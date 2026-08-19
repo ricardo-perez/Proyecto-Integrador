@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.37531.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Entidades", "ProyectoFinal.Entidades\ProyectoIntegrador.Entidades.csproj", "{40BE41E0-9B78-44CF-A6BC-E8BA3FCC09DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Entidades", "ProyectoIntegrador.Entidades\ProyectoIntegrador.Entidades.csproj", "{40BE41E0-9B78-44CF-A6BC-E8BA3FCC09DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Negocio", "ProyectoFinal.Negocio\ProyectoIntegrador.Negocio.csproj", "{E6E3109D-56E5-4133-AB33-3F31E9C58906}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Negocio", "ProyectoIntegrador.Negocio\ProyectoIntegrador.Negocio.csproj", "{E6E3109D-56E5-4133-AB33-3F31E9C58906}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Presentacion", "ProyectoFinal.Presentacion\ProyectoIntegrador.Presentacion.csproj", "{6792B70A-8698-4209-98EE-3E41BEF28474}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Presentacion", "ProyectoIntegrador.Presentacion\ProyectoIntegrador.Presentacion.csproj", "{6792B70A-8698-4209-98EE-3E41BEF28474}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

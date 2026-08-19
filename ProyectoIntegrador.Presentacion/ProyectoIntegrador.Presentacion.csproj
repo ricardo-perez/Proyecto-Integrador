@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{6792B70A-8698-4209-98EE-3E41BEF28474}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ProyectoFinal.Presentacion</RootNamespace>
-    <AssemblyName>ProyectoFinal.Presentacion</AssemblyName>
+    <RootNamespace>ProyectoIntegrador.Presentacion</RootNamespace>
+    <AssemblyName>ProyectoIntegrador.Presentacion</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -84,7 +84,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProyectoFinal.Negocio\ProyectoIntegrador.Negocio.csproj">
+    <ProjectReference Include="..\ProyectoIntegrador.Negocio\ProyectoIntegrador.Negocio.csproj">
       <Project>{e6e3109d-56e5-4133-ab33-3f31e9c58906}</Project>
       <Name>ProyectoIntegrador.Negocio</Name>
     </ProjectReference>
