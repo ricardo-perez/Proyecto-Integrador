@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProyectoFinal.Negocio
+namespace ProyectoIntegrador.Negocio
 {
     public class Class1
     {

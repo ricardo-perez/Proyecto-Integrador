@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ProyectoFinal.Presentacion
+namespace ProyectoIntegrador.Presentacion
 {
     public partial class Form2 : Form
     {

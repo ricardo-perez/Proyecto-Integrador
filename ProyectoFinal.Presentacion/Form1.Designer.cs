@@ -1,4 +1,4 @@
-﻿namespace ProyectoFinal.Presentacion
+﻿namespace ProyectoIntegrador.Presentacion
 {
     partial class Form1
     {

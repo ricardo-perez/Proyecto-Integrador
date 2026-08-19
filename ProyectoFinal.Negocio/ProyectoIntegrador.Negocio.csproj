@@ -45,9 +45,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProyectoFinal.Entidades\ProyectoFinal.Entidades.csproj">
+    <ProjectReference Include="..\ProyectoFinal.Entidades\ProyectoIntegrador.Entidades.csproj">
       <Project>{40be41e0-9b78-44cf-a6bc-e8ba3fcc09dd}</Project>
-      <Name>ProyectoFinal.Entidades</Name>
+      <Name>ProyectoIntegrador.Entidades</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

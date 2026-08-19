@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ProyectoFinal.Presentacion
+namespace ProyectoIntegrador.Presentacion
 {
     internal static class Program
     {

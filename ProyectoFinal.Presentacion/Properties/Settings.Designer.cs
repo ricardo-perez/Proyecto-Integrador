@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ProyectoFinal.Presentacion.Properties
+namespace ProyectoIntegrador.Presentacion.Properties
 {
 
 

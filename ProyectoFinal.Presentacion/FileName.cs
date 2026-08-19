@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProyectoFinal.Presentacion
+namespace ProyectoIntegrador.Presentacion
 {
     internal class FileName
     {
