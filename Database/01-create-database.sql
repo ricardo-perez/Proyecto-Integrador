@@ -87,7 +87,6 @@ CREATE TABLE detalles_ventas (
 CREATE TABLE facturas (
 	id_factura INT AUTO_INCREMENT PRIMARY KEY,
 	id_venta INT NOT NULL,
-	id_cliente INT NOT NULL,
 	tipo_factura VARCHAR(5) NOT NULL,
 	punto_venta VARCHAR(10) NOT NULL,
 	numero_factura VARCHAR(20) NOT NULL,
@@ -96,11 +95,6 @@ CREATE TABLE facturas (
 	CONSTRAINT fk_factura_venta
 		FOREIGN KEY (id_venta)
 		REFERENCES ventas(id_venta)
-		ON UPDATE CASCADE 
-		ON DELETE RESTRICT,
-	CONSTRAINT fk_factura_cliente
-		FOREIGN KEY (id_cliente)
-		REFERENCES clientes(id_cliente)
 		ON UPDATE CASCADE 
 		ON DELETE RESTRICT
 );
