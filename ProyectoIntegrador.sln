@@ -11,8 +11,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Presenta
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
-		Database\02-seed-data.sql = Database\02-seed-data.sql
 		Database\01-create-database.sql = Database\01-create-database.sql
+		Database\02-seed-data.sql = Database\02-seed-data.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentos", "Documentos", "{D81C7434-CE70-44D1-860F-8B518691FFF7}"
+	ProjectSection(SolutionItems) = preProject
+		Documentos\Gantt.xlsx = Documentos\Gantt.xlsx
+		Documentos\Proforma 1.docx = Documentos\Proforma 1.docx
+		Documentos\Proforma 2.docx = Documentos\Proforma 2.docx
 	EndProjectSection
 EndProject
 Global
