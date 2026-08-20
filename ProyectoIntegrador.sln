@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentos", "Documentos", 
 		Documentos\Proforma 2.docx = Documentos\Proforma 2.docx
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Escritorio", "ProyectoIntegrador.Escritorio\ProyectoIntegrador.Escritorio.csproj", "{D58D3A3C-0759-4D30-97C0-83C1C6C9F3E7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{6792B70A-8698-4209-98EE-3E41BEF28474}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6792B70A-8698-4209-98EE-3E41BEF28474}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6792B70A-8698-4209-98EE-3E41BEF28474}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D58D3A3C-0759-4D30-97C0-83C1C6C9F3E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D58D3A3C-0759-4D30-97C0-83C1C6C9F3E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D58D3A3C-0759-4D30-97C0-83C1C6C9F3E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D58D3A3C-0759-4D30-97C0-83C1C6C9F3E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
