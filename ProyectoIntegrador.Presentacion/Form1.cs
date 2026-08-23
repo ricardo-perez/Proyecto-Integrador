@@ -16,5 +16,23 @@ namespace ProyectoIntegrador.Presentacion
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form2 ventana = new Form2();
+            ventana.FormClosed += (s, args) => this.Show();
+
+            this.Hide();
+            ventana.Show();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Form3 ventana = new Form3();
+            ventana.FormClosed += (s, args) => this.Show();
+
+            this.Hide();
+            ventana.Show();
+        }
     }
 }
