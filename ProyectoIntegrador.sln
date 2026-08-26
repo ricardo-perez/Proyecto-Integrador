@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{02
 	ProjectSection(SolutionItems) = preProject
 		Database\01-create-database.sql = Database\01-create-database.sql
 		Database\02-seed-data.sql = Database\02-seed-data.sql
+		Database\SP-clientes.sql = Database\SP-clientes.sql
+		Database\SP-empleados.sql = Database\SP-empleados.sql
+		Database\SP-productos.sql = Database\SP-productos.sql
+		Database\SP-ventas.sql = Database\SP-ventas.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentos", "Documentos", "{D81C7434-CE70-44D1-860F-8B518691FFF7}"
