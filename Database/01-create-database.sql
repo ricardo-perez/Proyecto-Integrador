@@ -102,7 +102,7 @@ CREATE TABLE facturas (
 CREATE TABLE envios (
 	id_envio INT AUTO_INCREMENT PRIMARY KEY,
 	id_venta INT NOT NULL,
-	estado VARCHAR(30) NOT NULL,
+	estado VARCHAR(30) NOT NULL, -- estados posibles: "pendiente", "enviado", "entregado"
 	CONSTRAINT fk_envio_venta
 		FOREIGN KEY (id_venta)
 		REFERENCES ventas(id_venta)
