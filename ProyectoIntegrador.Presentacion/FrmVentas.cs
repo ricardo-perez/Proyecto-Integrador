@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ProyectoIntegrador.Escritorio
+namespace ProyectoIntegrador.Presentacion
 {
-    public partial class Form1 : Form
+    public partial class FrmVentas : Form
     {
-        public Form1()
+        public FrmVentas()
         {
             InitializeComponent();
         }

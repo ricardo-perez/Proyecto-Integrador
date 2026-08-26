@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace ProyectoIntegrador.Presentacion
 {
-    public partial class Form3 : Form
+    public partial class FrmProductos : Form
     {
-        public Form3()
+        public FrmProductos()
         {
             InitializeComponent();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

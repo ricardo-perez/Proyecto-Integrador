@@ -10,16 +10,16 @@ using System.Windows.Forms;
 
 namespace ProyectoIntegrador.Presentacion
 {
-    public partial class Form1 : Form
+    public partial class MainMenu : Form
     {
-        public Form1()
+        public MainMenu()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Form2 ventana = new Form2();
+            FrmVentas ventana = new FrmVentas();
             ventana.FormClosed += (s, args) => this.Show();
 
             this.Hide();
@@ -28,7 +28,7 @@ namespace ProyectoIntegrador.Presentacion
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Form3 ventana = new Form3();
+            FrmProductos ventana = new FrmProductos();
             ventana.FormClosed += (s, args) => this.Show();
 
             this.Hide();
