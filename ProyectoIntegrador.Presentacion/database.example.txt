@@ -1,0 +1,5 @@
+Server=localhost
+Port=3306
+Database=tienda_deportiva
+User=root
+Password=TU_CONTRASEÑA
