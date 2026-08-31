@@ -1,6 +1,9 @@
 ﻿using MySql.Data.MySqlClient;
+using ProyectoIntegrador.Entidades;
+using ProyectoIntegrador.Negocio;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -93,6 +96,131 @@ namespace ProyectoIntegrador.Negocio
         public MySqlConnection ObtenerConexion()
         {
             return new MySqlConnection(connectionString);
+        }
+    }
+}
+
+public class ProductoNegocio
+{
+    private readonly Conexion conexion;
+
+    public ProductoNegocio()
+    {
+        conexion = new Conexion();
+    }
+
+    // Alta (Create)
+    public void AgregarProducto(Producto producto)
+    {
+        using (MySqlConnection cn = conexion.ObtenerConexion())
+        {
+            cn.Open();
+
+            string consulta = @"INSERT INTO productos
+                                    (codigo, descripcion, descripcion_larga,
+                                     stock_online, stock_fisico,
+                                     activo_para_venta, precio_actual)
+                                    VALUES
+                                    (@codigo, @descripcion, @descripcion_larga,
+                                     @stock_online, @stock_fisico,
+                                     @activo_para_venta, @precio_actual)";
+
+            using (MySqlCommand comando = new MySqlCommand(consulta, cn))
+            {
+                comando.Parameters.AddWithValue("@codigo", producto.Codigo);
+                comando.Parameters.AddWithValue("@descripcion", producto.Descripcion);
+                comando.Parameters.AddWithValue("@descripcion_larga", producto.DescripcionLarga);
+                comando.Parameters.AddWithValue("@stock_online", producto.StockOnline);
+                comando.Parameters.AddWithValue("@stock_fisico", producto.StockFisico);
+                comando.Parameters.AddWithValue("@activo_para_venta", producto.ActivoParaVenta);
+                comando.Parameters.AddWithValue("@precio_actual", producto.PrecioActual);
+
+                comando.ExecuteNonQuery();
+            }
+        }
+    }
+
+    // Baja (Delete)
+    public void EliminarProducto(int idProducto)
+    {
+        using (MySqlConnection cn = conexion.ObtenerConexion())
+        {
+            cn.Open();
+
+            string consulta = @"DELETE FROM productos
+                                    WHERE id_producto = @id_producto";
+
+            using (MySqlCommand comando = new MySqlCommand(consulta, cn))
+            {
+                comando.Parameters.AddWithValue("@id_producto", idProducto);
+
+                comando.ExecuteNonQuery();
+            }
+        }
+    }
+
+    // Modificación (Update)
+    public void EditarProducto(Producto producto)
+    {
+        using (MySqlConnection cn = conexion.ObtenerConexion())
+        {
+            cn.Open();
+
+            string consulta = @"UPDATE productos
+                                    SET codigo = @codigo,
+                                        descripcion = @descripcion,
+                                        descripcion_larga = @descripcion_larga,
+                                        stock_online = @stock_online,
+                                        stock_fisico = @stock_fisico,
+                                        activo_para_venta = @activo_para_venta,
+                                        precio_actual = @precio_actual
+                                    WHERE id_producto = @id_producto";
+
+            using (MySqlCommand comando = new MySqlCommand(consulta, cn))
+            {
+                comando.Parameters.AddWithValue("@id_producto", producto.IdProducto);
+                comando.Parameters.AddWithValue("@codigo", producto.Codigo);
+                comando.Parameters.AddWithValue("@descripcion", producto.Descripcion);
+                comando.Parameters.AddWithValue("@descripcion_larga", producto.DescripcionLarga);
+                comando.Parameters.AddWithValue("@stock_online", producto.StockOnline);
+                comando.Parameters.AddWithValue("@stock_fisico", producto.StockFisico);
+                comando.Parameters.AddWithValue("@activo_para_venta", producto.ActivoParaVenta);
+                comando.Parameters.AddWithValue("@precio_actual", producto.PrecioActual);
+
+                comando.ExecuteNonQuery();
+            }
+        }
+    }
+
+    // Consulta (Read)
+    public DataTable ObtenerProductos()
+    {
+        using (MySqlConnection cn = conexion.ObtenerConexion())
+        {
+            cn.Open();
+
+            string consulta = @"SELECT
+                                        id_producto,
+                                        codigo,
+                                        descripcion,
+                                        descripcion_larga,
+                                        stock_online,
+                                        stock_fisico,
+                                        activo_para_venta,
+                                        precio_actual
+                                    FROM productos";
+
+            using (MySqlCommand comando = new MySqlCommand(consulta, cn))
+            {
+                using (MySqlDataAdapter adaptador = new MySqlDataAdapter(comando))
+                {
+                    DataTable tabla = new DataTable();
+
+                    adaptador.Fill(tabla);
+
+                    return tabla;
+                }
+            }
         }
     }
 }
