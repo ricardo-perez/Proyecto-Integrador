@@ -85,6 +85,7 @@
             this.button5.TabIndex = 4;
             this.button5.Text = "Editar productos";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button6
             // 
@@ -139,7 +140,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "MainMenu";
-            this.Text = "Form1";
+            this.Text = "Menu principal";
+            this.Load += new System.EventHandler(this.MainMenu_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -31,26 +31,26 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtNombre = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.txtPrecio = new System.Windows.Forms.TextBox();
+            this.txtStockF = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label13 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.button7 = new System.Windows.Forms.Button();
+            this.txtStockO = new System.Windows.Forms.TextBox();
+            this.btnGuardar1 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.clbTipoStock = new System.Windows.Forms.CheckedListBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.txtDescripcionExistente = new System.Windows.Forms.TextBox();
+            this.CheckActivo = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.label10 = new System.Windows.Forms.Label();
+            this.btnEliminar = new System.Windows.Forms.Button();
+            this.btnGuardar2 = new System.Windows.Forms.Button();
+            this.lblStockActual = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
@@ -59,10 +59,11 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.txtNombreExistente = new System.Windows.Forms.TextBox();
+            this.txtBuscador = new System.Windows.Forms.TextBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label6 = new System.Windows.Forms.Label();
+            this.btnVolver = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -96,19 +97,19 @@
             this.txtNombre.Size = new System.Drawing.Size(188, 20);
             this.txtNombre.TabIndex = 2;
             // 
-            // textBox2
+            // txtPrecio
             // 
-            this.textBox2.Location = new System.Drawing.Point(121, 88);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(188, 20);
-            this.textBox2.TabIndex = 3;
+            this.txtPrecio.Location = new System.Drawing.Point(121, 88);
+            this.txtPrecio.Name = "txtPrecio";
+            this.txtPrecio.Size = new System.Drawing.Size(188, 20);
+            this.txtPrecio.TabIndex = 3;
             // 
-            // textBox3
+            // txtStockF
             // 
-            this.textBox3.Location = new System.Drawing.Point(121, 114);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(188, 20);
-            this.textBox3.TabIndex = 4;
+            this.txtStockF.Location = new System.Drawing.Point(121, 114);
+            this.txtStockF.Name = "txtStockF";
+            this.txtStockF.Size = new System.Drawing.Size(188, 20);
+            this.txtStockF.TabIndex = 4;
             // 
             // label3
             // 
@@ -134,17 +135,17 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.label13);
-            this.panel1.Controls.Add(this.textBox8);
+            this.panel1.Controls.Add(this.txtDescripcion);
             this.panel1.Controls.Add(this.label11);
-            this.panel1.Controls.Add(this.textBox7);
-            this.panel1.Controls.Add(this.button7);
+            this.panel1.Controls.Add(this.txtStockO);
+            this.panel1.Controls.Add(this.btnGuardar1);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.txtNombre);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.textBox2);
-            this.panel1.Controls.Add(this.textBox3);
+            this.panel1.Controls.Add(this.txtPrecio);
+            this.panel1.Controls.Add(this.txtStockF);
             this.panel1.Location = new System.Drawing.Point(6, 70);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(318, 309);
@@ -160,12 +161,12 @@
             this.label13.TabIndex = 27;
             this.label13.Text = "Descripción:";
             // 
-            // textBox8
+            // txtDescripcion
             // 
-            this.textBox8.Location = new System.Drawing.Point(121, 166);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(188, 20);
-            this.textBox8.TabIndex = 28;
+            this.txtDescripcion.Location = new System.Drawing.Point(121, 166);
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(188, 20);
+            this.txtDescripcion.TabIndex = 28;
             // 
             // label11
             // 
@@ -177,21 +178,21 @@
             this.label11.TabIndex = 26;
             this.label11.Text = "Stock Online";
             // 
-            // textBox7
+            // txtStockO
             // 
-            this.textBox7.Location = new System.Drawing.Point(121, 140);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(188, 20);
-            this.textBox7.TabIndex = 25;
+            this.txtStockO.Location = new System.Drawing.Point(121, 140);
+            this.txtStockO.Name = "txtStockO";
+            this.txtStockO.Size = new System.Drawing.Size(188, 20);
+            this.txtStockO.TabIndex = 25;
             // 
-            // button7
+            // btnGuardar1
             // 
-            this.button7.Location = new System.Drawing.Point(98, 283);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(120, 23);
-            this.button7.TabIndex = 24;
-            this.button7.Text = "Guardar cambios";
-            this.button7.UseVisualStyleBackColor = true;
+            this.btnGuardar1.Location = new System.Drawing.Point(98, 283);
+            this.btnGuardar1.Name = "btnGuardar1";
+            this.btnGuardar1.Size = new System.Drawing.Size(120, 23);
+            this.btnGuardar1.TabIndex = 24;
+            this.btnGuardar1.Text = "Guardar cambios";
+            this.btnGuardar1.UseVisualStyleBackColor = true;
             // 
             // label5
             // 
@@ -205,14 +206,14 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.checkedListBox1);
+            this.panel2.Controls.Add(this.clbTipoStock);
             this.panel2.Controls.Add(this.label14);
-            this.panel2.Controls.Add(this.textBox9);
-            this.panel2.Controls.Add(this.checkBox1);
+            this.panel2.Controls.Add(this.txtDescripcionExistente);
+            this.panel2.Controls.Add(this.CheckActivo);
             this.panel2.Controls.Add(this.label12);
-            this.panel2.Controls.Add(this.button6);
-            this.panel2.Controls.Add(this.button5);
-            this.panel2.Controls.Add(this.label10);
+            this.panel2.Controls.Add(this.btnEliminar);
+            this.panel2.Controls.Add(this.btnGuardar2);
+            this.panel2.Controls.Add(this.lblStockActual);
             this.panel2.Controls.Add(this.label9);
             this.panel2.Controls.Add(this.textBox6);
             this.panel2.Controls.Add(this.button4);
@@ -221,8 +222,8 @@
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.label8);
             this.panel2.Controls.Add(this.label7);
-            this.panel2.Controls.Add(this.textBox5);
-            this.panel2.Controls.Add(this.textBox4);
+            this.panel2.Controls.Add(this.txtNombreExistente);
+            this.panel2.Controls.Add(this.txtBuscador);
             this.panel2.Controls.Add(this.dataGridView1);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Location = new System.Drawing.Point(340, 70);
@@ -230,18 +231,18 @@
             this.panel2.Size = new System.Drawing.Size(539, 368);
             this.panel2.TabIndex = 8;
             // 
-            // checkedListBox1
+            // clbTipoStock
             // 
-            this.checkedListBox1.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
+            this.clbTipoStock.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.clbTipoStock.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.clbTipoStock.FormattingEnabled = true;
+            this.clbTipoStock.Items.AddRange(new object[] {
             "Online",
             "Físico"});
-            this.checkedListBox1.Location = new System.Drawing.Point(213, 272);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(58, 30);
-            this.checkedListBox1.TabIndex = 28;
+            this.clbTipoStock.Location = new System.Drawing.Point(213, 272);
+            this.clbTipoStock.Name = "clbTipoStock";
+            this.clbTipoStock.Size = new System.Drawing.Size(58, 30);
+            this.clbTipoStock.TabIndex = 28;
             // 
             // label14
             // 
@@ -253,22 +254,22 @@
             this.label14.TabIndex = 26;
             this.label14.Text = "Descripción:";
             // 
-            // textBox9
+            // txtDescripcionExistente
             // 
-            this.textBox9.Location = new System.Drawing.Point(99, 183);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(188, 20);
-            this.textBox9.TabIndex = 27;
+            this.txtDescripcionExistente.Location = new System.Drawing.Point(99, 183);
+            this.txtDescripcionExistente.Name = "txtDescripcionExistente";
+            this.txtDescripcionExistente.Size = new System.Drawing.Size(188, 20);
+            this.txtDescripcionExistente.TabIndex = 27;
             // 
-            // checkBox1
+            // CheckActivo
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(458, 160);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(56, 17);
-            this.checkBox1.TabIndex = 25;
-            this.checkBox1.Text = "Activo";
-            this.checkBox1.UseVisualStyleBackColor = true;
+            this.CheckActivo.AutoSize = true;
+            this.CheckActivo.Location = new System.Drawing.Point(458, 160);
+            this.CheckActivo.Name = "CheckActivo";
+            this.CheckActivo.Size = new System.Drawing.Size(56, 17);
+            this.CheckActivo.TabIndex = 25;
+            this.CheckActivo.Text = "Activo";
+            this.CheckActivo.UseVisualStyleBackColor = true;
             // 
             // label12
             // 
@@ -279,35 +280,36 @@
             this.label12.Size = new System.Drawing.Size(0, 16);
             this.label12.TabIndex = 24;
             // 
-            // button6
+            // btnEliminar
             // 
-            this.button6.BackColor = System.Drawing.Color.RosyBrown;
-            this.button6.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.button6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button6.Location = new System.Drawing.Point(18, 328);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(120, 28);
-            this.button6.TabIndex = 23;
-            this.button6.Text = "Eliminar producto";
-            this.button6.UseVisualStyleBackColor = false;
+            this.btnEliminar.BackColor = System.Drawing.Color.RosyBrown;
+            this.btnEliminar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnEliminar.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnEliminar.Location = new System.Drawing.Point(18, 328);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(120, 28);
+            this.btnEliminar.TabIndex = 23;
+            this.btnEliminar.Text = "Eliminar producto";
+            this.btnEliminar.UseVisualStyleBackColor = false;
             // 
-            // button5
+            // btnGuardar2
             // 
-            this.button5.Location = new System.Drawing.Point(408, 333);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(120, 23);
-            this.button5.TabIndex = 22;
-            this.button5.Text = "Guardar cambios";
-            this.button5.UseVisualStyleBackColor = true;
+            this.btnGuardar2.Location = new System.Drawing.Point(408, 333);
+            this.btnGuardar2.Name = "btnGuardar2";
+            this.btnGuardar2.Size = new System.Drawing.Size(120, 23);
+            this.btnGuardar2.TabIndex = 22;
+            this.btnGuardar2.Text = "Guardar cambios";
+            this.btnGuardar2.UseVisualStyleBackColor = true;
             // 
-            // label10
+            // lblStockActual
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(488, 224);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(25, 13);
-            this.label10.TabIndex = 21;
-            this.label10.Text = "000";
+            this.lblStockActual.AutoSize = true;
+            this.lblStockActual.Location = new System.Drawing.Point(478, 225);
+            this.lblStockActual.Name = "lblStockActual";
+            this.lblStockActual.Size = new System.Drawing.Size(25, 13);
+            this.lblStockActual.TabIndex = 21;
+            this.lblStockActual.Text = "000";
+            this.lblStockActual.Click += new System.EventHandler(this.label10_Click);
             // 
             // label9
             // 
@@ -383,20 +385,20 @@
             this.label7.TabIndex = 12;
             this.label7.Text = "Nombre:";
             // 
-            // textBox5
+            // txtNombreExistente
             // 
-            this.textBox5.Location = new System.Drawing.Point(99, 158);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(188, 20);
-            this.textBox5.TabIndex = 13;
+            this.txtNombreExistente.Location = new System.Drawing.Point(99, 158);
+            this.txtNombreExistente.Name = "txtNombreExistente";
+            this.txtNombreExistente.Size = new System.Drawing.Size(188, 20);
+            this.txtNombreExistente.TabIndex = 13;
             // 
-            // textBox4
+            // txtBuscador
             // 
-            this.textBox4.Location = new System.Drawing.Point(9, 49);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(519, 20);
-            this.textBox4.TabIndex = 11;
-            this.textBox4.Text = "Codigo / nombre del producto";
+            this.txtBuscador.Location = new System.Drawing.Point(9, 49);
+            this.txtBuscador.Name = "txtBuscador";
+            this.txtBuscador.Size = new System.Drawing.Size(519, 20);
+            this.txtBuscador.TabIndex = 11;
+            this.txtBuscador.Text = "Codigo / nombre del producto";
             // 
             // dataGridView1
             // 
@@ -416,16 +418,27 @@
             this.label6.TabIndex = 9;
             this.label6.Text = "Editar producto existente";
             // 
+            // btnVolver
+            // 
+            this.btnVolver.Location = new System.Drawing.Point(6, 9);
+            this.btnVolver.Name = "btnVolver";
+            this.btnVolver.Size = new System.Drawing.Size(75, 23);
+            this.btnVolver.TabIndex = 9;
+            this.btnVolver.Text = "Volver";
+            this.btnVolver.UseVisualStyleBackColor = true;
+            this.btnVolver.Click += new System.EventHandler(this.btnVolver_Click);
+            // 
             // EditProduct
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(891, 450);
+            this.Controls.Add(this.btnVolver);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.label1);
             this.Name = "EditProduct";
-            this.Text = "EditProduct";
+            this.Text = "Edicion de productos";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -441,8 +454,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtNombre;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtPrecio;
+        private System.Windows.Forms.TextBox txtStockF;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Panel panel1;
@@ -452,26 +465,27 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox txtNombreExistente;
+        private System.Windows.Forms.TextBox txtBuscador;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Button btnEliminar;
+        private System.Windows.Forms.Button btnGuardar2;
+        private System.Windows.Forms.Label lblStockActual;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button btnGuardar1;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TextBox txtStockO;
+        private System.Windows.Forms.CheckBox CheckActivo;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.TextBox txtDescripcionExistente;
+        private System.Windows.Forms.CheckedListBox clbTipoStock;
+        private System.Windows.Forms.Button btnVolver;
     }
 }

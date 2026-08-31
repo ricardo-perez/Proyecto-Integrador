@@ -17,7 +17,7 @@ namespace ProyectoIntegrador.Presentacion
             InitializeComponent();
 
             // Añade el nuevo ítem al CheckedListBox
-            checkedListBox1.Items.Add("Físico");
+            clbTipoStock.Items.Add("Físico");
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -32,6 +32,19 @@ namespace ProyectoIntegrador.Presentacion
 
         private void label4_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnVolver_Click(object sender, EventArgs e)
+        {
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.Show();
+            this.Hide();
 
         }
     }

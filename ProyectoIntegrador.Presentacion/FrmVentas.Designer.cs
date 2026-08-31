@@ -307,7 +307,7 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.button2);
             this.Name = "FrmVentas";
-            this.Text = "Form2";
+            this.Text = "Formulario de ventas";
             ((System.ComponentModel.ISupportInitialize)(this.txtCant)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panel1.ResumeLayout(false);

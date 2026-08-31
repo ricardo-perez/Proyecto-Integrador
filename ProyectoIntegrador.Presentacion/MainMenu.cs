@@ -39,5 +39,19 @@ namespace ProyectoIntegrador.Presentacion
         {
 
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            EditProduct ventana = new EditProduct();
+            ventana.FormClosed += (s, args) => this.Show();
+            this.Hide();
+            ventana.Show();
+
+        }
+
+        private void MainMenu_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
