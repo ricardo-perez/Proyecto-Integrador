@@ -15,6 +15,9 @@ namespace ProyectoIntegrador.Presentacion
         public EditProduct()
         {
             InitializeComponent();
+
+            // Añade el nuevo ítem al CheckedListBox
+            checkedListBox1.Items.Add("Físico");
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -23,6 +26,11 @@ namespace ProyectoIntegrador.Presentacion
         }
 
         private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
         {
 
         }
