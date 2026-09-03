@@ -223,4 +223,82 @@ public class ProductoNegocio
             }
         }
     }
+
+    // Nueva: búsqueda centralizada para la capa de presentación.
+    // Si texto es null/empty devuelve todos los productos.
+    // Si texto es numérico busca por id exacto y también por LIKE en campos relevantes.
+    // Si no es numérico busca por descripcion/codigo/descripcion_larga con LIKE.
+    public DataTable BuscarProductos(string texto)
+    {
+        using (MySqlConnection cn = conexion.ObtenerConexion())
+        {
+            cn.Open();
+
+            string consulta;
+            MySqlCommand comando = cn.CreateCommand();
+
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                consulta = @"SELECT
+                                id_producto,
+                                codigo,
+                                descripcion,
+                                descripcion_larga,
+                                stock_online,
+                                stock_fisico,
+                                activo_para_venta,
+                                precio_actual
+                              FROM productos";
+            }
+            else
+            {
+                // Si es número, permitir buscar por id exacto + LIKE en otras columnas
+                if (int.TryParse(texto.Trim(), out int idBusqueda))
+                {
+                    consulta = @"SELECT
+                                    id_producto,
+                                    codigo,
+                                    descripcion,
+                                    descripcion_larga,
+                                    stock_online,
+                                    stock_fisico,
+                                    activo_para_venta,
+                                    precio_actual
+                                 FROM productos
+                                 WHERE id_producto = @idBusqueda
+                                    OR descripcion LIKE @bus
+                                    OR codigo LIKE @bus
+                                    OR descripcion_larga LIKE @bus";
+                    comando.Parameters.AddWithValue("@idBusqueda", idBusqueda);
+                    comando.Parameters.AddWithValue("@bus", "%" + texto.Trim() + "%");
+                }
+                else
+                {
+                    consulta = @"SELECT
+                                    id_producto,
+                                    codigo,
+                                    descripcion,
+                                    descripcion_larga,
+                                    stock_online,
+                                    stock_fisico,
+                                    activo_para_venta,
+                                    precio_actual
+                                 FROM productos
+                                 WHERE descripcion LIKE @bus
+                                    OR codigo LIKE @bus
+                                    OR descripcion_larga LIKE @bus";
+                    comando.Parameters.AddWithValue("@bus", "%" + texto.Trim() + "%");
+                }
+            }
+
+            comando.CommandText = consulta;
+
+            using (MySqlDataAdapter adaptador = new MySqlDataAdapter(comando))
+            {
+                DataTable tabla = new DataTable();
+                adaptador.Fill(tabla);
+                return tabla;
+            }
+        }
+    }
 }
