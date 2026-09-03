@@ -91,12 +91,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ProyectoIntegrador.Entidades\ProyectoIntegrador.Entidades.csproj">
-      <Project>{40be41e0-9b78-44cf-a6bc-e8ba3fcc09dd}</Project>
-      <Name>ProyectoIntegrador.Entidades</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
