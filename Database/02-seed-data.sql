@@ -1,3 +1,6 @@
+USE tienda_online;
+GO
+
 INSERT INTO tipos_comprobante (nombre, descripcion) 
 VALUES
     ('Factura A', 'Responsables Inscriptos'),
