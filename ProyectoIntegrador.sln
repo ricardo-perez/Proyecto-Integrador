@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Entidade
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.Negocio", "ProyectoIntegrador.Negocio\ProyectoIntegrador.Negocio.csproj", "{3AA5A212-7018-4ECB-9B87-42FB8B520A25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProyectoIntegrador.AccesoDatos", "ProyectoIntegrador.AccesoDatos\ProyectoIntegrador.AccesoDatos.csproj", "{A2D428E2-B65E-4786-804A-16525A2CFB22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{3AA5A212-7018-4ECB-9B87-42FB8B520A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AA5A212-7018-4ECB-9B87-42FB8B520A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AA5A212-7018-4ECB-9B87-42FB8B520A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2D428E2-B65E-4786-804A-16525A2CFB22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2D428E2-B65E-4786-804A-16525A2CFB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2D428E2-B65E-4786-804A-16525A2CFB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2D428E2-B65E-4786-804A-16525A2CFB22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
