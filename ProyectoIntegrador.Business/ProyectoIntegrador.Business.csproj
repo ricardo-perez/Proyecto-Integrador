@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProyectoIntegrador.AccesoDatos\ProyectoIntegrador.AccesoDatos.csproj" />
-    <ProjectReference Include="..\ProyectoIntegrador.Entidades\ProyectoIntegrador.Entidades.csproj" />
+    <ProjectReference Include="..\ProyectoIntegrador.DataAccess\ProyectoIntegrador.DataAccess.csproj" />
+    <ProjectReference Include="..\ProyectoIntegrador.Entities\ProyectoIntegrador.Entities.csproj" />
   </ItemGroup>
 
 </Project>

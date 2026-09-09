@@ -1,6 +1,6 @@
-﻿namespace ProyectoIntegrador.AccesoDatos
+﻿namespace ProyectoIntegrador.DataAccess
 {
-    using ProyectoIntegrador.Entidades;
+    using ProyectoIntegrador.Entities;
     public class EmpleadoDaoSQL : DaoBase, IEmpleadoDao
     {
         public EmpleadoDaoSQL(IConnectionFactory connectionFactory) : base(connectionFactory)

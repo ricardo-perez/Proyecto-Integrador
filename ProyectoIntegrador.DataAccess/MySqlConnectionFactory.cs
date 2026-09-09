@@ -1,4 +1,4 @@
-﻿namespace ProyectoIntegrador.AccesoDatos
+﻿namespace ProyectoIntegrador.DataAccess
 {
     using System.Data;
     public class MySqlConnectionFactory : IConnectionFactory

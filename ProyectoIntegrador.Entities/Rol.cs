@@ -1,4 +1,4 @@
-﻿namespace ProyectoIntegrador.Entidades
+﻿namespace ProyectoIntegrador.Entities
 {
     public class Rol
     {

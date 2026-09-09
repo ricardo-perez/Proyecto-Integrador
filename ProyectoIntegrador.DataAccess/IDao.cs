@@ -1,4 +1,4 @@
-﻿namespace ProyectoIntegrador.AccesoDatos
+﻿namespace ProyectoIntegrador.DataAccess
 {
     using System.Collections.Generic;
     public interface IDao<T> where T : class

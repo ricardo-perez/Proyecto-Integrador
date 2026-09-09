@@ -1,4 +1,4 @@
-﻿namespace ProyectoIntegrador.AccesoDatos
+﻿namespace ProyectoIntegrador.DataAccess
 {
     public abstract class DaoBase(IConnectionFactory connectionFactory)
     {

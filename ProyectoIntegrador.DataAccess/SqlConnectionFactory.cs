@@ -1,4 +1,4 @@
-﻿namespace ProyectoIntegrador.AccesoDatos
+﻿namespace ProyectoIntegrador.DataAccess
 {
     using Microsoft.Data.SqlClient;
     using System;
