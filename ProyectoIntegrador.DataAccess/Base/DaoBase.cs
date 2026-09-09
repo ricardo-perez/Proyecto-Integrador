@@ -12,5 +12,12 @@
             connection.Open();
             return connection;
         }
+        protected static void AddParameter(IDbCommand command, string name, object? value)
+        {
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = name;
+            parameter.Value = value ?? DBNull.Value;
+            command.Parameters.Add(parameter);
+        }
     }
 }

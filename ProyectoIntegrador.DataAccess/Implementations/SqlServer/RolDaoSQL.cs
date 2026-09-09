@@ -43,10 +43,7 @@
             using var command = connection.CreateCommand();
             command.CommandText = query;
 
-            var paramId = command.CreateParameter();
-            paramId.ParameterName = "@Id";
-            paramId.Value = id;
-            command.Parameters.Add(paramId);
+            AddParameter(command, "@Id", id);
 
             using var reader = command.ExecuteReader();
             if (reader.Read())
@@ -70,15 +67,8 @@
             using var command = connection.CreateCommand();
             command.CommandText = query;
 
-            var paramNombre = command.CreateParameter();
-            paramNombre.ParameterName = "@Nombre";
-            paramNombre.Value = entity.Nombre;
-            command.Parameters.Add(paramNombre);
-
-            var paramDescripcion = command.CreateParameter();
-            paramDescripcion.ParameterName = "@Descripcion";
-            paramDescripcion.Value = (object?)entity.Descripcion ?? DBNull.Value;
-            command.Parameters.Add(paramDescripcion);
+            AddParameter(command, "@Nombre", entity.Nombre);
+            AddParameter(command, "@Description", entity.Descripcion);
 
             var result = command.ExecuteScalar();
 
@@ -95,20 +85,9 @@
             using var command = connection.CreateCommand();
             command.CommandText = query;
 
-            var paramId = command.CreateParameter();
-            paramId.ParameterName = "@Id";
-            paramId.Value = entity.IdRol;
-            command.Parameters.Add(paramId);
-
-            var paramNombre = command.CreateParameter();
-            paramNombre.ParameterName = "@Nombre";
-            paramNombre.Value = entity.Nombre;
-            command.Parameters.Add(paramNombre);
-
-            var paramDescripcion = command.CreateParameter();
-            paramDescripcion.ParameterName = "@Descripcion";
-            paramDescripcion.Value = (object?)entity.Descripcion ?? DBNull.Value;
-            command.Parameters.Add(paramDescripcion);
+            AddParameter(command, "@Id", entity.IdRol);
+            AddParameter(command, "@Nombre", entity.Nombre);
+            AddParameter(command, "@Descripcion", entity.Descripcion);
 
             int rowsAffected = command.ExecuteNonQuery();
 
