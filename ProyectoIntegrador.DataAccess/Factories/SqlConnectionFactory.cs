@@ -1,6 +1,7 @@
-﻿namespace ProyectoIntegrador.DataAccess
+﻿namespace ProyectoIntegrador.DataAccess.Factories
 {
     using Microsoft.Data.SqlClient;
+    using ProyectoIntegrador.DataAccess.Interfaces;
     using System;
     using System.Data;
     public class SqlConnectionFactory : IConnectionFactory

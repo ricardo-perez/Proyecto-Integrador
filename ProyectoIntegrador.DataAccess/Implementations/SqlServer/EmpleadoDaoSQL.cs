@@ -1,5 +1,7 @@
-﻿namespace ProyectoIntegrador.DataAccess
+﻿namespace ProyectoIntegrador.DataAccess.Implementations.SqlServer
 {
+    using ProyectoIntegrador.DataAccess.Base;
+    using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     public class EmpleadoDaoSQL : DaoBase, IEmpleadoDao
     {

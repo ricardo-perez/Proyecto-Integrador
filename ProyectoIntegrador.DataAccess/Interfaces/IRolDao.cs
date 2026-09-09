@@ -1,4 +1,4 @@
-﻿namespace ProyectoIntegrador.DataAccess
+﻿namespace ProyectoIntegrador.DataAccess.Interfaces
 {
     using ProyectoIntegrador.Entities;
     public interface IRolDao : IDao<Rol>

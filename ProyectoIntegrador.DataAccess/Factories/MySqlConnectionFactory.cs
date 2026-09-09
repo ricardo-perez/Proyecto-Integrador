@@ -1,5 +1,6 @@
-﻿namespace ProyectoIntegrador.DataAccess
+﻿namespace ProyectoIntegrador.DataAccess.Factories
 {
+    using ProyectoIntegrador.DataAccess.Interfaces;
     using System.Data;
     public class MySqlConnectionFactory : IConnectionFactory
     {
