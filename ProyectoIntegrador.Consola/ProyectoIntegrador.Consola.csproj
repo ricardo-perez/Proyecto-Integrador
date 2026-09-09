@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ProyectoIntegrador.Entidades\ProyectoIntegrador.Entidades.csproj" />
+    <ProjectReference Include="..\ProyectoIntegrador.Negocio\ProyectoIntegrador.Negocio.csproj" />
+  </ItemGroup>
+
 </Project>
