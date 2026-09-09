@@ -10,7 +10,7 @@ INSERT INTO estados_envio (nombre, descripcion)
 VALUES
     ('Pendiente', 'Pago verificado, pendiente de embalaje'),
     ('En Preparación', 'Producto empaquetado en depósito'),
-    ('Despachado', 'Entregado al correo '),
+    ('Despachado', 'Entregado al correo'),
     ('Entregado', 'Recibido por el cliente'),
     ('Cancelado', 'Envío anulado');
 INSERT INTO roles (nombre, descripcion) 
