@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     public interface IDao<T> where T : class
     {
-        void Insert(T entity);
+        int Insert(T entity);
         T? FindById(int id);
         IEnumerable<T> FindAll();
-        void Update(T entity);
+        bool Update(T entity);
         void Delete(int id);
     }
 }

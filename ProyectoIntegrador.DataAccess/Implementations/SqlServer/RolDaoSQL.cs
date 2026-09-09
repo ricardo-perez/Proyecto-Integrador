@@ -13,10 +13,13 @@
         public IEnumerable<Rol> FindAll()
         {
             var roles = new List<Rol>();
-            const string query = "SELECT * FROM Roles";
+            const string query = "SELECT id, nombre, descripcion " +
+                "FROM Roles";
+
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
+
             using var reader = command.ExecuteReader();
             int idRolIndex = reader.GetOrdinal("id_rol");
             int nombreIndex = reader.GetOrdinal("nombre");
@@ -32,14 +35,19 @@
         }
         public Rol? FindById(int id)
         {
-            const string query = "SELECT * FROM Roles WHERE id_rol = @Id";
+            const string query = "SELECT id, nombre, descripcion " +
+                "FROM Roles " +
+                "WHERE id_rol = @Id";
+
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
             var parameter = command.CreateParameter();
+
             parameter.ParameterName = "@Id";
             parameter.Value = id;
             command.Parameters.Add(parameter);
+
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
@@ -51,13 +59,38 @@
             }
             return null;
         }
-        public void Insert(Rol entity)
+        public int Insert(Rol entity)
         {
             throw new NotImplementedException();
         }
-        public void Update(Rol entity)
+        public bool Update(Rol entity)
         {
-            throw new NotImplementedException();
+            const string query = "UPDATE Roles " +
+                "SET nombre = @Nombre, descripcion = @Descripcion " +
+                "WHERE id_rol = @Id";
+
+            using var connection = OpenConnection();
+            using var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            var paramId = command.CreateParameter();
+            paramId.ParameterName = "@Id";
+            paramId.Value = entity.IdRol;
+            command.Parameters.Add(paramId);
+
+            var paramNombre = command.CreateParameter();
+            paramNombre.ParameterName = "@Nombre";
+            paramNombre.Value = entity.Nombre;
+            command.Parameters.Add(paramNombre);
+
+            var paramDescripcion = command.CreateParameter();
+            paramDescripcion.ParameterName = "@Descripcion";
+            paramDescripcion.Value = (object?)entity.Descripcion ?? DBNull.Value;
+            command.Parameters.Add(paramDescripcion);
+
+            int rowsAffected = command.ExecuteNonQuery();
+
+            return rowsAffected > 0;
         }
     }
 }
