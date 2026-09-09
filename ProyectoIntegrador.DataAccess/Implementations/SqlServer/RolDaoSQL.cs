@@ -4,6 +4,7 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Collections.Generic;
+    using System.Data;
     public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IRolDao
     {
         public bool Delete(int id)
@@ -27,15 +28,7 @@
             int descripcionIndex = reader.GetOrdinal("descripcion");
             while (reader.Read())
             {
-                roles.Add(new Rol
-                {
-                    IdRol = reader.GetInt32(idRolIndex),
-                    Nombre = reader.GetString(nombreIndex),
-                    Descripcion = reader.IsDBNull(descripcionIndex)
-                    ? null
-                    : reader.GetString(descripcionIndex)
-
-                });
+                roles.Add(MapRol(reader, idRolIndex, nombreIndex, descripcionIndex));
             }
             return roles;
         }
@@ -61,14 +54,8 @@
                 int idRolIndex = reader.GetOrdinal("id_rol");
                 int nombreIndex = reader.GetOrdinal("nombre");
                 int descripcionIndex = reader.GetOrdinal("descripcion");
-                return new Rol
-                {
-                    IdRol = reader.GetInt32(idRolIndex),
-                    Nombre = reader.GetString(nombreIndex),
-                    Descripcion = reader.IsDBNull(descripcionIndex)
-                    ? null
-                    : reader.GetString(descripcionIndex)
-                };
+
+                return MapRol(reader, idRolIndex, nombreIndex, descripcionIndex);
             }
             return null;
         }
@@ -126,6 +113,17 @@
             int rowsAffected = command.ExecuteNonQuery();
 
             return rowsAffected > 0;
+        }
+        private static Rol MapRol(IDataReader reader, int idIndex, int nombreIndex, int descripcionIndex)
+        {
+            return new Rol
+            {
+                IdRol = reader.GetInt32(idIndex),
+                Nombre = reader.GetString(nombreIndex),
+                Descripcion = reader.IsDBNull(descripcionIndex)
+                    ? null
+                    : reader.GetString(descripcionIndex)
+            };
         }
     }
 }
