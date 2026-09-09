@@ -36,7 +36,25 @@
         }
         public Rol FindById(int id)
         {
-            throw new NotImplementedException();
+            const string query = "SELECT * FROM Roles WHERE id_rol = @Id";
+            using var connection = _connectionFactory.CreateConnection();
+            using var command = connection.CreateCommand();
+            command.CommandText = query;
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = "@Id";
+            parameter.Value = id;
+            command.Parameters.Add(parameter);
+            connection.Open();
+            using var reader = command.ExecuteReader();
+            if (reader.Read())
+            {
+                return new Rol
+                {
+                    IdRol = reader.GetInt32(reader.GetOrdinal("id_rol")),
+                    Nombre = reader.GetString(reader.GetOrdinal("nombre"))
+                };
+            }
+            return null;
         }
         public void Insert(Rol entity)
         {
