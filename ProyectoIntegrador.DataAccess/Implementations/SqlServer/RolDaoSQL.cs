@@ -22,12 +22,14 @@
             command.CommandText = query;
             connection.Open();
             using var reader = command.ExecuteReader();
+            int idRolIndex = reader.GetOrdinal("id_rol");
+            int nombreIndex = reader.GetOrdinal("nombre");
             while (reader.Read())
             {
                 roles.Add(new Rol
                 {
-                    IdRol = reader.GetInt32(reader.GetOrdinal("Id")),
-                    Nombre = reader.GetString(reader.GetOrdinal("Nombre"))
+                    IdRol = reader.GetInt32(idRolIndex),
+                    Nombre = reader.GetString(nombreIndex)
                 });
             }
             return roles;
