@@ -13,8 +13,9 @@
         public IEnumerable<Rol> FindAll()
         {
             var roles = new List<Rol>();
-            const string query = "SELECT id, nombre, descripcion " +
-                "FROM Roles";
+            const string query = @"
+                SELECT id, nombre, descripcion
+                FROM Roles";
 
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
@@ -35,18 +36,19 @@
         }
         public Rol? FindById(int id)
         {
-            const string query = "SELECT id, nombre, descripcion " +
-                "FROM Roles " +
-                "WHERE id_rol = @Id";
+            const string query = @"
+                SELECT id, nombre, descripcion 
+                FROM Roles 
+                WHERE id_rol = @Id";
 
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
-            var parameter = command.CreateParameter();
 
-            parameter.ParameterName = "@Id";
-            parameter.Value = id;
-            command.Parameters.Add(parameter);
+            var paramId = command.CreateParameter();
+            paramId.ParameterName = "@Id";
+            paramId.Value = id;
+            command.Parameters.Add(paramId);
 
             using var reader = command.ExecuteReader();
             if (reader.Read())
@@ -61,13 +63,35 @@
         }
         public int Insert(Rol entity)
         {
-            throw new NotImplementedException();
+            const string query = @"
+                INSERT INTO Roles (nombre, descripcion) 
+                VALUES (@Nombre, @Descripcion); 
+                SELECT SCOPE_IDENTITY();";
+
+            using var connection = OpenConnection();
+            using var command = connection.CreateCommand();
+            command.CommandText = query;
+
+            var paramNombre = command.CreateParameter();
+            paramNombre.ParameterName = "@Nombre";
+            paramNombre.Value = entity.Nombre;
+            command.Parameters.Add(paramNombre);
+
+            var paramDescripcion = command.CreateParameter();
+            paramDescripcion.ParameterName = "@Descripcion";
+            paramDescripcion.Value = (object?)entity.Descripcion ?? DBNull.Value;
+            command.Parameters.Add(paramDescripcion);
+
+            var result = command.ExecuteScalar();
+
+            return Convert.ToInt32(result);
         }
         public bool Update(Rol entity)
         {
-            const string query = "UPDATE Roles " +
-                "SET nombre = @Nombre, descripcion = @Descripcion " +
-                "WHERE id_rol = @Id";
+            const string query = @"
+                UPDATE Roles 
+                SET nombre = @Nombre, descripcion = @Descripcion 
+                WHERE id_rol = @Id";
 
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
