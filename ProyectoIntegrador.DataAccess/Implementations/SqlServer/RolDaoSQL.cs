@@ -68,7 +68,7 @@
             command.CommandText = query;
 
             AddParameter(command, "@Nombre", entity.Nombre);
-            AddParameter(command, "@Description", entity.Descripcion);
+            AddParameter(command, "@Descripcion", entity.Descripcion);
 
             var result = command.ExecuteScalar();
 
