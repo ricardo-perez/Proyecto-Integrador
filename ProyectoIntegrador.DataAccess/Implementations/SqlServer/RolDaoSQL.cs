@@ -4,11 +4,8 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Collections.Generic;
-    public class RolDaoSQL : DaoBase, IRolDao
+    public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IRolDao
     {
-        public RolDaoSQL(IConnectionFactory connectionFactory) : base(connectionFactory)
-        {
-        }
         public void Delete(int id)
         {
             throw new NotImplementedException();
@@ -17,10 +14,9 @@
         {
             var roles = new List<Rol>();
             const string query = "SELECT * FROM Roles";
-            using var connection = _connectionFactory.CreateConnection();
+            using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
-            connection.Open();
             using var reader = command.ExecuteReader();
             int idRolIndex = reader.GetOrdinal("id_rol");
             int nombreIndex = reader.GetOrdinal("nombre");
@@ -34,17 +30,16 @@
             }
             return roles;
         }
-        public Rol FindById(int id)
+        public Rol? FindById(int id)
         {
             const string query = "SELECT * FROM Roles WHERE id_rol = @Id";
-            using var connection = _connectionFactory.CreateConnection();
+            using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
             var parameter = command.CreateParameter();
             parameter.ParameterName = "@Id";
             parameter.Value = id;
             command.Parameters.Add(parameter);
-            connection.Open();
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {

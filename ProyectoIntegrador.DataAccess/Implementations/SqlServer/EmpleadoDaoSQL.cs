@@ -3,11 +3,8 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    public class EmpleadoDaoSQL : DaoBase, IEmpleadoDao
+    public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IEmpleadoDao
     {
-        public EmpleadoDaoSQL(IConnectionFactory connectionFactory) : base(connectionFactory)
-        {
-        }
         public void Delete(int id)
         {
             throw new NotImplementedException();
@@ -16,7 +13,7 @@
         {
             throw new NotImplementedException();
         }
-        public Empleado FindById(int id)
+        public Empleado? FindById(int id)
         {
             throw new NotImplementedException();
         }
