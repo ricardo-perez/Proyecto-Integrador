@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IRolDao
     {
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -14,7 +14,7 @@
         {
             var roles = new List<Rol>();
             const string query = @"
-                SELECT id, nombre, descripcion
+                SELECT id_rol, nombre, descripcion
                 FROM Roles";
 
             using var connection = OpenConnection();
@@ -24,12 +24,17 @@
             using var reader = command.ExecuteReader();
             int idRolIndex = reader.GetOrdinal("id_rol");
             int nombreIndex = reader.GetOrdinal("nombre");
+            int descripcionIndex = reader.GetOrdinal("descripcion");
             while (reader.Read())
             {
                 roles.Add(new Rol
                 {
                     IdRol = reader.GetInt32(idRolIndex),
-                    Nombre = reader.GetString(nombreIndex)
+                    Nombre = reader.GetString(nombreIndex),
+                    Descripcion = reader.IsDBNull(descripcionIndex)
+                    ? null
+                    : reader.GetString(descripcionIndex)
+
                 });
             }
             return roles;
@@ -37,7 +42,7 @@
         public Rol? FindById(int id)
         {
             const string query = @"
-                SELECT id, nombre, descripcion 
+                SELECT id_rol, nombre, descripcion 
                 FROM Roles 
                 WHERE id_rol = @Id";
 
@@ -53,10 +58,16 @@
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
+                int idRolIndex = reader.GetOrdinal("id_rol");
+                int nombreIndex = reader.GetOrdinal("nombre");
+                int descripcionIndex = reader.GetOrdinal("descripcion");
                 return new Rol
                 {
-                    IdRol = reader.GetInt32(reader.GetOrdinal("id_rol")),
-                    Nombre = reader.GetString(reader.GetOrdinal("nombre"))
+                    IdRol = reader.GetInt32(idRolIndex),
+                    Nombre = reader.GetString(nombreIndex),
+                    Descripcion = reader.IsDBNull(descripcionIndex)
+                    ? null
+                    : reader.GetString(descripcionIndex)
                 };
             }
             return null;

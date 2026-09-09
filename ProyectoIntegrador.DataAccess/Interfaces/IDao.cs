@@ -7,6 +7,6 @@
         T? FindById(int id);
         IEnumerable<T> FindAll();
         bool Update(T entity);
-        void Delete(int id);
+        bool Delete(int id);
     }
 }

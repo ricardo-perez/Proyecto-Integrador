@@ -5,7 +5,7 @@
     using ProyectoIntegrador.Entities;
     public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IEmpleadoDao
     {
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -17,11 +17,11 @@
         {
             throw new NotImplementedException();
         }
-        public void Insert(Empleado entity)
+        public int Insert(Empleado entity)
         {
             throw new NotImplementedException();
         }
-        public void Update(Empleado entity)
+        public bool Update(Empleado entity)
         {
             throw new NotImplementedException();
         }
