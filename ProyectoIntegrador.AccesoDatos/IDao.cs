@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     public interface IDao<T> where T : class
     {
-        IEnumerable<T> ObtenerTodos();
-        T? ObtenerPorId(int id);
-        int Insertar(T entidad);
-        bool Actualizar(T entidad);
-        bool Eliminar(int id);
+        void Insert(T entity);
+        T FindById(int id);
+        IEnumerable<T> FindAll();
+        void Update(T entity);
+        void Delete(int id);
     }
 }

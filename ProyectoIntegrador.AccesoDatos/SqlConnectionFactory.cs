@@ -11,7 +11,7 @@
             _connectionString = connectionString
                 ?? throw new ArgumentNullException(nameof(connectionString));
         }
-        public IDbConnection CrearConexion()
+        public IDbConnection CreateConnection()
         {
             return new SqlConnection(_connectionString);
         }

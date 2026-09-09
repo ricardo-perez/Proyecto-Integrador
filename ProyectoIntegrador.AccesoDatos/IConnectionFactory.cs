@@ -3,6 +3,6 @@
     using System.Data;
     public interface IConnectionFactory
     {
-        IDbConnection CrearConexion();
+        IDbConnection CreateConnection();
     }
 }

@@ -3,7 +3,7 @@
     using System.Data;
     public class MySqlConnectionFactory : IConnectionFactory
     {
-        public IDbConnection CrearConexion()
+        public IDbConnection CreateConnection()
         {
             throw new NotImplementedException();
         }
