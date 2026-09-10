@@ -5,31 +5,31 @@
     using ProyectoIntegrador.Entities;
     using System;
     using System.Data;
-
     public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IEmpleadoDao
     {
+        protected override string TableName => "Empleados";
         public bool Delete(int id)
         {
             throw new NotImplementedException();
         }
         public IEnumerable<Empleado> FindAll()
         {
-            var empleados = new List<Empleado>();
-            const string query = @"
+            string query = @$"
                 SELECT id_empleado, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
-                FROM empleados";
+                FROM {TableName}";
 
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
 
             using var reader = command.ExecuteReader();
+
+            var entities = new List<Empleado>();
             while (reader.Read())
             {
-                empleados.Add(EmpleadoMapper(reader));
+                entities.Add(EmpleadoMapper(reader));
             }
-            return empleados;
-
+            return entities;
         }
         public Empleado? FindById(int id)
         {
@@ -37,8 +37,8 @@
         }
         public int Insert(Empleado entity)
         {
-            const string query = @"
-                INSERT INTO empleados (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo) 
+            string query = @$"
+                INSERT INTO {TableName} (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo) 
                 VALUES (@IdRol, @Legajo, @Nombre, @Apellido, @Dni, @Telefono, @Direccion, @Email, @NombreUsuario, @Contrasena, @ImagenRuta, @Activo);
                 SELECT SCOPE_IDENTITY();";
 
@@ -94,7 +94,7 @@
                     ? null
                     : reader.GetString(telefonoIndex),
                 Direccion = reader.IsDBNull(direccionIndex)
-                    ? null 
+                    ? null
                     : reader.GetString(direccionIndex),
                 Email = reader.IsDBNull(emailIndex)
                     ? null

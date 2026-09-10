@@ -7,33 +7,35 @@
     using System.Data;
     public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IRolDao
     {
+        protected override string TableName => "roles";
         public bool Delete(int id)
         {
             throw new NotImplementedException();
         }
         public IEnumerable<Rol> FindAll()
         {
-            var roles = new List<Rol>();
-            const string query = @"
+            string query = @$"
                 SELECT id_rol, nombre, descripcion
-                FROM Roles";
+                FROM {TableName}";
 
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
 
             using var reader = command.ExecuteReader();
+
+            var entities = new List<Rol>();
             while (reader.Read())
             {
-                roles.Add(MapRol(reader));
+                entities.Add(RolMapper(reader));
             }
-            return roles;
+            return entities;
         }
         public Rol? FindById(int id)
         {
-            const string query = @"
+            string query = @$"
                 SELECT id_rol, nombre, descripcion 
-                FROM Roles 
+                FROM {TableName} 
                 WHERE id_rol = @Id";
 
             using var connection = OpenConnection();
@@ -45,14 +47,14 @@
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
-                return MapRol(reader);
+                return RolMapper(reader);
             }
             return null;
         }
         public int Insert(Rol entity)
         {
-            const string query = @"
-                INSERT INTO Roles (nombre, descripcion) 
+            string query = @$"
+                INSERT INTO {TableName} (nombre, descripcion) 
                 VALUES (@Nombre, @Descripcion); 
                 SELECT SCOPE_IDENTITY();";
 
@@ -69,8 +71,8 @@
         }
         public bool Update(Rol entity)
         {
-            const string query = @"
-                UPDATE Roles 
+            string query = @$"
+                UPDATE {TableName} 
                 SET nombre = @Nombre, descripcion = @Descripcion 
                 WHERE id_rol = @Id";
 
@@ -86,7 +88,7 @@
 
             return rowsAffected > 0;
         }
-        private static Rol MapRol(IDataReader reader)
+        private static Rol RolMapper(IDataReader reader)
         {
             int idIndex = reader.GetOrdinal("id_rol");
             int nombreIndex = reader.GetOrdinal("nombre");

@@ -4,6 +4,7 @@
     using System.Data;
     public abstract class DaoBase(IConnectionFactory connectionFactory)
     {
+        protected abstract string TableName { get; }
         protected readonly IConnectionFactory _connectionFactory = connectionFactory
             ?? throw new ArgumentNullException(nameof(connectionFactory));
         protected IDbConnection OpenConnection()
