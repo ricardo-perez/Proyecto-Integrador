@@ -25,7 +25,6 @@
                     {PrimaryKeyColumn}, nombre, descripcion
                 FROM {TableName}
                 """;
-
             return ExecuteList(query);
         }
         public Rol? FindById(int id)
@@ -37,7 +36,6 @@
                 WHERE
                     {PrimaryKeyColumn} = @Id
                 """;
-
             return ExecuteSingle(query, ("@Id", id));
         }
         public int Insert(Rol entity)
@@ -49,7 +47,6 @@
                     (@Nombre, @Descripcion); 
                 SELECT SCOPE_IDENTITY();
                 """;
-
             return ExecuteScalar<int>(query,
                 ("@Nombre", entity.Nombre),
                 ("@Descripcion", entity.Descripcion));
@@ -64,7 +61,6 @@
                 WHERE
                     {PrimaryKeyColumn} = @Id
                 """;
-
             return ExecuteNonQuery(query,
                 ("@Id", entity.IdRol),
                 ("@Nombre", entity.Nombre),

@@ -7,9 +7,7 @@
     public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Empleado>(connectionFactory), IEmpleadoDao
     {
         protected override string TableName { get { return "empleados"; } }
-
         protected override string PrimaryKeyColumn { get { return "id_empleado"; } }
-
         public bool Delete(int id)
         {
             var query = $"""
@@ -27,7 +25,6 @@
                     {PrimaryKeyColumn}, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
                 FROM {TableName}
                 """;
-
             return ExecuteList(query);
         }
         public Empleado? FindById(int id)
@@ -39,7 +36,6 @@
                 WHERE
                     {PrimaryKeyColumn} = @Id
                 """;
-
             return ExecuteSingle(query, ("@Id", id));
         }
         public int Insert(Empleado entity)
@@ -51,7 +47,6 @@
                     (@IdRol, @Legajo, @Nombre, @Apellido, @Dni, @Telefono, @Direccion, @Email, @NombreUsuario, @Contrasena, @ImagenRuta, @Activo);
                 SELECT SCOPE_IDENTITY();
                 """;
-
             return ExecuteScalar<int>(query,
                 ("@IdRol", entity.IdRol),
                 ("@Legajo", entity.Legajo),
@@ -84,9 +79,8 @@
                     , imagen_ruta = @ImagenRuta
                     , activo = @Activo
                 WHERE
-                    id_rol = @Id
+                    {PrimaryKeyColumn} = @Id
                 """;
-
             return ExecuteNonQuery(query,
                 ("@Id", entity.IdEmpleado),
                 ("@IdRol", entity.IdRol),
