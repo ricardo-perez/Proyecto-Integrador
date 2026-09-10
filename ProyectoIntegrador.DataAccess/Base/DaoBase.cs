@@ -2,9 +2,10 @@
 {
     using ProyectoIntegrador.DataAccess.Interfaces;
     using System.Data;
-    public abstract class DaoBase(IConnectionFactory connectionFactory)
+    public abstract class DaoBase<T>(IConnectionFactory connectionFactory)
     {
         protected abstract string TableName { get; }
+        protected abstract T Mapper(IDataReader reader);
         protected readonly IConnectionFactory _connectionFactory = connectionFactory
             ?? throw new ArgumentNullException(nameof(connectionFactory));
         protected IDbConnection OpenConnection()
@@ -20,7 +21,7 @@
             parameter.Value = value ?? DBNull.Value;
             command.Parameters.Add(parameter);
         }
-        protected IEnumerable<T> ExecuteList<T>(string query, Func<IDataReader, T> mapper, params (string Name, object? Value)[] parameters)
+        protected IEnumerable<T> ExecuteList(string query, params (string Name, object? Value)[] parameters)
         {
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
@@ -36,12 +37,12 @@
             var list = new List<T>();
             while (reader.Read())
             {
-                list.Add(mapper(reader));
+                list.Add(Mapper(reader));
             }
 
             return list;
         }
-        protected T ExecuteScalar<T>(string query, params (string Name, object? Value)[] parameters)
+        protected TScalar ExecuteScalar<TScalar>(string query, params (string Name, object? Value)[] parameters)
         {
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
@@ -59,9 +60,9 @@
                 return default!;
             }
 
-            return (T)Convert.ChangeType(result, typeof(T));
+            return (TScalar)Convert.ChangeType(result, typeof(TScalar));
         }
-        protected T? ExecuteSingle<T>(string query, Func<IDataReader, T> mapper, params (string Name, object? Value)[] parameters)
+        protected T? ExecuteSingle(string query, params (string Name, object? Value)[] parameters)
         {
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
@@ -75,7 +76,7 @@
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
-                return mapper(reader);
+                return Mapper(reader);
             }
 
             return default;

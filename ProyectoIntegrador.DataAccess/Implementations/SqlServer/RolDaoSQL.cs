@@ -4,7 +4,7 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IRolDao
+    public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Rol>(connectionFactory), IRolDao
     {
         protected override string TableName => "roles";
         public bool Delete(int id)
@@ -25,7 +25,7 @@
                 FROM {TableName}
                 """;
 
-            return ExecuteList(query, Mapper);
+            return ExecuteList(query);
         }
         public Rol? FindById(int id)
         {
@@ -37,7 +37,7 @@
                     id_rol = @Id
                 """;
 
-            return ExecuteSingle(query, Mapper, ("@Id", id));
+            return ExecuteSingle(query, ("@Id", id));
         }
         public int Insert(Rol entity)
         {
@@ -69,7 +69,7 @@
                 ("@Nombre", entity.Nombre),
                 ("@Descripcion", entity.Descripcion)) > 0;
         }
-        private static Rol Mapper(IDataReader reader)
+        protected override Rol Mapper(IDataReader reader)
         {
             int idIndex = reader.GetOrdinal("id_rol");
             int nombreIndex = reader.GetOrdinal("nombre");

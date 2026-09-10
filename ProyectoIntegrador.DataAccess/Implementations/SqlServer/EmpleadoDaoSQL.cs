@@ -4,7 +4,7 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IEmpleadoDao
+    public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Empleado>(connectionFactory), IEmpleadoDao
     {
         protected override string TableName => "Empleados";
         public bool Delete(int id)
@@ -25,7 +25,7 @@
                 FROM {TableName}
                 """;
 
-            return ExecuteList(query, Mapper);
+            return ExecuteList(query);
         }
         public Empleado? FindById(int id)
         {
@@ -37,7 +37,7 @@
                     id_empleado = @Id
                 """;
 
-            return ExecuteSingle(query, Mapper, ("@Id", id));
+            return ExecuteSingle(query, ("@Id", id));
         }
         public int Insert(Empleado entity)
         {
@@ -100,7 +100,7 @@
                 ("@ImagenRuta", entity.ImagenRuta),
                 ("@Activo", entity.Activo)) > 0;
         }
-        private static Empleado Mapper(IDataReader reader)
+        protected override Empleado Mapper(IDataReader reader)
         {
             int idEmpleadoIndex = reader.GetOrdinal("id_empleado");
             int idRolIndex = reader.GetOrdinal("id_rol");
