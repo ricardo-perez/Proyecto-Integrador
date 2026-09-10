@@ -1,7 +1,7 @@
 ﻿namespace ProyectoIntegrador.DataAccess.Interfaces
 {
     using ProyectoIntegrador.Entities;
-    internal interface IEmpleadoDao : IDao<Empleado>
+    public interface IEmpleadoDao : IDao<Empleado>
     {
     }
 }

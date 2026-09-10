@@ -23,12 +23,9 @@
             command.CommandText = query;
 
             using var reader = command.ExecuteReader();
-            int idRolIndex = reader.GetOrdinal("id_rol");
-            int nombreIndex = reader.GetOrdinal("nombre");
-            int descripcionIndex = reader.GetOrdinal("descripcion");
             while (reader.Read())
             {
-                roles.Add(MapRol(reader, idRolIndex, nombreIndex, descripcionIndex));
+                roles.Add(MapRol(reader));
             }
             return roles;
         }
@@ -48,11 +45,7 @@
             using var reader = command.ExecuteReader();
             if (reader.Read())
             {
-                int idRolIndex = reader.GetOrdinal("id_rol");
-                int nombreIndex = reader.GetOrdinal("nombre");
-                int descripcionIndex = reader.GetOrdinal("descripcion");
-
-                return MapRol(reader, idRolIndex, nombreIndex, descripcionIndex);
+                return MapRol(reader);
             }
             return null;
         }
@@ -93,8 +86,11 @@
 
             return rowsAffected > 0;
         }
-        private static Rol MapRol(IDataReader reader, int idIndex, int nombreIndex, int descripcionIndex)
+        private static Rol MapRol(IDataReader reader)
         {
+            int idIndex = reader.GetOrdinal("id_rol");
+            int nombreIndex = reader.GetOrdinal("nombre");
+            int descripcionIndex = reader.GetOrdinal("descripcion");
             return new Rol
             {
                 IdRol = reader.GetInt32(idIndex),
