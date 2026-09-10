@@ -6,10 +6,10 @@
     using System.Data;
     public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Empleado>(connectionFactory), IEmpleadoDao
     {
-        protected override string TableName => "Empleados";
+        protected override string TableName { get { return "empleados"; } }
         public bool Delete(int id)
         {
-            string query = $"""
+            var query = $"""
                 DELETE
                 FROM {TableName} 
                 WHERE
@@ -19,7 +19,7 @@
         }
         public IEnumerable<Empleado> FindAll()
         {
-            string query = $"""
+            var query = $"""
                 SELECT
                     id_empleado, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
                 FROM {TableName}
@@ -29,7 +29,7 @@
         }
         public Empleado? FindById(int id)
         {
-            string query = $"""
+            var query = $"""
                 SELECT
                     id_empleado, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
                 FROM {TableName} 
@@ -41,8 +41,7 @@
         }
         public int Insert(Empleado entity)
         {
-
-            string query = $"""
+            var query = $"""
                 INSERT INTO {TableName}
                     (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo)
                 VALUES
@@ -66,7 +65,7 @@
         }
         public bool Update(Empleado entity)
         {
-            string query = $"""
+            var query = $"""
                 UPDATE {TableName} 
                 SET
                     id_rol = @IdRol
@@ -102,19 +101,19 @@
         }
         protected override Empleado Mapper(IDataReader reader)
         {
-            int idEmpleadoIndex = reader.GetOrdinal("id_empleado");
-            int idRolIndex = reader.GetOrdinal("id_rol");
-            int legajoIndex = reader.GetOrdinal("legajo");
-            int nombreIndex = reader.GetOrdinal("nombre");
-            int apellidoIndex = reader.GetOrdinal("apellido");
-            int dniIndex = reader.GetOrdinal("dni");
-            int telefonoIndex = reader.GetOrdinal("telefono");
-            int direccionIndex = reader.GetOrdinal("direccion");
-            int emailIndex = reader.GetOrdinal("email");
-            int nombreUsuarioIndex = reader.GetOrdinal("nombre_usuario");
-            int contrasenaIndex = reader.GetOrdinal("contrasena");
-            int imagenRutaIndex = reader.GetOrdinal("imagen_ruta");
-            int activoIndex = reader.GetOrdinal("activo");
+            var idEmpleadoIndex = reader.GetOrdinal("id_empleado");
+            var idRolIndex = reader.GetOrdinal("id_rol");
+            var legajoIndex = reader.GetOrdinal("legajo");
+            var nombreIndex = reader.GetOrdinal("nombre");
+            var apellidoIndex = reader.GetOrdinal("apellido");
+            var dniIndex = reader.GetOrdinal("dni");
+            var telefonoIndex = reader.GetOrdinal("telefono");
+            var direccionIndex = reader.GetOrdinal("direccion");
+            var emailIndex = reader.GetOrdinal("email");
+            var nombreUsuarioIndex = reader.GetOrdinal("nombre_usuario");
+            var contrasenaIndex = reader.GetOrdinal("contrasena");
+            var imagenRutaIndex = reader.GetOrdinal("imagen_ruta");
+            var activoIndex = reader.GetOrdinal("activo");
             return new Empleado
             {
                 IdEmpleado = reader.GetInt32(idEmpleadoIndex),

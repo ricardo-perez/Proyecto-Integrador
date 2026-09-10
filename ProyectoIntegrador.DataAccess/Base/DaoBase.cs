@@ -24,13 +24,7 @@
         protected IEnumerable<T> ExecuteList(string query, params (string Name, object? Value)[] parameters)
         {
             using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            foreach (var (name, value) in parameters)
-            {
-                AddParameter(command, name, value);
-            }
+            using var command = CreateCommand(connection, query, parameters);
 
             using var reader = command.ExecuteReader();
 
@@ -45,13 +39,7 @@
         protected TScalar ExecuteScalar<TScalar>(string query, params (string Name, object? Value)[] parameters)
         {
             using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            foreach (var (name, value) in parameters)
-            {
-                AddParameter(command, name, value);
-            }
+            using var command = CreateCommand(connection, query, parameters);
 
             var result = command.ExecuteScalar();
 
@@ -65,13 +53,7 @@
         protected T? ExecuteSingle(string query, params (string Name, object? Value)[] parameters)
         {
             using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            foreach (var (name, value) in parameters)
-            {
-                AddParameter(command, name, value);
-            }
+            using var command = CreateCommand(connection, query, parameters);
 
             using var reader = command.ExecuteReader();
             if (reader.Read())
@@ -84,7 +66,13 @@
         protected int ExecuteNonQuery(string query, params (string Name, object? Value)[] parameters)
         {
             using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
+            using var command = CreateCommand(connection, query, parameters);
+
+            return command.ExecuteNonQuery();
+        }
+        private static IDbCommand CreateCommand(IDbConnection connection, string query, (string Name, object? Value)[] parameters)
+        {
+            var command = connection.CreateCommand();
             command.CommandText = query;
 
             foreach (var (name, value) in parameters)
@@ -92,7 +80,7 @@
                 AddParameter(command, name, value);
             }
 
-            return command.ExecuteNonQuery();
+            return command;
         }
     }
 }

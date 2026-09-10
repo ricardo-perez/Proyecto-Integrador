@@ -6,10 +6,10 @@
     using System.Data;
     public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Rol>(connectionFactory), IRolDao
     {
-        protected override string TableName => "roles";
+        protected override string TableName { get { return "roles"; } }
         public bool Delete(int id)
         {
-            string query = $"""
+            var query = $"""
                 DELETE
                 FROM {TableName} 
                 WHERE
@@ -19,7 +19,7 @@
         }
         public IEnumerable<Rol> FindAll()
         {
-            string query = $"""
+            var query = $"""
                 SELECT
                     id_rol, nombre, descripcion
                 FROM {TableName}
@@ -29,7 +29,7 @@
         }
         public Rol? FindById(int id)
         {
-            string query = $"""
+            var query = $"""
                 SELECT
                     id_rol, nombre, descripcion 
                 FROM {TableName} 
@@ -41,7 +41,7 @@
         }
         public int Insert(Rol entity)
         {
-            string query = $"""
+            var query = $"""
                 INSERT INTO {TableName}
                     (nombre, descripcion) 
                 VALUES
@@ -55,7 +55,7 @@
         }
         public bool Update(Rol entity)
         {
-            string query = $"""
+            var query = $"""
                 UPDATE {TableName} 
                 SET
                     nombre = @Nombre
@@ -71,9 +71,9 @@
         }
         protected override Rol Mapper(IDataReader reader)
         {
-            int idIndex = reader.GetOrdinal("id_rol");
-            int nombreIndex = reader.GetOrdinal("nombre");
-            int descripcionIndex = reader.GetOrdinal("descripcion");
+            var idIndex = reader.GetOrdinal("id_rol");
+            var nombreIndex = reader.GetOrdinal("nombre");
+            var descripcionIndex = reader.GetOrdinal("descripcion");
             return new Rol
             {
                 IdRol = reader.GetInt32(idIndex),
