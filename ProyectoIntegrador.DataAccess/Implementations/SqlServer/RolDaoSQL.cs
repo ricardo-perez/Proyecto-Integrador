@@ -10,83 +10,55 @@
         protected override string TableName => "roles";
         public bool Delete(int id)
         {
-            throw new NotImplementedException();
+            string query = $"""
+                DELETE FROM {TableName} 
+                WHERE id_rol = @Id
+                """;
+            return ExecuteNonQuery(query, ("@Id", id)) > 0;
         }
         public IEnumerable<Rol> FindAll()
         {
-            string query = @$"
+            string query = $"""
                 SELECT id_rol, nombre, descripcion
-                FROM {TableName}";
+                FROM {TableName}
+                """;
 
-            using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            using var reader = command.ExecuteReader();
-
-            var entities = new List<Rol>();
-            while (reader.Read())
-            {
-                entities.Add(RolMapper(reader));
-            }
-            return entities;
+            return ExecuteList(query, RolMapper);
         }
         public Rol? FindById(int id)
         {
-            string query = @$"
+            string query = $"""
                 SELECT id_rol, nombre, descripcion 
                 FROM {TableName} 
-                WHERE id_rol = @Id";
+                WHERE id_rol = @Id
+                """;
 
-            using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            AddParameter(command, "@Id", id);
-
-            using var reader = command.ExecuteReader();
-            if (reader.Read())
-            {
-                return RolMapper(reader);
-            }
-            return null;
+            return ExecuteSingle(query, RolMapper, ("@Id", id));
         }
         public int Insert(Rol entity)
         {
-            string query = @$"
+            string query = $"""
                 INSERT INTO {TableName} (nombre, descripcion) 
                 VALUES (@Nombre, @Descripcion); 
-                SELECT SCOPE_IDENTITY();";
+                SELECT SCOPE_IDENTITY();
+                """;
 
-            using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            AddParameter(command, "@Nombre", entity.Nombre);
-            AddParameter(command, "@Descripcion", entity.Descripcion);
-
-            var result = command.ExecuteScalar();
-
-            return Convert.ToInt32(result);
+            return ExecuteScalar<int>(query,
+                ("@Nombre", entity.Nombre),
+                ("@Descripcion", entity.Descripcion));
         }
         public bool Update(Rol entity)
         {
-            string query = @$"
+            string query = $"""
                 UPDATE {TableName} 
                 SET nombre = @Nombre, descripcion = @Descripcion 
-                WHERE id_rol = @Id";
+                WHERE id_rol = @Id
+                """;
 
-            using var connection = OpenConnection();
-            using var command = connection.CreateCommand();
-            command.CommandText = query;
-
-            AddParameter(command, "@Id", entity.IdRol);
-            AddParameter(command, "@Nombre", entity.Nombre);
-            AddParameter(command, "@Descripcion", entity.Descripcion);
-
-            int rowsAffected = command.ExecuteNonQuery();
-
-            return rowsAffected > 0;
+            return ExecuteNonQuery(query,
+                ("@Id", entity.IdRol),
+                ("@Nombre", entity.Nombre),
+                ("@Descripcion", entity.Descripcion)) > 0;
         }
         private static Rol RolMapper(IDataReader reader)
         {

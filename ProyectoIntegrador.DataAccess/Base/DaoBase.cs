@@ -22,8 +22,6 @@
         }
         protected IEnumerable<T> ExecuteList<T>(string query, Func<IDataReader, T> mapper, params (string Name, object? Value)[] parameters)
         {
-            var list = new List<T>();
-
             using var connection = OpenConnection();
             using var command = connection.CreateCommand();
             command.CommandText = query;
@@ -34,6 +32,8 @@
             }
 
             using var reader = command.ExecuteReader();
+
+            var list = new List<T>();
             while (reader.Read())
             {
                 list.Add(mapper(reader));
