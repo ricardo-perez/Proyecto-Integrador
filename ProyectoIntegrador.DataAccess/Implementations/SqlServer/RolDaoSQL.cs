@@ -3,7 +3,6 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    using System.Collections.Generic;
     using System.Data;
     public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase(connectionFactory), IRolDao
     {
@@ -11,35 +10,42 @@
         public bool Delete(int id)
         {
             string query = $"""
-                DELETE FROM {TableName} 
-                WHERE id_rol = @Id
+                DELETE
+                FROM {TableName} 
+                WHERE
+                    id_rol = @Id
                 """;
             return ExecuteNonQuery(query, ("@Id", id)) > 0;
         }
         public IEnumerable<Rol> FindAll()
         {
             string query = $"""
-                SELECT id_rol, nombre, descripcion
+                SELECT
+                    id_rol, nombre, descripcion
                 FROM {TableName}
                 """;
 
-            return ExecuteList(query, RolMapper);
+            return ExecuteList(query, Mapper);
         }
         public Rol? FindById(int id)
         {
             string query = $"""
-                SELECT id_rol, nombre, descripcion 
+                SELECT
+                    id_rol, nombre, descripcion 
                 FROM {TableName} 
-                WHERE id_rol = @Id
+                WHERE
+                    id_rol = @Id
                 """;
 
-            return ExecuteSingle(query, RolMapper, ("@Id", id));
+            return ExecuteSingle(query, Mapper, ("@Id", id));
         }
         public int Insert(Rol entity)
         {
             string query = $"""
-                INSERT INTO {TableName} (nombre, descripcion) 
-                VALUES (@Nombre, @Descripcion); 
+                INSERT INTO {TableName}
+                    (nombre, descripcion) 
+                VALUES
+                    (@Nombre, @Descripcion); 
                 SELECT SCOPE_IDENTITY();
                 """;
 
@@ -51,8 +57,11 @@
         {
             string query = $"""
                 UPDATE {TableName} 
-                SET nombre = @Nombre, descripcion = @Descripcion 
-                WHERE id_rol = @Id
+                SET
+                    nombre = @Nombre
+                    , descripcion = @Descripcion 
+                WHERE
+                    id_rol = @Id
                 """;
 
             return ExecuteNonQuery(query,
@@ -60,7 +69,7 @@
                 ("@Nombre", entity.Nombre),
                 ("@Descripcion", entity.Descripcion)) > 0;
         }
-        private static Rol RolMapper(IDataReader reader)
+        private static Rol Mapper(IDataReader reader)
         {
             int idIndex = reader.GetOrdinal("id_rol");
             int nombreIndex = reader.GetOrdinal("nombre");
