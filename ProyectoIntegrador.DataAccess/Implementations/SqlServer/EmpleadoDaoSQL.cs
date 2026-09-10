@@ -7,13 +7,16 @@
     public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Empleado>(connectionFactory), IEmpleadoDao
     {
         protected override string TableName { get { return "empleados"; } }
+
+        protected override string PrimaryKeyColumn { get { return "id_empleado"; } }
+
         public bool Delete(int id)
         {
             var query = $"""
                 DELETE
                 FROM {TableName} 
                 WHERE
-                    id_empleado = @Id
+                    {PrimaryKeyColumn} = @Id
                 """;
             return ExecuteNonQuery(query, ("@Id", id)) > 0;
         }
@@ -21,7 +24,7 @@
         {
             var query = $"""
                 SELECT
-                    id_empleado, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
+                    {PrimaryKeyColumn}, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
                 FROM {TableName}
                 """;
 
@@ -31,10 +34,10 @@
         {
             var query = $"""
                 SELECT
-                    id_empleado, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
+                    {PrimaryKeyColumn}, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
                 FROM {TableName} 
                 WHERE
-                    id_empleado = @Id
+                    {PrimaryKeyColumn} = @Id
                 """;
 
             return ExecuteSingle(query, ("@Id", id));
@@ -101,7 +104,7 @@
         }
         protected override Empleado Mapper(IDataReader reader)
         {
-            var idEmpleadoIndex = reader.GetOrdinal("id_empleado");
+            var idEmpleadoIndex = reader.GetOrdinal(PrimaryKeyColumn);
             var idRolIndex = reader.GetOrdinal("id_rol");
             var legajoIndex = reader.GetOrdinal("legajo");
             var nombreIndex = reader.GetOrdinal("nombre");

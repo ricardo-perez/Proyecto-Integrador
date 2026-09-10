@@ -7,13 +7,14 @@
     public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Rol>(connectionFactory), IRolDao
     {
         protected override string TableName { get { return "roles"; } }
+        protected override string PrimaryKeyColumn { get { return "id_rol"; } }
         public bool Delete(int id)
         {
             var query = $"""
                 DELETE
                 FROM {TableName} 
                 WHERE
-                    id_rol = @Id
+                    {PrimaryKeyColumn} = @Id
                 """;
             return ExecuteNonQuery(query, ("@Id", id)) > 0;
         }
@@ -21,7 +22,7 @@
         {
             var query = $"""
                 SELECT
-                    id_rol, nombre, descripcion
+                    {PrimaryKeyColumn}, nombre, descripcion
                 FROM {TableName}
                 """;
 
@@ -31,10 +32,10 @@
         {
             var query = $"""
                 SELECT
-                    id_rol, nombre, descripcion 
+                    {PrimaryKeyColumn}, nombre, descripcion 
                 FROM {TableName} 
                 WHERE
-                    id_rol = @Id
+                    {PrimaryKeyColumn} = @Id
                 """;
 
             return ExecuteSingle(query, ("@Id", id));
@@ -61,7 +62,7 @@
                     nombre = @Nombre
                     , descripcion = @Descripcion 
                 WHERE
-                    id_rol = @Id
+                    {PrimaryKeyColumn} = @Id
                 """;
 
             return ExecuteNonQuery(query,
@@ -71,12 +72,12 @@
         }
         protected override Rol Mapper(IDataReader reader)
         {
-            var idIndex = reader.GetOrdinal("id_rol");
+            var idRolIndex = reader.GetOrdinal(PrimaryKeyColumn);
             var nombreIndex = reader.GetOrdinal("nombre");
             var descripcionIndex = reader.GetOrdinal("descripcion");
             return new Rol
             {
-                IdRol = reader.GetInt32(idIndex),
+                IdRol = reader.GetInt32(idRolIndex),
                 Nombre = reader.GetString(nombreIndex),
                 Descripcion = reader.IsDBNull(descripcionIndex)
                     ? null

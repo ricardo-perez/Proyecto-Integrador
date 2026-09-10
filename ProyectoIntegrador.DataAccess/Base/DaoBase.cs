@@ -5,6 +5,7 @@
     public abstract class DaoBase<T>(IConnectionFactory connectionFactory)
     {
         protected abstract string TableName { get; }
+        protected abstract string PrimaryKeyColumn { get; }
         protected abstract T Mapper(IDataReader reader);
         protected readonly IConnectionFactory _connectionFactory = connectionFactory
             ?? throw new ArgumentNullException(nameof(connectionFactory));
