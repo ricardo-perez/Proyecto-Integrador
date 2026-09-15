@@ -4,64 +4,25 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    public class EmpleadoDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Empleado>(connectionFactory), IEmpleadoDao
+    public class EmpleadoDaoSQL(IConnectionFactory connectionFactory)
+        : DaoBase<Empleado>(connectionFactory), IEmpleadoDao
     {
-        protected override string TableName { get { return "empleados"; } }
-        protected override string PrimaryKeyColumn { get { return "id_empleado"; } }
-        public bool Delete(int id)
-        {
-            var query = $"""
-                DELETE
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteNonQuery(query, ("@Id", id)) > 0;
-        }
-        public IEnumerable<Empleado> FindAll()
-        {
-            var query = $"""
-                SELECT
-                    {PrimaryKeyColumn}, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
-                FROM {TableName}
-                """;
-            return ExecuteList(query);
-        }
-        public Empleado? FindById(int id)
-        {
-            var query = $"""
-                SELECT
-                    {PrimaryKeyColumn}, id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteSingle(query, ("@Id", id));
-        }
-        public int Insert(Empleado entity)
+        protected override string TableName => "empleados";
+        protected override string PrimaryKeyColumn => "id_empleado";
+        protected override string SelectColumns => $"{PrimaryKeyColumn}, {InsertColumns}";
+        private static string InsertColumns => "id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo";
+        public override int Insert(Empleado entity)
         {
             var query = $"""
                 INSERT INTO {TableName}
-                    (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo)
+                    ({InsertColumns})
                 VALUES
                     (@IdRol, @Legajo, @Nombre, @Apellido, @Dni, @Telefono, @Direccion, @Email, @NombreUsuario, @Contrasena, @ImagenRuta, @Activo);
                 SELECT SCOPE_IDENTITY();
                 """;
-            return ExecuteScalar<int>(query,
-                ("@IdRol", entity.IdRol),
-                ("@Legajo", entity.Legajo),
-                ("@Nombre", entity.Nombre),
-                ("@Apellido", entity.Apellido),
-                ("@Dni", entity.Dni),
-                ("@Telefono", entity.Telefono),
-                ("@Direccion", entity.Direccion),
-                ("@Email", entity.Email),
-                ("@NombreUsuario", entity.NombreUsuario),
-                ("@Contrasena", entity.Contrasena),
-                ("@ImagenRuta", entity.ImagenRuta),
-                ("@Activo", entity.Activo));
+            return ExecuteScalar<int>(query, GetParameters(entity));
         }
-        public bool Update(Empleado entity)
+        public override bool Update(Empleado entity)
         {
             var query = $"""
                 UPDATE {TableName} 
@@ -81,8 +42,11 @@
                 WHERE
                     {PrimaryKeyColumn} = @Id
                 """;
-            return ExecuteNonQuery(query,
-                ("@Id", entity.IdEmpleado),
+            return ExecuteNonQuery(query, [("@Id", entity.IdEmpleado), .. GetParameters(entity)]) > 0;
+        }
+        private static (string, object?)[] GetParameters(Empleado entity)
+        {
+            return [
                 ("@IdRol", entity.IdRol),
                 ("@Legajo", entity.Legajo),
                 ("@Nombre", entity.Nombre),
@@ -94,46 +58,38 @@
                 ("@NombreUsuario", entity.NombreUsuario),
                 ("@Contrasena", entity.Contrasena),
                 ("@ImagenRuta", entity.ImagenRuta),
-                ("@Activo", entity.Activo)) > 0;
+                ("@Activo", entity.Activo)
+            ];
         }
         protected override Empleado Mapper(IDataReader reader)
         {
-            var idEmpleadoIndex = reader.GetOrdinal(PrimaryKeyColumn);
-            var idRolIndex = reader.GetOrdinal("id_rol");
-            var legajoIndex = reader.GetOrdinal("legajo");
-            var nombreIndex = reader.GetOrdinal("nombre");
-            var apellidoIndex = reader.GetOrdinal("apellido");
-            var dniIndex = reader.GetOrdinal("dni");
-            var telefonoIndex = reader.GetOrdinal("telefono");
-            var direccionIndex = reader.GetOrdinal("direccion");
-            var emailIndex = reader.GetOrdinal("email");
-            var nombreUsuarioIndex = reader.GetOrdinal("nombre_usuario");
-            var contrasenaIndex = reader.GetOrdinal("contrasena");
-            var imagenRutaIndex = reader.GetOrdinal("imagen_ruta");
-            var activoIndex = reader.GetOrdinal("activo");
+            int telefonoIndex;
+            int direccionIndex;
+            int emailIndex;
+            int imagenRutaIndex;
             return new Empleado
             {
-                IdEmpleado = reader.GetInt32(idEmpleadoIndex),
-                IdRol = reader.GetInt32(idRolIndex),
-                Legajo = reader.GetInt32(legajoIndex),
-                Nombre = reader.GetString(nombreIndex),
-                Apellido = reader.GetString(apellidoIndex),
-                Dni = reader.GetString(dniIndex),
-                Telefono = reader.IsDBNull(telefonoIndex)
+                IdEmpleado = reader.GetInt32(reader.GetOrdinal(PrimaryKeyColumn)),
+                IdRol = reader.GetInt32(reader.GetOrdinal("id_rol")),
+                Legajo = reader.GetInt32(reader.GetOrdinal("legajo")),
+                Nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                Apellido = reader.GetString(reader.GetOrdinal("apellido")),
+                Dni = reader.GetString(reader.GetOrdinal("dni")),
+                Telefono = reader.IsDBNull(telefonoIndex = reader.GetOrdinal("telefono"))
                     ? null
                     : reader.GetString(telefonoIndex),
-                Direccion = reader.IsDBNull(direccionIndex)
+                Direccion = reader.IsDBNull(direccionIndex = reader.GetOrdinal("direccion"))
                     ? null
                     : reader.GetString(direccionIndex),
-                Email = reader.IsDBNull(emailIndex)
+                Email = reader.IsDBNull(emailIndex = reader.GetOrdinal("email"))
                     ? null
                     : reader.GetString(emailIndex),
-                NombreUsuario = reader.GetString(nombreUsuarioIndex),
-                Contrasena = reader.GetString(contrasenaIndex),
-                ImagenRuta = reader.IsDBNull(imagenRutaIndex)
+                NombreUsuario = reader.GetString(reader.GetOrdinal("nombre_usuario")),
+                Contrasena = reader.GetString(reader.GetOrdinal("contrasena")),
+                ImagenRuta = reader.IsDBNull(imagenRutaIndex = reader.GetOrdinal("imagen_ruta"))
                     ? null
                     : reader.GetString(imagenRutaIndex),
-                Activo = reader.GetBoolean(activoIndex)
+                Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
     }

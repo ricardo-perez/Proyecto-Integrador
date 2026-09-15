@@ -4,54 +4,25 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    public class RolDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Rol>(connectionFactory), IRolDao
+    public class RolDaoSQL(IConnectionFactory connectionFactory)
+        : DaoBase<Rol>(connectionFactory), IRolDao
     {
-        protected override string TableName { get { return "roles"; } }
-        protected override string PrimaryKeyColumn { get { return "id_rol"; } }
-        public bool Delete(int id)
-        {
-            var query = $"""
-                DELETE
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteNonQuery(query, ("@Id", id)) > 0;
-        }
-        public IEnumerable<Rol> FindAll()
-        {
-            var query = $"""
-                SELECT
-                    {PrimaryKeyColumn}, nombre, descripcion
-                FROM {TableName}
-                """;
-            return ExecuteList(query);
-        }
-        public Rol? FindById(int id)
-        {
-            var query = $"""
-                SELECT
-                    {PrimaryKeyColumn}, nombre, descripcion 
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteSingle(query, ("@Id", id));
-        }
-        public int Insert(Rol entity)
+        protected override string TableName => "roles";
+        protected override string PrimaryKeyColumn => "id_rol";
+        protected override string SelectColumns => $"{PrimaryKeyColumn}, {InsertColumns}";
+        private static string InsertColumns => "nombre, descripcion";
+        public override int Insert(Rol entity)
         {
             var query = $"""
                 INSERT INTO {TableName}
-                    (nombre, descripcion) 
+                    ({InsertColumns})
                 VALUES
                     (@Nombre, @Descripcion); 
                 SELECT SCOPE_IDENTITY();
                 """;
-            return ExecuteScalar<int>(query,
-                ("@Nombre", entity.Nombre),
-                ("@Descripcion", entity.Descripcion));
+            return ExecuteScalar<int>(query, GetParameters(entity));
         }
-        public bool Update(Rol entity)
+        public override bool Update(Rol entity)
         {
             var query = $"""
                 UPDATE {TableName} 
@@ -61,21 +32,23 @@
                 WHERE
                     {PrimaryKeyColumn} = @Id
                 """;
-            return ExecuteNonQuery(query,
-                ("@Id", entity.IdRol),
+            return ExecuteNonQuery(query, [("@Id", entity.IdRol), .. GetParameters(entity)]) > 0;
+        }
+        private static (string, object?)[] GetParameters(Rol entity)
+        {
+            return [
                 ("@Nombre", entity.Nombre),
-                ("@Descripcion", entity.Descripcion)) > 0;
+                ("@Descripcion", entity.Descripcion)
+            ];
         }
         protected override Rol Mapper(IDataReader reader)
         {
-            var idRolIndex = reader.GetOrdinal(PrimaryKeyColumn);
-            var nombreIndex = reader.GetOrdinal("nombre");
-            var descripcionIndex = reader.GetOrdinal("descripcion");
+            int descripcionIndex;
             return new Rol
             {
-                IdRol = reader.GetInt32(idRolIndex),
-                Nombre = reader.GetString(nombreIndex),
-                Descripcion = reader.IsDBNull(descripcionIndex)
+                IdRol = reader.GetInt32(reader.GetOrdinal(PrimaryKeyColumn)),
+                Nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                Descripcion = reader.IsDBNull(descripcionIndex = reader.GetOrdinal("descripcion"))
                     ? null
                     : reader.GetString(descripcionIndex)
             };

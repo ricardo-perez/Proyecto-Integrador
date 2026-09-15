@@ -1,47 +1,17 @@
-﻿
-namespace ProyectoIntegrador.DataAccess.Implementations.SqlServer
+﻿namespace ProyectoIntegrador.DataAccess.Implementations.SqlServer
 {
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    public class DescuentoVentaSQL(IConnectionFactory connectionFactory) : DaoBase<DescuentoVenta>(connectionFactory), IDescuentoVentaDao
+    public class DescuentoVentaSQL(IConnectionFactory connectionFactory)
+        : DaoBase<DescuentoVenta>(connectionFactory), IDescuentoVentaDao
     {
         protected override string TableName => "descuentos_ventas";
         protected override string PrimaryKeyColumn => "id_descuento_venta";
-        private string SelectColumns => $"{PrimaryKeyColumn}, {InsertColumns}";
-        private string InsertColumns => $"id_venta, concepto, porcentaje, monto_descuento";
-        public bool Delete(int id)
-        {
-            var query = $"""
-                DELETE
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteNonQuery(query, ("@Id", id)) > 0;
-        }
-        public IEnumerable<DescuentoVenta> FindAll()
-        {
-            var query = $"""
-                SELECT
-                    {SelectColumns}
-                FROM {TableName}
-                """;
-            return ExecuteList(query);
-        }
-        public DescuentoVenta? FindById(int id)
-        {
-            var query = $"""
-                SELECT
-                    {SelectColumns}
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteSingle(query, ("@Id", id));
-        }
-        public int Insert(DescuentoVenta entity)
+        protected override string SelectColumns => $"{PrimaryKeyColumn}, {InsertColumns}";
+        private static string InsertColumns => "id_venta, concepto, porcentaje, monto_descuento";
+        public override int Insert(DescuentoVenta entity)
         {
             var query = $"""
                 INSERT INTO {TableName}
@@ -52,7 +22,7 @@ namespace ProyectoIntegrador.DataAccess.Implementations.SqlServer
                 """;
             return ExecuteScalar<int>(query, GetParameters(entity));
         }
-        public bool Update(DescuentoVenta entity)
+        public override bool Update(DescuentoVenta entity)
         {
             var query = $"""
                 UPDATE {TableName} 

@@ -3,12 +3,48 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using System.Data;
     public abstract class DaoBase<T>(IConnectionFactory connectionFactory)
+        : IDao<T> where T : class
     {
         protected abstract string TableName { get; }
         protected abstract string PrimaryKeyColumn { get; }
         protected abstract T Mapper(IDataReader reader);
+        protected abstract string SelectColumns { get; }
         protected readonly IConnectionFactory _connectionFactory = connectionFactory
             ?? throw new ArgumentNullException(nameof(connectionFactory));
+        public virtual IEnumerable<T> FindAll()
+        {
+            var query = $"""
+                SELECT
+                    {SelectColumns}
+                FROM
+                    {TableName}
+                """;
+            return ExecuteList(query);
+        }
+        public virtual T? FindById(int id)
+        {
+            var query = $"""
+                SELECT
+                    {SelectColumns}
+                FROM
+                    {TableName}
+                WHERE
+                    {PrimaryKeyColumn} = @Id
+                """;
+            return ExecuteSingle(query, ("@Id", id));
+        }
+        public virtual bool Delete(int id)
+        {
+            var query = $"""
+                DELETE FROM
+                    {TableName}
+                WHERE
+                    {PrimaryKeyColumn} = @Id
+                """;
+            return ExecuteNonQuery(query, ("@Id", id)) > 0;
+        }
+        public abstract int Insert(T entity);
+        public abstract bool Update(T entity);
         protected IDbConnection OpenConnection()
         {
             var connection = _connectionFactory.CreateConnection();

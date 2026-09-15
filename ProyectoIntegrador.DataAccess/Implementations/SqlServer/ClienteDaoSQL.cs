@@ -3,84 +3,47 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    using System.Collections.Generic;
     using System.Data;
-    public class ClienteDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Cliente>(connectionFactory), IClienteDao
+    public class ClienteDaoSQL(IConnectionFactory connectionFactory)
+        : DaoBase<Cliente>(connectionFactory), IClienteDao
     {
         protected override string TableName => "clientes";
         protected override string PrimaryKeyColumn => "id_cliente";
-        public bool Delete(int id)
-        {
-            var query = $"""
-                DELETE
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteNonQuery(query, ("@Id", id)) > 0;
-        }
-        public IEnumerable<Cliente> FindAll()
-        {
-            var query = $"""
-                SELECT
-                    {PrimaryKeyColumn}, nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo
-                FROM {TableName}
-                """;
-            return ExecuteList(query);
-        }
-        public Cliente? FindById(int id)
-        {
-            var query = $"""
-                SELECT
-                    {PrimaryKeyColumn}, nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo
-                FROM {TableName} 
-                WHERE
-                    {PrimaryKeyColumn} = @Id
-                """;
-            return ExecuteSingle(query, ("@Id", id));
-        }
-        public int Insert(Cliente entity)
+        protected override string SelectColumns => $"{PrimaryKeyColumn}, {InsertColumns}";
+        private static string InsertColumns => "nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo";
+        public override int Insert(Cliente entity)
         {
             var query = $"""
                 INSERT INTO {TableName}
-                    (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo)
+                    ({InsertColumns})
                 VALUES
                     (@Nombre, @Apellido, @Dni, @Telefono, @Direccion, @Email, @CuitCuil, @Contrasena, @Activo);
                 SELECT SCOPE_IDENTITY();
                 """;
-            return ExecuteScalar<int>(query,
-                ("@Nombre", entity.Nombre),
-                ("@Apellido", entity.Apellido),
-                ("@Dni", entity.Dni),
-                ("@Telefono", entity.Telefono),
-                ("@Direccion", entity.Direccion),
-                ("@Email", entity.Email),
-                ("@CuitCuil", entity.CuitCuil),
-                ("@Contrasena", entity.Contrasena),
-                ("@Activo", entity.Activo));
+            return ExecuteScalar<int>(query, GetParameters(entity));
         }
-        public bool Update(Cliente entity)
+        public override bool Update(Cliente entity)
         {
             var query = $"""
                 UPDATE {TableName} 
                 SET
-                    id_rol = @IdRol
-                    , legajo = @Legajo
-                    , nombre = @Nombre
+                    nombre = @Nombre
                     , apellido = @Apellido
                     , dni = @Dni
                     , telefono = @Telefono
                     , direccion = @Direccion
                     , email = @Email
-                    , nombre_usuario = @NombreUsuario
+                    , cuit_cuil = @CuitCuil
                     , contrasena = @Contrasena
-                    , imagen_ruta = @ImagenRuta
                     , activo = @Activo
                 WHERE
-                    id_rol = @Id
+                    {PrimaryKeyColumn} = @Id
                 """;
-            return ExecuteNonQuery(query,
-                ("@Id", entity.IdCliente),
+            return ExecuteNonQuery(query, [("@Id", entity.IdCliente), .. GetParameters(entity)]) > 0;
+        }
+        private static (string, object?)[] GetParameters(Cliente entity)
+        {
+            return [
                 ("@Nombre", entity.Nombre),
                 ("@Apellido", entity.Apellido),
                 ("@Dni", entity.Dni),
@@ -89,35 +52,29 @@
                 ("@Email", entity.Email),
                 ("@CuitCuil", entity.CuitCuil),
                 ("@Contrasena", entity.Contrasena),
-                ("@Activo", entity.Activo)) > 0;
+                ("@Activo", entity.Activo)
+            ];
         }
         protected override Cliente Mapper(IDataReader reader)
         {
-            var idClienteIndex = reader.GetOrdinal(PrimaryKeyColumn);
-            var nombreIndex = reader.GetOrdinal("nombre");
-            var apellidoIndex = reader.GetOrdinal("apellido");
-            var dniIndex = reader.GetOrdinal("dni");
-            var telefonoIndex = reader.GetOrdinal("telefono");
-            var direccionIndex = reader.GetOrdinal("direccion");
-            var emailIndex = reader.GetOrdinal("email");
-            var cuitCuilIndex = reader.GetOrdinal("cuit_cuil");
-            var contrasenaIndex = reader.GetOrdinal("contrasena");
-            var activoIndex = reader.GetOrdinal("activo");
+            int telefonoIndex;
+            int direccionIndex;
             return new Cliente
             {
-                IdCliente = reader.GetInt32(idClienteIndex),
-                Nombre = reader.GetString(nombreIndex),
-                Apellido = reader.GetString(apellidoIndex),
-                Dni = reader.GetString(dniIndex),
-                Telefono = reader.IsDBNull(telefonoIndex)
+                IdCliente = reader.GetInt32(reader.GetOrdinal(PrimaryKeyColumn)),
+                Nombre = reader.GetString(reader.GetOrdinal("nombre")),
+                Apellido = reader.GetString(reader.GetOrdinal("apellido")),
+                Dni = reader.GetString(reader.GetOrdinal("dni")),
+                Telefono = reader.IsDBNull(telefonoIndex = reader.GetOrdinal("telefono"))
                     ? null
                     : reader.GetString(telefonoIndex),
-                Direccion = reader.IsDBNull(direccionIndex)
+                Direccion = reader.IsDBNull(direccionIndex = reader.GetOrdinal("direccion"))
                     ? null
                     : reader.GetString(direccionIndex),
-                Email = reader.GetString(emailIndex),
-                Contrasena = reader.GetString(contrasenaIndex),
-                Activo = reader.GetBoolean(activoIndex)
+                Email = reader.GetString(reader.GetOrdinal("email")),
+                CuitCuil = reader.GetString(reader.GetOrdinal("cuit_cuil")),
+                Contrasena = reader.GetString(reader.GetOrdinal("contrasena")),
+                Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
     }

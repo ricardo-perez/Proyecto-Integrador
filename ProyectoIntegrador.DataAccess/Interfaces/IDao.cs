@@ -1,7 +1,7 @@
 ﻿namespace ProyectoIntegrador.DataAccess.Interfaces
 {
     using System.Collections.Generic;
-    public interface IDao<T> where T : class
+    internal interface IDao<T> where T : class
     {
         int Insert(T entity);
         T? FindById(int id);
