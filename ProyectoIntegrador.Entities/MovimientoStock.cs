@@ -3,12 +3,23 @@
     public class MovimientoStock
     {
         private int _cantidad;
+        private string _tipoStock = string.Empty;
         public int IdMovimiento { get; set; }
         public int IdProducto { get; set; }
         public int IdTipoMovimiento { get; set; }
         public int? IdEmpleado { get; set; }
         public int? IdVenta { get; set; }
-        public string TipoStock { get; set; } = string.Empty; // 'FISICO' u 'ONLINE'
+        public string TipoStock
+        {
+            get => _tipoStock;
+            set
+            {
+                value = value.ToUpper();
+                if (value != "FISICO" && value != "ONLINE")
+                    throw new ArgumentException("El tipo de stock debe ser 'FISICO' u 'ONLINE'.", nameof(value));
+                _tipoStock = value;
+            }
+        }
         public int Cantidad
         {
             get => _cantidad;

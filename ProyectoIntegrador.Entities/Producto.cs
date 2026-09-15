@@ -8,7 +8,7 @@
         public string Descripcion { get; set; } = string.Empty;
         public string? DescripcionLarga { get; set; }
         public string? ImagenRuta { get; set; }
-        public decimal Precio { get; set; } = 0.00m;
+        public decimal Precio { get; set; }
         public bool ActivoParaVenta { get; set; } = false;
     }
 }
