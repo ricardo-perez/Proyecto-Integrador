@@ -11,7 +11,6 @@ namespace ProyectoIntegrador.DataAccess.Implementations.SqlServer
         protected override string PrimaryKeyColumn => "id_descuento_venta";
         private string SelectColumns => $"{PrimaryKeyColumn}, {InsertColumns}";
         private string InsertColumns => $"id_venta, concepto, porcentaje, monto_descuento";
-
         public bool Delete(int id)
         {
             var query = $"""
@@ -51,11 +50,7 @@ namespace ProyectoIntegrador.DataAccess.Implementations.SqlServer
                     (@IdVenta, @Concepto, @Porcentaje, @MontoDescuento);
                 SELECT SCOPE_IDENTITY();
                 """;
-            return ExecuteScalar<int>(query,
-                ("@IdVenta", entity.IdVenta),
-                ("@Concepto", entity.Concepto),
-                ("@Porcentaje", entity.Porcentaje),
-                ("@MontoDescuento", entity.MontoDescuento));
+            return ExecuteScalar<int>(query, GetParameters(entity));
         }
         public bool Update(DescuentoVenta entity)
         {
@@ -69,13 +64,16 @@ namespace ProyectoIntegrador.DataAccess.Implementations.SqlServer
                 WHERE
                     {PrimaryKeyColumn} = @Id
                 """;
-            return ExecuteNonQuery(query,
-                ("@Id", entity.IdDescuentoVenta),
+            return ExecuteNonQuery(query, [("@Id", entity.IdDescuentoVenta), .. GetParameters(entity)]) > 0;
+        }
+        private static (string, object?)[] GetParameters(DescuentoVenta entity)
+        {
+            return [
                 ("@IdVenta", entity.IdVenta),
                 ("@Concepto", entity.Concepto),
                 ("@Porcentaje", entity.Porcentaje),
-                ("@MontoDescuento", entity.MontoDescuento)) > 0;
-
+                ("@MontoDescuento", entity.MontoDescuento)
+            ];
         }
         protected override DescuentoVenta Mapper(IDataReader reader)
         {
