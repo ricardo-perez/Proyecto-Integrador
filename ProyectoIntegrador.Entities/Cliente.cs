@@ -12,6 +12,6 @@ namespace ProyectoIntegrador.Entities
         public string Email { get; set; } = string.Empty;
         public string CuitCuil { get; set; } = string.Empty;
         public string Contrasena { get; set; } = string.Empty;
-        public bool Activo { get; set; }
+        public bool Activo { get; set; } = true;
     }
 }
