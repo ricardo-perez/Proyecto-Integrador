@@ -7,8 +7,8 @@
     using System.Data;
     public class ClienteDaoSQL(IConnectionFactory connectionFactory) : DaoBase<Cliente>(connectionFactory), IClienteDao
     {
-        protected override string TableName { get { return "clientes"; } }
-        protected override string PrimaryKeyColumn { get { return "id_cliente"; } }
+        protected override string TableName => "clientes";
+        protected override string PrimaryKeyColumn => "id_cliente";
         public bool Delete(int id)
         {
             var query = $"""
