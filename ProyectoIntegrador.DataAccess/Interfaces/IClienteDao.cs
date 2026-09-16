@@ -2,7 +2,8 @@
 namespace ProyectoIntegrador.DataAccess.Interfaces
 {
     using ProyectoIntegrador.Entities;
-    internal interface IClienteDao : IDao<Cliente>
+    public interface IClienteDao : IDao<Cliente>
     {
+        Cliente? GetByEmail(string email);
     }
 }

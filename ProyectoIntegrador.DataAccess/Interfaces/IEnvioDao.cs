@@ -1,7 +1,7 @@
 ﻿namespace ProyectoIntegrador.DataAccess.Interfaces
 {
     using ProyectoIntegrador.Entities;
-    internal interface IEnvioDao : IDao<Envio>
+    public interface IEnvioDao : IDao<Envio>
     {
     }
 }

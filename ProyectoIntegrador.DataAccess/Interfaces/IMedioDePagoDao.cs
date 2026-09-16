@@ -1,7 +1,7 @@
 ﻿namespace ProyectoIntegrador.DataAccess.Interfaces
 {
     using ProyectoIntegrador.Entities;
-    internal interface IMedioDePagoDao : IDao<MedioDePago>
+    public interface IMedioDePagoDao : IDao<MedioDePago>
     {
     }
 }

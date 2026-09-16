@@ -1,11 +1,11 @@
 ﻿namespace ProyectoIntegrador.DataAccess.Interfaces
 {
     using System.Collections.Generic;
-    internal interface IDao<T> where T : class
+    public interface IDao<T> where T : class
     {
-        int Insert(T entity);
-        T? FindById(int id);
-        IEnumerable<T> FindAll();
+        int Add(T entity);
+        T? GetById(int id);
+        IEnumerable<T> GetAll();
         bool Update(T entity);
         bool Delete(int id);
     }

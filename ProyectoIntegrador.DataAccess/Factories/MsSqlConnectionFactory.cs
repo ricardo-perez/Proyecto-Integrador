@@ -4,10 +4,10 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using System;
     using System.Data;
-    public class SqlConnectionFactory : IConnectionFactory
+    public class MsSqlConnectionFactory : IConnectionFactory
     {
         private readonly string _connectionString;
-        public SqlConnectionFactory(string connectionString)
+        public MsSqlConnectionFactory(string connectionString)
         {
             _connectionString = connectionString
                 ?? throw new ArgumentNullException(nameof(connectionString));
