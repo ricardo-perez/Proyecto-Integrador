@@ -7,6 +7,7 @@
         Empleado? GetByEmail(string email);
         Empleado? GetByApellido(string apellido);
         Empleado? GetByLegajo(int legajo);
+        bool Activo();
 
     }
 }

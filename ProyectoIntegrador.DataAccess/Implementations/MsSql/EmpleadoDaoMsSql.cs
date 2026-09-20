@@ -3,7 +3,6 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    using System;
     using System.Collections.Generic;
     using System.Data;
     internal class EmpleadoDaoMsSql(IConnectionFactory connectionFactory)
@@ -50,7 +49,6 @@
                     WHERE 
                         {_primaryKeyColumn} = @Id
                 """);
-
             AddParameter(command, "@Id", id);
             return command.ExecuteNonQuery() > 0;
         }
@@ -62,7 +60,6 @@
                 , $"""
                     {_selectBase}
                 """);
-
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -135,6 +132,10 @@
             return reader.Read()
                 ? Map(reader)
                 : null;
+        }
+        public bool Activo()
+        {
+            return false;
         }
         public override bool Update(Empleado entity)
         {

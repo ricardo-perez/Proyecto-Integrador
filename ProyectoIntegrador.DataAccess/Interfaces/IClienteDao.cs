@@ -5,5 +5,7 @@ namespace ProyectoIntegrador.DataAccess.Interfaces
     public interface IClienteDao : IDao<Cliente>
     {
         Cliente? GetByEmail(string email);
+        Cliente? GetByAppellido(string apellido);
+        bool Activo();
     }
 }
