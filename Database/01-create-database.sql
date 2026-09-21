@@ -13,7 +13,7 @@ CREATE TABLE roles (
 CREATE TABLE empleados (
     id_empleado INT IDENTITY(1,1) PRIMARY KEY,
     id_rol INT NOT NULL,
-    legajo INT NOT NULL UNIQUE  CHECK (legajo > 0),
+    legajo INT NOT NULL UNIQUE CHECK (legajo > 0),
     nombre NVARCHAR(100) NOT NULL,
     apellido NVARCHAR(100) NOT NULL,
     dni VARCHAR(15) NOT NULL UNIQUE,
@@ -50,7 +50,8 @@ CREATE TABLE productos (
     descripcion_larga NVARCHAR(MAX) NULL,
     imagen_ruta NVARCHAR(500) NULL,
     precio DECIMAL(12, 2) NOT NULL DEFAULT 0.00 CHECK (precio >= 0.00),
-    activo_para_venta BIT NOT NULL DEFAULT 0
+    activo_para_venta BIT NOT NULL DEFAULT 0,
+    activo BIT NOT NULL DEFAULT 0
 );
 CREATE TABLE medios_de_pago (
     id_medio_de_pago INT IDENTITY(1,1) PRIMARY KEY,

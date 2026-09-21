@@ -5,32 +5,30 @@
     using ProyectoIntegrador.Entities;
     using System.Data;
     internal class EmpleadoDaoMsSql(IConnectionFactory connectionFactory)
-                : AdoDaoBase<Empleado>(connectionFactory), IEmpleadoDao
+        : AdoDaoBase<Empleado>(connectionFactory), IEmpleadoDao
     {
-        private const string _tableName = "empleados";
-        private const string _primaryKeyColumn = "id_empleado";
-        private const string _selectBase = $"""
+        private const string TableName = "empleados";
+        private const string PrimaryKeyColumn = "id_empleado";
+        private const string SelectBase = $"""
             SELECT 
-                E.{_primaryKeyColumn}, E.id_rol, E.legajo, E.nombre, E.apellido, E.dni, 
-                E.telefono, E.direccion, E.email, E.nombre_usuario, E.contrasena, E.imagen_ruta, E.activo,
-                R.id_rol AS rol_id_rol, R.nombre AS rol_nombre, R.descripcion AS rol_descripcion
+                {PrimaryKeyColumn}, id_rol, legajo, nombre, apellido, dni, 
+                telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
             FROM 
-                {_tableName} AS E
-            INNER JOIN
-                roles AS R ON R.id_rol = E.id_rol
+                {TableName}
             WHERE
-                E.activo = 1
+                activo = 1
         """;
         public override int Add(Empleado entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    INSERT INTO {_tableName} 
+                    INSERT INTO {TableName} 
                         (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo) 
+                    OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
                         (@IdRol, @Legajo, @Nombre, @Apellido, @Dni, @Telefono, @Direccion, @Email, @NombreUsuario, @Contrasena, @ImagenRuta, @Activo);
-                    SELECT SCOPE_IDENTITY();
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -46,11 +44,11 @@
             using var command = CreateCommand(connection
                 , $"""
                     UPDATE
-                        {_tableName} 
+                        {TableName} 
                     SET
                         activo = 0
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                         AND activo = 1
                 """);
             AddParameter(command, "@Id", id);
@@ -60,7 +58,7 @@
         {
             var entityList = new List<Empleado>();
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection, _selectBase);
+            using var command = CreateCommand(connection, SelectBase);
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -73,8 +71,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
-                        AND E.apellido = @Apellido
+                    {SelectBase}
+                        AND apellido = @Apellido
                 """);
             AddParameter(command, "@Apellido", apellido.Trim());
             using var reader = command.ExecuteReader();
@@ -90,8 +88,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
-                        AND E.apellido LIKE @Apellido
+                    {SelectBase}
+                        AND apellido LIKE @Apellido
                 """);
             AddParameter(command, "@Apellido", $"%{apellido.Trim()}%");
             using var reader = command.ExecuteReader();
@@ -106,8 +104,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
-                        AND E.email = @Email
+                    {SelectBase}
+                        AND email = @Email
                 """);
             AddParameter(command, "@Email", email.Trim());
             using var reader = command.ExecuteReader();
@@ -123,8 +121,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
-                        AND E.email LIKE @Email
+                    {SelectBase}
+                        AND email LIKE @Email
                 """);
             AddParameter(command, "@Email", $"%{email.Trim()}%");
             using var reader = command.ExecuteReader();
@@ -139,8 +137,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
-                        AND E.{_primaryKeyColumn} = @Id
+                    {SelectBase}
+                        AND {PrimaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             using var reader = command.ExecuteReader();
@@ -155,8 +153,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
-                        AND E.legajo = @Legajo
+                    {SelectBase}
+                        AND legajo = @Legajo
                 """);
             AddParameter(command, "@Legajo", legajo);
             using var reader = command.ExecuteReader();
@@ -166,13 +164,14 @@
         }
         public override bool Update(Empleado entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             if (entity.IdEmpleado <= 0)
                 return false;
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
                     UPDATE
-                        {_tableName}
+                        {TableName}
                     SET 
                         id_rol = @IdRol 
                         , legajo = @Legajo
@@ -187,9 +186,10 @@
                         , imagen_ruta = @ImagenRuta
                         , activo = @Activo
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddEntityParameters(command, entity);
+            AddParameter(command, "@Id", entity.IdEmpleado);
             return command.ExecuteNonQuery() > 0;
         }
         private static Empleado Map(IDataReader reader)
@@ -198,10 +198,9 @@
             int direccionIndex = reader.GetOrdinal("direccion");
             int emailIndex = reader.GetOrdinal("email");
             int imagenRutaIndex = reader.GetOrdinal("imagen_ruta");
-            int rolDescripcionIndex = reader.GetOrdinal("rol_descripcion");
             return new Empleado
             {
-                IdEmpleado = reader.GetInt32(reader.GetOrdinal(_primaryKeyColumn)),
+                IdEmpleado = reader.GetInt32(reader.GetOrdinal(PrimaryKeyColumn)),
                 IdRol = reader.GetInt32(reader.GetOrdinal("id_rol")),
                 Legajo = reader.GetInt32(reader.GetOrdinal("legajo")),
                 Nombre = reader.GetString(reader.GetOrdinal("nombre")),
@@ -222,14 +221,7 @@
                     ? null
                     : reader.GetString(imagenRutaIndex),
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo")),
-                Rol = new Rol
-                {
-                    IdRol = reader.GetInt32(reader.GetOrdinal("rol_id_rol")),
-                    Nombre = reader.GetString(reader.GetOrdinal("rol_nombre")),
-                    Descripcion = reader.IsDBNull(rolDescripcionIndex)
-                        ? null
-                        : reader.GetString(rolDescripcionIndex)
-                }
+                Rol = null
             };
         }
         private static void AddEntityParameters(IDbCommand command, Empleado entity)
@@ -249,8 +241,6 @@
                 ("@ImagenRuta", entity.ImagenRuta),
                 ("@Activo", entity.Activo)
             ];
-            if (entity.IdEmpleado > 0)
-                parameters.Insert(0, ("@Id", entity.IdEmpleado));
             AddParameters(command, parameters);
         }
     }

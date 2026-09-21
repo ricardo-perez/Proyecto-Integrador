@@ -5,28 +5,29 @@
     using ProyectoIntegrador.Entities;
     using System.Data;
     internal class ClienteDaoMsSql(IConnectionFactory connectionFactory)
-                : AdoDaoBase<Cliente>(connectionFactory), IClienteDao
+        : AdoDaoBase<Cliente>(connectionFactory), IClienteDao
     {
-        private const string _tableName = "clientes";
-        private const string _primaryKeyColumn = "id_cliente";
-        private const string _selectBase = $"""
+        private const string TableName = "clientes";
+        private const string PrimaryKeyColumn = "id_cliente";
+        private const string SelectBase = $"""
             SELECT 
-                {_primaryKeyColumn}, nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo
+                {PrimaryKeyColumn}, nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo
             FROM 
-                {_tableName}
+                {TableName}
             WHERE
                 activo = 1
         """;
         public override int Add(Cliente entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    INSERT INTO {_tableName} 
+                    INSERT INTO {TableName} 
                         (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo) 
+                    OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
                         (@Nombre, @Apellido, @Dni, @Telefono, @Direccion, @Email, @CuitCuil, @Contrasena, @Activo);
-                    SELECT SCOPE_IDENTITY();
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -42,11 +43,11 @@
             using var command = CreateCommand(connection
                 , $"""
                     UPDATE
-                        {_tableName} 
+                        {TableName} 
                     SET 
                         activo = 0
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                         AND activo = 1
                 """);
             AddParameter(command, "@Id", id);
@@ -56,7 +57,7 @@
         {
             var entityList = new List<Cliente>();
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection, _selectBase);
+            using var command = CreateCommand(connection, SelectBase);
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -69,7 +70,7 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
+                    {SelectBase}
                         AND apellido = @Apellido
                 """);
             AddParameter(command, "@Apellido", apellido.Trim());
@@ -86,7 +87,7 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
+                    {SelectBase}
                         AND apellido LIKE @Apellido
                 """);
             AddParameter(command, "@Apellido", $"%{apellido.Trim()}%");
@@ -102,7 +103,7 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
+                    {SelectBase}
                     WHERE 
                         email = @Email
                 """);
@@ -120,7 +121,7 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
+                    {SelectBase}
                         AND email LIKE @Email
                 """);
             AddParameter(command, "@Email", $"%{email.Trim()}%");
@@ -136,8 +137,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
-                        AND {_primaryKeyColumn} = @Id
+                    {SelectBase}
+                        AND {PrimaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             using var reader = command.ExecuteReader();
@@ -147,13 +148,14 @@
         }
         public override bool Update(Cliente entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             if (entity.IdCliente <= 0)
                 return false;
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
                     UPDATE
-                        {_tableName}
+                        {TableName}
                     SET 
                         nombre = @Nombre
                         , apellido = @Apellido
@@ -165,9 +167,10 @@
                         , contrasena = @Contrasena
                         , activo = @Activo                                
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddEntityParameters(command, entity);
+            AddParameter(command, "@Id", entity.IdCliente);
             return command.ExecuteNonQuery() > 0;
         }
         private static void AddEntityParameters(IDbCommand command, Cliente entity)
@@ -184,8 +187,6 @@
                 ("@Contrasena", entity.Contrasena),
                 ("@Activo", entity.Activo)
             ];
-            if (entity.IdCliente > 0)
-                parameters.Insert(0, ("@Id", entity.IdCliente));
             AddParameters(command, parameters);
         }
         private static Cliente Map(IDataReader reader)
@@ -194,7 +195,7 @@
             int direccionIndex = reader.GetOrdinal("direccion");
             return new Cliente
             {
-                IdCliente = reader.GetInt32(reader.GetOrdinal(_primaryKeyColumn)),
+                IdCliente = reader.GetInt32(reader.GetOrdinal(PrimaryKeyColumn)),
                 Nombre = reader.GetString(reader.GetOrdinal("nombre")),
                 Apellido = reader.GetString(reader.GetOrdinal("apellido")),
                 Dni = reader.GetString(reader.GetOrdinal("dni")),
@@ -210,7 +211,5 @@
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
-
-
     }
 }

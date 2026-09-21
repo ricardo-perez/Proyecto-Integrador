@@ -5,26 +5,27 @@
     using ProyectoIntegrador.Entities;
     using System.Data;
     internal class ProductoDaoMsSql(IConnectionFactory connectionFactory)
-                : AdoDaoBase<Producto>(connectionFactory), IProductoDao
+        : AdoDaoBase<Producto>(connectionFactory), IProductoDao
     {
-        private const string _tableName = "productos";
-        private const string _primaryKeyColumn = "id_producto";
-        private const string _selectBase = $"""
+        private const string TableName = "productos";
+        private const string PrimaryKeyColumn = "id_producto";
+        private const string SelectBase = $"""
             SELECT 
-                {_primaryKeyColumn}, sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta
+                {PrimaryKeyColumn}, sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta
             FROM 
-                {_tableName}
+                {TableName}
         """;
         public override int Add(Producto entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    INSERT INTO {_tableName} 
+                    INSERT INTO {TableName} 
                         (sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta) 
+                    OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
                         (@Sku, @Nombre, @Descripcion, @DescripcionLarga, @ImagenRuta, @Precio, @ActivoParaVenta);
-                    SELECT SCOPE_IDENTITY();
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -40,9 +41,9 @@
             using var command = CreateCommand(connection
                 , $"""
                     DELETE FROM
-                        {_tableName} 
+                        {TableName} 
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             return command.ExecuteNonQuery() > 0;
@@ -51,10 +52,7 @@
         {
             var entityList = new List<Producto>();
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {_selectBase}
-                """);
+            using var command = CreateCommand(connection, SelectBase);
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -67,9 +65,9 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
+                    {SelectBase}
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             using var reader = command.ExecuteReader();
@@ -79,13 +77,14 @@
         }
         public override bool Update(Producto entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             if (entity.IdProducto <= 0)
                 return false;
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
                     UPDATE
-                        {_tableName}
+                        {TableName}
                     SET 
                         sku = @Sku
                         , nombre = @Nombre
@@ -95,9 +94,10 @@
                         , precio = @Precio
                         , activo_para_venta = @ActivoParaVenta
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddEntityParameters(command, entity);
+            AddParameter(command, "@Id", entity.IdProducto);
             return command.ExecuteNonQuery() > 0;
         }
         private static void AddEntityParameters(IDbCommand command, Producto entity)
@@ -112,8 +112,6 @@
                 ("@Precio", entity.Precio),
                 ("@ActivoParaVenta", entity.ActivoParaVenta)
             ];
-            if (entity.IdProducto > 0)
-                parameters.Insert(0, ("@Id", entity.IdProducto));
             AddParameters(command, parameters);
         }
         private static Producto Map(IDataReader reader)

@@ -11,6 +11,6 @@
         public decimal MontoTotal { get; set; }
         public Cliente? Cliente { get; set; }
         public MedioDePago? MedioDePago { get; set; }
-        public List<DetalleVenta> DetallesVenta { get; set; } = [];
+        public IEnumerable<DetalleVenta> DetallesVenta { get; set; } = [];
     }
 }

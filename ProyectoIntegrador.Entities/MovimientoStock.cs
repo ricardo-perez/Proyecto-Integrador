@@ -14,6 +14,8 @@
             get => _tipoStock;
             set
             {
+                if(string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("El tipo de stock debe ser 'FISICO' u 'ONLINE'.", nameof(value));
                 value = value.ToUpper();
                 if (value != "FISICO" && value != "ONLINE")
                     throw new ArgumentException("El tipo de stock debe ser 'FISICO' u 'ONLINE'.", nameof(value));

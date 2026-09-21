@@ -7,24 +7,25 @@
     internal class RolDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<Rol>(connectionFactory), IRolDao
     {
-        private const string _tableName = "roles";
-        private const string _primaryKeyColumn = "id_rol";
-        private const string _selectBase = $"""
+        private const string TableName = "roles";
+        private const string PrimaryKeyColumn = "id_rol";
+        private const string SelectBase = $"""
             SELECT 
-                {_primaryKeyColumn}, nombre, descripcion
+                {PrimaryKeyColumn}, nombre, descripcion
             FROM 
-                {_tableName}
+                {TableName}
         """;
         public override int Add(Rol entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    INSERT INTO {_tableName} 
+                    INSERT INTO {TableName} 
                         (nombre, descripcion) 
+                    OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
                         (@Nombre, @Descripcion);
-                    SELECT SCOPE_IDENTITY();
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -40,9 +41,9 @@
             using var command = CreateCommand(connection
                 , $"""
                     DELETE FROM
-                        {_tableName} 
+                        {TableName} 
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             return command.ExecuteNonQuery() > 0;
@@ -51,7 +52,7 @@
         {
             var entityList = new List<Rol>();
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection, _selectBase);
+            using var command = CreateCommand(connection, SelectBase);
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -64,9 +65,9 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    {_selectBase}
+                    {SelectBase}
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             using var reader = command.ExecuteReader();
@@ -76,20 +77,22 @@
         }
         public override bool Update(Rol entity)
         {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
             if (entity.IdRol <= 0)
                 return false;
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
                     UPDATE
-                        {_tableName}
+                        {TableName}
                     SET 
                         nombre = @Nombre,
                         descripcion = @Descripcion
                     WHERE 
-                        {_primaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @Id
                 """);
             AddEntityParameters(command, entity);
+            AddParameter(command, "@Id", entity.IdRol);
             return command.ExecuteNonQuery() > 0;
         }
         private static Rol Map(IDataReader reader)
@@ -97,7 +100,7 @@
             int descripcionIndex = reader.GetOrdinal("descripcion");
             return new Rol
             {
-                IdRol = reader.GetInt32(reader.GetOrdinal(_primaryKeyColumn)),
+                IdRol = reader.GetInt32(reader.GetOrdinal(PrimaryKeyColumn)),
                 Nombre = reader.GetString(reader.GetOrdinal("nombre")),
                 Descripcion = reader.IsDBNull(descripcionIndex)
                     ? null
@@ -111,8 +114,6 @@
                 ("@Nombre", entity.Nombre),
                 ("@Descripcion", entity.Descripcion)
             ];
-            if (entity.IdRol > 0)
-                parameters.Insert(0, ("@Id", entity.IdRol));
             AddParameters(command, parameters);
         }
     }
