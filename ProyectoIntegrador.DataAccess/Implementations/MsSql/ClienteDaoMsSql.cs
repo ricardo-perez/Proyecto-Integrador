@@ -15,6 +15,8 @@
                 {_primaryKeyColumn}, nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo
             FROM 
                 {_tableName}
+            WHERE
+                activo = 1
         """;
         public override int Add(Cliente entity)
         {
@@ -40,10 +42,13 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    DELETE FROM
+                    UPDATE
                         {_tableName} 
+                    SET 
+                        activo = 0
                     WHERE 
                         {_primaryKeyColumn} = @Id
+                        AND activo = 1
                 """);
             AddParameter(command, "@Id", id);
             return command.ExecuteNonQuery() > 0;
@@ -52,16 +57,13 @@
         {
             var entityList = new List<Cliente>();
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {_selectBase}
-                """);
+            using var command = CreateCommand(connection, _selectBase);
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
             return entityList;
         }
-        public Cliente? GetByAppellido(string apellido)
+        public Cliente? GetByApellido(string apellido)
         {
             if (string.IsNullOrEmpty(apellido))
                 return null;
@@ -69,14 +71,30 @@
             using var command = CreateCommand(connection
                 , $"""
                     {_selectBase}
-                    WHERE 
-                        apellido LIKE @Apellido
+                        AND apellido = @Apellido
                 """);
-            AddParameter(command, "@Apellido", $"%{apellido}%");
+            AddParameter(command, "@Apellido", apellido.Trim());
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
                 : null;
+        }
+        public IEnumerable<Cliente> SearchByApellido(string apellido)
+        {
+            if (string.IsNullOrWhiteSpace(apellido))
+                return [];
+            var entityList = new List<Cliente>();
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                    {_selectBase}
+                        AND apellido LIKE @Apellido
+                """);
+            AddParameter(command, "@Apellido", $"%{apellido.Trim()}%");
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+                entityList.Add(Map(reader));
+            return entityList;
         }
         public Cliente? GetByEmail(string email)
         {
@@ -87,13 +105,30 @@
                 , $"""
                     {_selectBase}
                     WHERE 
-                        email LIKE @Email
+                        email = @Email
                 """);
-            AddParameter(command, "@Email", $"%{email}%");
+            AddParameter(command, "@Email", email.Trim());
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
                 : null;
+        }
+        public IEnumerable<Cliente> SearchByEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return [];
+            var entityList = new List<Cliente>();
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                    {_selectBase}
+                        AND email LIKE @Email
+                """);
+            AddParameter(command, "@Email", $"%{email.Trim()}%");
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+                entityList.Add(Map(reader));
+            return entityList;
         }
         public override Cliente? GetById(int id)
         {
@@ -103,8 +138,7 @@
             using var command = CreateCommand(connection
                 , $"""
                     {_selectBase}
-                    WHERE 
-                        {_primaryKeyColumn} = @Id
+                        AND {_primaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             using var reader = command.ExecuteReader();
@@ -177,5 +211,7 @@
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
+
+
     }
 }

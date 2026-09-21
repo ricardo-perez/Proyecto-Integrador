@@ -19,6 +19,8 @@
                 {_tableName} AS E
             INNER JOIN
                 roles AS R ON R.id_rol = E.id_rol
+            WHERE
+                E.activo = 1
         """;
         public override int Add(Empleado entity)
         {
@@ -44,10 +46,13 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    DELETE FROM
+                    UPDATE
                         {_tableName} 
+                    SET
+                        activo = 0
                     WHERE 
                         {_primaryKeyColumn} = @Id
+                        AND activo = 1
                 """);
             AddParameter(command, "@Id", id);
             return command.ExecuteNonQuery() > 0;
@@ -56,10 +61,7 @@
         {
             var entityList = new List<Empleado>();
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {_selectBase}
-                """);
+            using var command = CreateCommand(connection, _selectBase);
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -73,14 +75,30 @@
             using var command = CreateCommand(connection
                 , $"""
                     {_selectBase}
-                    WHERE 
-                        E.apellido LIKE @Apellido
+                        AND E.apellido = @Apellido
                 """);
-            AddParameter(command, "@Apellido", $"%{apellido}%");
+            AddParameter(command, "@Apellido", apellido.Trim());
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
                 : null;
+        }
+        public IEnumerable<Empleado> SearchByApellido(string apellido)
+        {
+            if (string.IsNullOrWhiteSpace(apellido))
+                return [];
+            var entityList = new List<Empleado>();
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                    {_selectBase}
+                        AND E.apellido LIKE @Apellido
+                """);
+            AddParameter(command, "@Apellido", $"%{apellido.Trim()}%");
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+                entityList.Add(Map(reader));
+            return entityList;
         }
         public Empleado? GetByEmail(string email)
         {
@@ -90,14 +108,30 @@
             using var command = CreateCommand(connection
                 , $"""
                     {_selectBase}
-                    WHERE 
-                        E.email LIKE @Email
+                        AND E.email = @Email
                 """);
-            AddParameter(command, "@Email", $"%{email}%");
+            AddParameter(command, "@Email", email.Trim());
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
                 : null;
+        }
+        public IEnumerable<Empleado> SearchByEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return [];
+            var entityList = new List<Empleado>();
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                    {_selectBase}
+                        AND E.email LIKE @Email
+                """);
+            AddParameter(command, "@Email", $"%{email.Trim()}%");
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+                entityList.Add(Map(reader));
+            return entityList;
         }
         public override Empleado? GetById(int id)
         {
@@ -107,8 +141,7 @@
             using var command = CreateCommand(connection
                 , $"""
                     {_selectBase}
-                    WHERE 
-                        E.{_primaryKeyColumn} = @Id
+                        AND E.{_primaryKeyColumn} = @Id
                 """);
             AddParameter(command, "@Id", id);
             using var reader = command.ExecuteReader();
@@ -124,8 +157,7 @@
             using var command = CreateCommand(connection
                 , $"""
                     {_selectBase}
-                    WHERE 
-                        E.legajo = @Legajo
+                        AND E.legajo = @Legajo
                 """);
             AddParameter(command, "@Legajo", legajo);
             using var reader = command.ExecuteReader();
