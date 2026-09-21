@@ -3,7 +3,6 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    using System.Collections.Generic;
     using System.Data;
     internal class ClienteDaoMsSql(IConnectionFactory connectionFactory)
                 : AdoDaoBase<Cliente>(connectionFactory), IClienteDao

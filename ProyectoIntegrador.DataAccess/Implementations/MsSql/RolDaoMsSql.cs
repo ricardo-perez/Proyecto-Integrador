@@ -3,7 +3,6 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    using System.Collections.Generic;
     using System.Data;
     internal class RolDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<Rol>(connectionFactory), IRolDao
@@ -27,7 +26,6 @@
                         (@Nombre, @Descripcion);
                     SELECT SCOPE_IDENTITY();
                 """);
-
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
             if (result == null || result == DBNull.Value)
@@ -46,7 +44,6 @@
                     WHERE 
                         {_primaryKeyColumn} = @Id
                 """);
-
             AddParameter(command, "@Id", id);
             return command.ExecuteNonQuery() > 0;
         }
@@ -54,10 +51,7 @@
         {
             var entityList = new List<Rol>();
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {_selectBase}
-                """);
+            using var command = CreateCommand(connection, _selectBase);
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
