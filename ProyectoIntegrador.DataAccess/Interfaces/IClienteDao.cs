@@ -6,6 +6,5 @@ namespace ProyectoIntegrador.DataAccess.Interfaces
     {
         Cliente? GetByEmail(string email);
         Cliente? GetByAppellido(string apellido);
-        bool Activo();
     }
 }

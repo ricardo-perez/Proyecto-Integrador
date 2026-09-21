@@ -10,6 +10,12 @@
     {
         private const string _tableName = "roles";
         private const string _primaryKeyColumn = "id_rol";
+        private const string _selectBase = $"""
+            SELECT 
+                {_primaryKeyColumn}, nombre, descripcion
+            FROM 
+                {_tableName}
+        """;
         public override int Add(Rol entity)
         {
             using var connection = CreateConnection();
@@ -50,12 +56,8 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    SELECT 
-                        {_primaryKeyColumn}, nombre, descripcion 
-                    FROM 
-                        {_tableName}
+                    {_selectBase}
                 """);
-
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -68,10 +70,7 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    SELECT 
-                        {_primaryKeyColumn}, nombre, descripcion 
-                    FROM 
-                        {_tableName} 
+                    {_selectBase}
                     WHERE 
                         {_primaryKeyColumn} = @Id
                 """);

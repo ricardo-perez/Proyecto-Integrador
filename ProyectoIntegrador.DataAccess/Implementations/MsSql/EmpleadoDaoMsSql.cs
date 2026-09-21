@@ -133,10 +133,6 @@
                 ? Map(reader)
                 : null;
         }
-        public bool Activo()
-        {
-            return false;
-        }
         public override bool Update(Empleado entity)
         {
             if (entity.IdEmpleado <= 0)

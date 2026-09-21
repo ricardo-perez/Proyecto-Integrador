@@ -112,10 +112,6 @@
                 ? Map(reader)
                 : null;
         }
-        public bool Activo()
-        {
-            return false;
-        }
         public override bool Update(Cliente entity)
         {
             if (entity.IdCliente <= 0)
@@ -134,8 +130,7 @@
                         , email = @Email
                         , cuitCuil = @CuitCuil
                         , contrasena = @Contrasena
-                        , activo = @Activo
-                                
+                        , activo = @Activo                                
                     WHERE 
                         {_primaryKeyColumn} = @Id
                 """);
