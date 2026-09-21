@@ -34,9 +34,5 @@
         }
         public DateTime Fecha { get; set; } = DateTime.Now;
         public string? Motivo { get; set; }
-        public Producto? Producto { get; set; }
-        public TipoMovimiento? TipoMovimiento { get; set; }
-        public Empleado? Empleado { get; set; }
-        public Venta? Venta { get; set; }
     }
 }

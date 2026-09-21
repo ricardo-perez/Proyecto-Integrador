@@ -9,8 +9,5 @@
         public decimal Subtotal { get; set; }
         public decimal DescuentoTotal { get; set; }
         public decimal MontoTotal { get; set; }
-        public Cliente? Cliente { get; set; }
-        public MedioDePago? MedioDePago { get; set; }
-        public IEnumerable<DetalleVenta> DetallesVenta { get; set; } = [];
     }
 }

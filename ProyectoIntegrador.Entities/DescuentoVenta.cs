@@ -7,6 +7,5 @@
         public string Concepto { get; set; } = string.Empty;
         public decimal? Porcentaje { get; set; }
         public decimal MontoDescuento { get; set; }
-        public Venta? Venta { get; set; }
     }
 }

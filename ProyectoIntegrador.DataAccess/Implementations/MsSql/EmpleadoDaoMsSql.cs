@@ -220,8 +220,7 @@
                 ImagenRuta = reader.IsDBNull(imagenRutaIndex)
                     ? null
                     : reader.GetString(imagenRutaIndex),
-                Activo = reader.GetBoolean(reader.GetOrdinal("activo")),
-                Rol = null
+                Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
         private static void AddEntityParameters(IDbCommand command, Empleado entity)

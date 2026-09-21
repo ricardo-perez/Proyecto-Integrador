@@ -15,6 +15,5 @@
         public string Contrasena { get; set; } = string.Empty;
         public string? ImagenRuta { get; set; }
         public bool Activo { get; set; } = true;
-        public Rol? Rol{ get; set; }
     }
 }

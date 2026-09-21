@@ -8,7 +8,5 @@
         public string? CodigoSeguimiento { get; set; }
         public DateTime? FechaDespacho { get; set; }
         public DateTime? FechaEntrega { get; set; }
-        public Venta? Venta { get; set; }
-        public EstadoEnvio? EstadoEnvio { get; set; }
     }
 }

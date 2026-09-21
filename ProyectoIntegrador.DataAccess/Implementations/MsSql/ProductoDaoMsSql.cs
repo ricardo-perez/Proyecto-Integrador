@@ -11,7 +11,7 @@
         private const string PrimaryKeyColumn = "id_producto";
         private const string SelectBase = $"""
             SELECT 
-                {PrimaryKeyColumn}, sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta
+                {PrimaryKeyColumn}, sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta, activo
             FROM 
                 {TableName}
         """;
@@ -22,10 +22,10 @@
             using var command = CreateCommand(connection
                 , $"""
                     INSERT INTO {TableName} 
-                        (sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta) 
+                        (sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta, activo) 
                     OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
-                        (@Sku, @Nombre, @Descripcion, @DescripcionLarga, @ImagenRuta, @Precio, @ActivoParaVenta);
+                        (@Sku, @Nombre, @Descripcion, @DescripcionLarga, @ImagenRuta, @Precio, @ActivoParaVenta, @Activo);
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -40,10 +40,13 @@
             using var connection = CreateConnection();
             using var command = CreateCommand(connection
                 , $"""
-                    DELETE FROM
+                    UPDATE
                         {TableName} 
+                    SET
+                        activo = 0
                     WHERE 
                         {PrimaryKeyColumn} = @Id
+                        AND activo = 1
                 """);
             AddParameter(command, "@Id", id);
             return command.ExecuteNonQuery() > 0;
@@ -93,6 +96,7 @@
                         , imagen_ruta = @ImagenRuta
                         , precio = @Precio
                         , activo_para_venta = @ActivoParaVenta
+                        , activo = @Activo
                     WHERE 
                         {PrimaryKeyColumn} = @Id
                 """);
@@ -110,7 +114,8 @@
                 ("@DescripcionLarga", entity.DescripcionLarga),
                 ("@ImagenRuta", entity.ImagenRuta),
                 ("@Precio", entity.Precio),
-                ("@ActivoParaVenta", entity.ActivoParaVenta)
+                ("@ActivoParaVenta", entity.ActivoParaVenta),
+                ("Activo", entity.Activo)
             ];
             AddParameters(command, parameters);
         }
@@ -131,7 +136,8 @@
                     ? null
                     : reader.GetString(imagenRutaIndex),
                 Precio = reader.GetDecimal(reader.GetOrdinal("precio")),
-                ActivoParaVenta = reader.GetBoolean(reader.GetOrdinal("activo_para_venta"))
+                ActivoParaVenta = reader.GetBoolean(reader.GetOrdinal("activo_para_venta")),
+                Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
     }

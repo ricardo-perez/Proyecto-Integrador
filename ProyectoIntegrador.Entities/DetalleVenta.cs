@@ -8,7 +8,5 @@
         public int Cantidad { get; set; } = 1;
         public decimal PrecioUnitario { get; set; }
         public decimal Subtotal { get; set; }
-        public Venta? Venta { get; set; }
-        public Producto? Producto { get; set; }
     }
 }

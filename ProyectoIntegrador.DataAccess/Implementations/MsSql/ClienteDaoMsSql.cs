@@ -104,8 +104,7 @@
             using var command = CreateCommand(connection
                 , $"""
                     {SelectBase}
-                    WHERE 
-                        email = @Email
+                        AND email = @Email
                 """);
             AddParameter(command, "@Email", email.Trim());
             using var reader = command.ExecuteReader();
@@ -163,7 +162,7 @@
                         , telefono = @Telefono
                         , direccion = @Direccion
                         , email = @Email
-                        , cuitCuil = @CuitCuil
+                        , cuit_cuil = @CuitCuil
                         , contrasena = @Contrasena
                         , activo = @Activo                                
                     WHERE 

@@ -10,5 +10,6 @@
         public string? ImagenRuta { get; set; }
         public decimal Precio { get; set; }
         public bool ActivoParaVenta { get; set; } = false;
+        public bool Activo { get; set; } = false;
     }
 }

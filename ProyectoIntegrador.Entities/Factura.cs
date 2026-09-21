@@ -11,7 +11,5 @@
         public decimal Subtotal { get; set; }
         public decimal DescuentoTotal { get; set; }
         public decimal Total { get; set; }
-        public Venta? Venta { get; set; }
-        public TipoComprobante? TipoComprobante { get; set; }
     }
 }

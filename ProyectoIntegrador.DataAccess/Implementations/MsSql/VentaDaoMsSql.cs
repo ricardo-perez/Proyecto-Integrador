@@ -122,10 +122,7 @@
                 Fecha = reader.GetDateTime(reader.GetOrdinal("fecha")),
                 Subtotal = reader.GetDecimal(reader.GetOrdinal("subtotal")),
                 DescuentoTotal = reader.GetDecimal(reader.GetOrdinal("descuento_total")),
-                MontoTotal = reader.GetDecimal(reader.GetOrdinal("monto_total")),
-                Cliente = null,
-                MedioDePago = null,
-                DetallesVenta = []
+                MontoTotal = reader.GetDecimal(reader.GetOrdinal("monto_total"))
             };
         }
     }
