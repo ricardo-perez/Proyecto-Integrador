@@ -4,7 +4,7 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    internal class ClienteDaoMsSql(IConnectionFactory connectionFactory)
+    public class ClienteDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<Cliente>(connectionFactory), IClienteDao
     {
         private const string TableName = "clientes";
