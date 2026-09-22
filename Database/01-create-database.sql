@@ -88,7 +88,7 @@ CREATE TABLE movimientos_stock (
     id_tipo_movimiento INT NOT NULL,
     id_empleado INT NULL,
     id_venta INT NULL,
-    tipo_stock VARCHAR(10) NOT NULL CHECK (tipo_stock IN ('FISICO', 'ONLINE')), -- 'FISICO' u 'ONLINE'
+    tipo_stock VARCHAR(10) NOT NULL CHECK (tipo_stock IN ('DEPÓSITO', 'ONLINE')), -- 'DEPÓSITO' u 'ONLINE'
     cantidad INT NOT NULL CHECK (cantidad <> 0), -- Positivos (ingresos) o Negativos (egresos | ventas)
     fecha DATETIME2 NOT NULL DEFAULT GETDATE(),
     motivo NVARCHAR(255) NULL,
