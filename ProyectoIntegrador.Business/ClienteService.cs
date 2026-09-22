@@ -28,5 +28,16 @@
                 return Result<Cliente>.Failure($"Ocurrió un error inesperado durante el registro: {ex.Message}", TipoError.Inesperado);
             }
         }
+        public Cliente? IniciarSesion(string email, string contrasena)
+        {
+            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(contrasena))
+                return null;
+            var cliente = _clienteDao.GetByEmail(email.Trim());
+            if (cliente is null || !cliente.Activo)
+                return null;
+            if (cliente.Contrasena != contrasena)
+                return null;
+            return cliente;
+        }
     }
 }
