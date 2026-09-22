@@ -12,10 +12,12 @@
             do
             {
                 var menu = """
-                    [1] Cliente
-                    [2] Empleado
-                    [9] Salir
-                    Ingrese una opción: 
+                MENÚ PRINCIPAL
+                ==============
+                [1] Cliente
+                [2] Empleado
+                [9] Salir
+                Ingrese una opción: 
                 """;
                 option = ConsoleInput.GetPositiveInt(menu);
                 switch (option)

@@ -4,21 +4,21 @@
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class ClienteMenu(ClienteService clienteBusiness)
+    internal class ClienteMenu(ClienteService clienteService)
     {
-        private readonly ClienteService _clienteBusiness = clienteBusiness;
+        private readonly ClienteService _clienteService = clienteService;
         internal void Show()
         {
             var option = 0;
             do
             {
                 var menu = """
-                    CLIENTE
-                    =======
-                    [1] Iniciar sesión
-                    [2] Registrarse
-                    [9] Volver
-                    Ingrese una opción: 
+                CLIENTE
+                =======
+                [1] Iniciar sesión
+                [2] Registrarse
+                [9] Volver
+                Ingrese una opción: 
                 """;
                 option = ConsoleInput.GetPositiveInt(menu);
                 switch (option)
@@ -41,8 +41,8 @@
         private void Registro()
         {
             Console.WriteLine("""
-                REGISTRO
-                ========
+            REGISTRO
+            ========
             """);
             string? nombre = ConsoleInput.GetValidText("Nombre: ", 1, 100);
             if (nombre is null)
@@ -87,7 +87,7 @@
                 Activo = true
             };
             ConsoleUI.InfoMessage("Guardando datos...");
-            var result = _clienteBusiness.RegistrarCliente(cliente);
+            var result = _clienteService.RegistrarCliente(cliente);
             if (result.IsSuccess)
                 ConsoleUI.OKMEssage($"{result.Mensaje} (ID : {result.Value.IdCliente})");
             else
@@ -97,8 +97,8 @@
         private void InicioSesion()
         {
             Console.WriteLine("""
-                INICIO DE SESIÓN
-                ================
+            INICIO DE SESIÓN
+            ================
             """);
             string? email = ConsoleInput.GetValidText("E-Mail: ", 1, 254);
             if (email is null)
@@ -106,6 +106,16 @@
             string? contrasena = ConsoleInput.GetValidText("Contraseña: ", 1, 255);
             if (contrasena is null)
                 return;
+            ConsoleUI.InfoMessage("Verificando datos...");
+            var cliente = _clienteService.IniciarSesion(email, contrasena);
+            if (cliente is null)
+            {
+                ConsoleUI.ErrorMEssage("Credenciales inválidas o cuenta inactiva");
+                return;
+            }
+            var clienteLoggedMenu = new ClienteLoggedMenu(cliente, _clienteService);
+            clienteLoggedMenu.Show();
+            ConsoleUI.InfoMessage("Sesión finalizada correctamente.");
         }
     }
 }
