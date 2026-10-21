@@ -27,7 +27,7 @@
                         (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo) 
                     OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
-                        (@Nombre, @Apellido, @Dni, @Telefono, @Direccion, @Email, @CuitCuil, @Contrasena, @Activo);
+                        (@nombre, @apellido, @dni, @telefono, @direccion, @email, @cuitCuil, @contrasenia, @activo);
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -47,10 +47,10 @@
                     SET 
                         activo = 0
                     WHERE 
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                         AND activo = 1
                 """);
-            AddParameter(command, "@Id", id);
+            AddParameter(command, "@id", id);
             return command.ExecuteNonQuery() > 0;
         }
         public override IEnumerable<Cliente> GetAll()
@@ -71,9 +71,9 @@
             using var command = CreateCommand(connection
                 , $"""
                     {SelectBase}
-                        AND apellido = @Apellido
+                        AND apellido = @apellido
                 """);
-            AddParameter(command, "@Apellido", apellido.Trim());
+            AddParameter(command, "@apellido", apellido.Trim());
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
@@ -88,9 +88,9 @@
             using var command = CreateCommand(connection
                 , $"""
                     {SelectBase}
-                        AND apellido LIKE @Apellido
+                        AND apellido LIKE @apellido
                 """);
-            AddParameter(command, "@Apellido", $"%{apellido.Trim()}%");
+            AddParameter(command, "@apellido", $"%{apellido.Trim()}%");
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -104,9 +104,9 @@
             using var command = CreateCommand(connection
                 , $"""
                     {SelectBase}
-                        AND email = @Email
+                        AND email = @email
                 """);
-            AddParameter(command, "@Email", email.Trim());
+            AddParameter(command, "@email", email.Trim());
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
@@ -121,9 +121,9 @@
             using var command = CreateCommand(connection
                 , $"""
                     {SelectBase}
-                        AND email LIKE @Email
+                        AND email LIKE @email
                 """);
-            AddParameter(command, "@Email", $"%{email.Trim()}%");
+            AddParameter(command, "@email", $"%{email.Trim()}%");
             using var reader = command.ExecuteReader();
             while (reader.Read())
                 entityList.Add(Map(reader));
@@ -137,9 +137,9 @@
             using var command = CreateCommand(connection
                 , $"""
                     {SelectBase}
-                        AND {PrimaryKeyColumn} = @Id
+                        AND {PrimaryKeyColumn} = @id
                 """);
-            AddParameter(command, "@Id", id);
+            AddParameter(command, "@id", id);
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
@@ -156,35 +156,35 @@
                     UPDATE
                         {TableName}
                     SET 
-                        nombre = @Nombre
-                        , apellido = @Apellido
-                        , dni = @Dni
-                        , telefono = @Telefono
-                        , direccion = @Direccion
-                        , email = @Email
-                        , cuit_cuil = @CuitCuil
-                        , contrasena = @Contrasena
-                        , activo = @Activo                                
+                        nombre = @nombre
+                        , apellido = @apellido
+                        , dni = @dni
+                        , telefono = @telefono
+                        , direccion = @direccion
+                        , email = @email
+                        , cuit_cuil = @cuitCuil
+                        , contrasena = @contrasenia
+                        , activo = @activo                                
                     WHERE 
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                 """);
             AddEntityParameters(command, entity);
-            AddParameter(command, "@Id", entity.IdCliente);
+            AddParameter(command, "@id", entity.IdCliente);
             return command.ExecuteNonQuery() > 0;
         }
         private static void AddEntityParameters(IDbCommand command, Cliente entity)
         {
             List<(string Name, object? Value)> parameters =
             [
-                ("@Nombre", entity.Nombre),
-                ("@Apellido", entity.Apellido),
-                ("@Dni", entity.Dni),
-                ("@Telefono", entity.Telefono),
-                ("@Direccion", entity.Direccion),
-                ("@Email", entity.Email),
-                ("@CuitCuil", entity.CuitCuil),
-                ("@Contrasena", entity.Contrasena),
-                ("@Activo", entity.Activo)
+                ("@nombre", entity.Nombre),
+                ("@apellido", entity.Apellido),
+                ("@dni", entity.Dni),
+                ("@telefono", entity.Telefono),
+                ("@direccion", entity.Direccion),
+                ("@email", entity.Email),
+                ("@cuitCuil", entity.CuitCuil),
+                ("@contrasenia", entity.Contrasenia),
+                ("@activo", entity.Activo)
             ];
             AddParameters(command, parameters);
         }
@@ -206,7 +206,7 @@
                     : reader.GetString(direccionIndex),
                 Email = reader.GetString(reader.GetOrdinal("email")),
                 CuitCuil = reader.GetString(reader.GetOrdinal("cuit_cuil")),
-                Contrasena = reader.GetString(reader.GetOrdinal("contrasena")),
+                Contrasenia = reader.GetString(reader.GetOrdinal("contrasena")),
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }

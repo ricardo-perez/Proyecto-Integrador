@@ -25,7 +25,7 @@
                         (id_cliente, id_medio_de_pago, fecha, subtotal, descuento_total, monto_total) 
                     OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
-                        (@IdCliente, @IdMedioDePago, @Fecha, @Subtotal, @DescuentoTotal, @MontoTotal);
+                        (@idCliente, @idMedioDePago, @fecha, @subtotal, @descuentoTotal, @montoTotal);
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -43,9 +43,9 @@
                     DELETE FROM
                         {TableName} 
                     WHERE 
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                 """);
-            AddParameter(command, "@Id", id);
+            AddParameter(command, "@id", id);
             return command.ExecuteNonQuery() > 0;
         }
         public override IEnumerable<Venta> GetAll()
@@ -67,9 +67,9 @@
                 , $"""
                     {SelectBase}
                  WHERE
-                    {PrimaryKeyColumn} = @Id
+                    {PrimaryKeyColumn} = @id
                 """);
-            AddParameter(command, "@Id", id);
+            AddParameter(command, "@id", id);
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
@@ -86,29 +86,29 @@
                     UPDATE
                         {TableName}
                     SET 
-                        id_cliente = @IdCliente 
-                        , id_medio_de_pago = @IdMedioDePago
-                        , fecha = @Fecha
-                        , subtotal = @Subtotal
-                        , descuento_total = @DescuentoTotal
-                        , monto_total = @MontoTotal
+                        id_cliente = @idCliente 
+                        , id_medio_de_pago = @idMedioDePago
+                        , fecha = @fecha
+                        , subtotal = @subtotal
+                        , descuento_total = @descuentoTotal
+                        , monto_total = @montoTotal
                     WHERE 
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                 """);
             AddEntityParameters(command, entity);
-            AddParameter(command, "@Id", entity.IdVenta);
+            AddParameter(command, "@id", entity.IdVenta);
             return command.ExecuteNonQuery() > 0;
         }
         private static void AddEntityParameters(IDbCommand command, Venta entity)
         {
             List<(string Name, object? Value)> parameters =
             [
-                ("@IdCliente", entity.IdCliente),
-                ("@IdMedioDePago", entity.IdMedioDePago),
-                ("@Fecha", entity.Fecha),
-                ("@Subtotal", entity.Subtotal),
-                ("@DescuentoTotal", entity.DescuentoTotal),
-                ("@MontoTotal", entity.MontoTotal)
+                ("@idCliente", entity.IdCliente),
+                ("@idMedioDePago", entity.IdMedioDePago),
+                ("@fecha", entity.Fecha),
+                ("@subtotal", entity.Subtotal),
+                ("@descuentoTotal", entity.DescuentoTotal),
+                ("@montoTotal", entity.MontoTotal)
             ];
             AddParameters(command, parameters);
         }

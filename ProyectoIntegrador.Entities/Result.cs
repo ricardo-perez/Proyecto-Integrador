@@ -22,7 +22,7 @@ namespace ProyectoIntegrador.Entities
             Mensaje = mensaje ?? string.Empty;
             TipoError = tipoError;
         }
-        public static Result Success(string mensaje = "Operación realizada con éxito.")
+        public static Result Success(string mensaje = "Operación realizada con éxito")
         {
             return new Result(true, mensaje, TipoError.Ninguno);
         }
@@ -39,7 +39,7 @@ namespace ProyectoIntegrador.Entities
         {
             Value = value;
         }
-        public static Result<T> Success(T value, string mensaje = "Operación realizada con éxito.")
+        public static Result<T> Success(T value, string mensaje = "Operación realizada con éxito")
         {
             return new Result<T>(value, true, mensaje, TipoError.Ninguno);
         }

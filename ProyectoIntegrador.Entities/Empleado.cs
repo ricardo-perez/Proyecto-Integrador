@@ -12,7 +12,7 @@
         public string? Direccion { get; set; }
         public string? Email { get; set; }
         public string NombreUsuario { get; set; } = string.Empty;
-        public string Contrasena { get; set; } = string.Empty;
+        public string Contrasenia { get; set; } = string.Empty;
         public string? ImagenRuta { get; set; }
         public bool Activo { get; set; } = true;
     }

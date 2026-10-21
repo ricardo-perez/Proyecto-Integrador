@@ -11,5 +11,6 @@
         public decimal Precio { get; set; }
         public bool ActivoParaVenta { get; set; } = false;
         public bool Activo { get; set; } = false;
+        public int Stock { get; set; }
     }
 }

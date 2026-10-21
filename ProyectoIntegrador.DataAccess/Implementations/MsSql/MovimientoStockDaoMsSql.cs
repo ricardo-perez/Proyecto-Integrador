@@ -28,7 +28,7 @@
                         (id_producto, id_tipo_movimiento, id_empleado, id_venta, tipo_stock, cantidad, fecha, motivo) 
                     OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
-                        (@IdProducto, @IdTipoMovimiento, @IdEmpleado, @IdVenta, @TipoStock, @Cantidad, @Fecha, @Motivo);
+                        (@idProducto, @idTipoMovimiento, @idEmpleado, @idVenta, @tipoStock, @cantidad, @fecha, @motivo);
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -59,9 +59,9 @@
                 , $"""
                     {SelectBase}
                     WHERE
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                 """);
-            AddParameter(command, "@Id", id);
+            AddParameter(command, "@id", id);
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
@@ -75,14 +75,14 @@
         {
             List<(string Name, object? Value)> parameters =
             [
-                ("@IdProducto", entity.IdProducto),
-                ("@IdTipoMovimiento", entity.IdTipoMovimiento),
-                ("@IdEmpleado", entity.IdEmpleado),
-                ("@IdVenta", entity.IdVenta),
-                ("@TipoStock", entity.TipoStock),
-                ("@Cantidad", entity.Cantidad),
-                ("@Fecha", entity.Fecha),
-                ("@Motivo", entity.Motivo),
+                ("@idProducto", entity.IdProducto),
+                ("@idTipoMovimiento", entity.IdTipoMovimiento),
+                ("@idEmpleado", entity.IdEmpleado),
+                ("@idVenta", entity.IdVenta),
+                ("@tipoStock", entity.TipoStock),
+                ("@cantidad", entity.Cantidad),
+                ("@fecha", entity.Fecha),
+                ("@motivo", entity.Motivo),
             ];
             AddParameters(command, parameters);
         }

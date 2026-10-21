@@ -9,10 +9,12 @@ IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
 string connectionString = configuration.GetConnectionString("SqlServerConnection")
-    ?? throw new InvalidOperationException("No se encontró la cadena de conexión 'SqlServerConnection' en appsettings.json.");
+    ?? throw new InvalidOperationException("No se encontró la cadena de conexión 'SqlServerConnection' en appsettings.json");
 IConnectionFactory connectionFactory = new MsSqlConnectionFactory(connectionString);
 IClienteDao clienteDao = new ClienteDaoMsSql(connectionFactory);
-var clienteBusiness = new ClienteService(clienteDao);
-var clienteMenu = new ClienteMenu(clienteBusiness);
-var mainMenu = new MainMenu(clienteMenu);
+var clienteSerive = new ClienteService(clienteDao);
+IProductoDao productoDao = new ProductoDaoMsSql(connectionFactory);
+var productoService = new ProductoService(productoDao);
+var clienteMenu = new ClienteMenu(clienteSerive, productoService);
+var mainMenu = new Main(clienteMenu);
 mainMenu.Show();

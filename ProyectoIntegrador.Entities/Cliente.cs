@@ -11,7 +11,24 @@ namespace ProyectoIntegrador.Entities
         public string? Direccion { get; set; }
         public string Email { get; set; } = string.Empty;
         public string CuitCuil { get; set; } = string.Empty;
-        public string Contrasena { get; set; } = string.Empty;
+        public string Contrasenia { get; set; } = string.Empty;
         public bool Activo { get; set; } = true;
+        public override string ToString()
+        {
+            return $"""
+            Id: {this.IdCliente}
+            Nombre: {this.Nombre}
+            Apellido: {this.Apellido}
+            DNI: {this.Dni}
+            Teléfono: {this.Telefono}
+            Dirección: {this.Direccion}
+            E-Mail: {this.Email}
+            CUIT-CUIL: {this.CuitCuil}
+            Contraseña: {this.Contrasenia}
+            Activo: {(this.Activo
+                ? "Sí"
+                : "No")}
+            """;
+        }
     }
 }

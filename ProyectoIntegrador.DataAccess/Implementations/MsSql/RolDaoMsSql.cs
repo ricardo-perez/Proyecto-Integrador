@@ -25,7 +25,7 @@
                         (nombre, descripcion) 
                     OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
-                        (@Nombre, @Descripcion);
+                        (@nombre, @descripcion);
                 """);
             AddEntityParameters(command, entity);
             var result = command.ExecuteScalar();
@@ -43,9 +43,9 @@
                     DELETE FROM
                         {TableName} 
                     WHERE 
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                 """);
-            AddParameter(command, "@Id", id);
+            AddParameter(command, "@id", id);
             return command.ExecuteNonQuery() > 0;
         }
         public override IEnumerable<Rol> GetAll()
@@ -67,9 +67,9 @@
                 , $"""
                     {SelectBase}
                     WHERE 
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                 """);
-            AddParameter(command, "@Id", id);
+            AddParameter(command, "@id", id);
             using var reader = command.ExecuteReader();
             return reader.Read()
                 ? Map(reader)
@@ -86,13 +86,13 @@
                     UPDATE
                         {TableName}
                     SET 
-                        nombre = @Nombre,
-                        descripcion = @Descripcion
+                        nombre = @nombre,
+                        descripcion = @descripcion
                     WHERE 
-                        {PrimaryKeyColumn} = @Id
+                        {PrimaryKeyColumn} = @id
                 """);
             AddEntityParameters(command, entity);
-            AddParameter(command, "@Id", entity.IdRol);
+            AddParameter(command, "@id", entity.IdRol);
             return command.ExecuteNonQuery() > 0;
         }
         private static Rol Map(IDataReader reader)
@@ -111,8 +111,8 @@
         {
             List<(string Name, object? Value)> parameters =
             [
-                ("@Nombre", entity.Nombre),
-                ("@Descripcion", entity.Descripcion)
+                ("@nombre", entity.Nombre),
+                ("@descripcion", entity.Descripcion)
             ];
             AddParameters(command, parameters);
         }

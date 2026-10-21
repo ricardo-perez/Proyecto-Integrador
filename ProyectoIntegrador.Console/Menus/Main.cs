@@ -1,9 +1,8 @@
 ﻿namespace ProyectoIntegrador.Console.Menus
 {
-    using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
     using System;
-    internal class MainMenu(ClienteMenu clienteMenu)
+    internal class Main(ClienteMenu clienteMenu)
     {
         private readonly ClienteMenu _clienteMenu = clienteMenu;
         internal void Show()
@@ -11,15 +10,14 @@
             var option = 0;
             do
             {
-                var menu = """
+                option = ConsoleHelper.Inputs.GetValidInt("""
                 MENÚ PRINCIPAL
                 ==============
                 [1] Cliente
                 [2] Empleado
-                [9] Salir
+                [0] Salir
                 Ingrese una opción: 
-                """;
-                option = ConsoleInput.GetPositiveInt(menu);
+                """);
                 switch (option)
                 {
                     case 1:
@@ -28,16 +26,16 @@
                     case 2:
                         Console.WriteLine("LOGIN EMPLEADO");
                         break;
-                    case 9:
+                    case 0:
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("Saliendo...");
                         Console.ResetColor();
                         break;
                     default:
-                        ConsoleUI.OpcionNoValida();
+                        ConsoleHelper.Messages.OpcionNoValida();
                         break;
                 }
-            } while (option != 9);
+            } while (option != 0);
         }
     }
 }
