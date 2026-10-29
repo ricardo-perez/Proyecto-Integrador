@@ -4,5 +4,6 @@
     public interface IProductoDao : IDao<Producto>
     {
         IEnumerable<Producto> GetPagedWithStock(int pageNumber, int pageSize);
+        int GetTotalCountForCatalog();
     }
 }

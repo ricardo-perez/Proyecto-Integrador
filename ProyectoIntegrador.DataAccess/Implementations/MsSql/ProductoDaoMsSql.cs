@@ -154,6 +154,22 @@
             AddParameter(command, "@id", entity.IdProducto);
             return command.ExecuteNonQuery() > 0;
         }
+        public int GetTotalCountForCatalog()
+        {
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                SELECT
+                    COUNT(*) AS Cantidad_Productos
+                FROM
+                    productos 
+                WHERE
+                    activo = 1 
+                    AND activo_para_venta = 1;
+                """);
+            using var reader = command.ExecuteReader();
+            return reader.GetInt32(reader.GetOrdinal("Cantidad_Productos"));
+        }
         private static void AddEntityParameters(IDbCommand command, Producto entity)
         {
             List<(string Name, object? Value)> parameters =

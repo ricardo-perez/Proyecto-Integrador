@@ -29,5 +29,10 @@
                 return Result<List<Producto>>.Failure($"Ocurrió un error inesperado durante la consulta: {ex.Message}", TipoError.Inesperado);
             }
         }
+        public int ObtenerTotalPaginas(int pageSize)
+        {
+            int totalRegistros = _productoDao.GetTotalCountForCatalog();
+            return (int)Math.Ceiling((double)totalRegistros / pageSize);
+        }
     }
 }
