@@ -4,6 +4,8 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
+    using System.Net;
+
     public class ClienteDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<Cliente>(connectionFactory), IClienteDao
     {
@@ -15,7 +17,7 @@
             FROM 
                 {TableName}
             WHERE
-                activo = 1
+                1 = 1
         """;
         //
         public override int Add(Cliente entity)
@@ -126,11 +128,35 @@
         }
         public Cliente? GetByDni(string dni)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(dni))
+                return null;
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                    {SelectBase}
+                        AND dni = @dni
+                """);
+            AddParameter(command, "@dni", dni.Trim());
+            using var reader = command.ExecuteReader();
+            return reader.Read()
+                ? Map(reader)
+                : null;
         }
         public Cliente? GetByCuitCuil(string cuitCuil)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(cuitCuil))
+                return null;
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                    {SelectBase}
+                        AND cuit_cuil = @cuitCuil
+                """);
+            AddParameter(command, "@cuitCuil", cuitCuil.Trim());
+            using var reader = command.ExecuteReader();
+            return reader.Read()
+                ? Map(reader)
+                : null;
         }
         //
         private static void AddEntityParameters(IDbCommand command, Cliente entity)
