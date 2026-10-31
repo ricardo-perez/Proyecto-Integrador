@@ -191,9 +191,9 @@
             string? contrasenia;
             while (true)
             {
-                var input = ConsoleHelper.Inputs.GetValidText("""
+                var input = ConsoleHelper.Inputs.GetValidText($"""
                     NUEVA CONTRASEÑA
-                    (dejar en blanco para mantener la actual): 
+                    {infoText}: 
                     """, isOptional: true);
                 if (string.IsNullOrWhiteSpace(input))
                 {

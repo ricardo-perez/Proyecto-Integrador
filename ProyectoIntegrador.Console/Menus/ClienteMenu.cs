@@ -24,13 +24,13 @@
                 switch (option)
                 {
                     case 1:
-                        InicioSesion();
+                        Login();
                         break;
                     case 2:
-                        Registro();
+                        Signup();
                         break;
                     case 3:
-                        RecuperarContrasenia();
+                        RecoveryPassword();
                         break;
                     case 0:
                         ConsoleHelper.Messages.Volviendo();
@@ -41,7 +41,7 @@
                 }
             }
         }
-        private void Registro()
+        private void Signup()
         {
             Console.WriteLine("""
             REGISTRO
@@ -221,7 +221,7 @@
                 }
             }
         }
-        private void RecuperarContrasenia()
+        private void RecoveryPassword()
         {
             Console.WriteLine("""
             RECUPERAR CONTRASEÑA
@@ -251,7 +251,7 @@
             Se le ha enviado un E-Mail para poder recuperar la contraseña
             """);
         }
-        private void InicioSesion()
+        private void Login()
         {
             Console.WriteLine("""
             INICIO DE SESIÓN
@@ -277,11 +277,6 @@
                 contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ");
                 if (contrasenia == null)
                     return;
-                if (!ClienteValidator.Contrasenia(contrasenia))
-                {
-                    ConsoleHelper.Messages.Error("El formato de la Contraseña no es válido. Intente nuevamente");
-                    continue;
-                }
                 break;
             }
             ConsoleHelper.Messages.Info("Verificando datos...");
@@ -324,7 +319,7 @@
                             Console.WriteLine("CARRITO DE COMPRAS");
                             break;
                         case 3:
-                            if (!Perfil())
+                            if (!Profile())
                                 return;
                             break;
                         case 0:
@@ -336,7 +331,7 @@
                     }
                 }
             }
-            private bool Perfil()
+            private bool Profile()
             {
                 while (true)
                 {
@@ -359,10 +354,10 @@
                             """);
                             break;
                         case 2:
-                            ModificarDatos();
+                            UpdateAccount();
                             break;
                         case 3:
-                            if (EliminarCuenta())
+                            if (DeleteAccount())
                                 return false;
                             break;
                         case 0:
@@ -374,7 +369,7 @@
                     }
                 }
             }
-            private bool EliminarCuenta()
+            private bool DeleteAccount()
             {
                 while (true)
                 {
@@ -409,7 +404,7 @@
                     }
                 }
             }
-            private void ModificarDatos()
+            private void UpdateAccount()
             {
                 var cliente = ClienteHelper.ModificarDatos(_cliente, _clienteService, false);
                 while (true)
