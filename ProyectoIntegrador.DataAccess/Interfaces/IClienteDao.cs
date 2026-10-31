@@ -5,9 +5,6 @@ namespace ProyectoIntegrador.DataAccess.Interfaces
     public interface IClienteDao : IDao<Cliente>
     {
         Cliente? GetByEmail(string email);
-        IEnumerable<Cliente> SearchByEmail(string email);
-        Cliente? GetByApellido(string apellido);
-        IEnumerable<Cliente> SearchByApellido(string apellido);
         Cliente? GetByDni(string dni);
         Cliente? GetByCuitCuil(string cuitCuil);        
     }

@@ -124,56 +124,6 @@
                 ? Map(reader)
                 : null;
         }
-        public IEnumerable<Cliente> SearchByEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return [];
-            var entityList = new List<Cliente>();
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND email LIKE @email
-                """);
-            AddParameter(command, "@email", $"%{email.Trim()}%");
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-                entityList.Add(Map(reader));
-            return entityList;
-        }
-        public Cliente? GetByApellido(string apellido)
-        {
-            if (string.IsNullOrEmpty(apellido))
-                return null;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND apellido = @apellido
-                """);
-            AddParameter(command, "@apellido", apellido.Trim());
-            using var reader = command.ExecuteReader();
-            return reader.Read()
-                ? Map(reader)
-                : null;
-        }
-        public IEnumerable<Cliente> SearchByApellido(string apellido)
-        {
-            if (string.IsNullOrWhiteSpace(apellido))
-                return [];
-            var entityList = new List<Cliente>();
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND apellido LIKE @apellido
-                """);
-            AddParameter(command, "@apellido", $"%{apellido.Trim()}%");
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-                entityList.Add(Map(reader));
-            return entityList;
-        }
         public Cliente? GetByDni(string dni)
         {
             throw new NotImplementedException();
