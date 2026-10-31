@@ -48,7 +48,7 @@
             ========
             """);
 
-            string? email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
+            var email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
             if (email == null)
                 return;
             var resultEmail = _clienteService.ExisteEmail(email);
@@ -58,7 +58,7 @@
                 return;
             }
 
-            string? dni = ConsoleHelper.Inputs.GetValidText("DNI: ", 1, 15);
+            var dni = ConsoleHelper.Inputs.GetValidText("DNI: ", 1, 15);
             if (dni == null)
                 return;
             var resultDni = _clienteService.ExisteDni(dni);
@@ -68,7 +68,7 @@
                 return;
             }
 
-            string? cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ", 1, 13);
+            var cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ", 1, 13);
             if (cuitCuil == null)
                 return;
             var resultCuitCuil = _clienteService.ExisteCuitCuil(cuitCuil);
@@ -78,30 +78,29 @@
                 return;
             }
 
-            string? nombre = ConsoleHelper.Inputs.GetValidText("Nombre: ", 1, 100);
+            var nombre = ConsoleHelper.Inputs.GetValidText("Nombre: ", 1, 100);
             if (nombre == null)
                 return;
 
-            string? apellido = ConsoleHelper.Inputs.GetValidText("Apellido: ", 1, 100);
+            var apellido = ConsoleHelper.Inputs.GetValidText("Apellido: ", 1, 100);
             if (apellido == null)
                 return;
 
-
-            string? telefonoInput = ConsoleHelper.Inputs.GetValidText("Teléfono (opcional - Enter para omitir): ", 1, 30, isOptional: true);
+            var telefonoInput = ConsoleHelper.Inputs.GetValidText("Teléfono (opcional - Enter para omitir): ", 1, 30, isOptional: true);
             if (telefonoInput == null)
                 return;
-            string? telefono = string.IsNullOrEmpty(telefonoInput)
+            var telefono = string.IsNullOrEmpty(telefonoInput)
                 ? null
                 : telefonoInput;
 
-            string? direccionInput = ConsoleHelper.Inputs.GetValidText("Dirección (opcional - Enter para omitir): ", 1, 200, isOptional: true);
+            var direccionInput = ConsoleHelper.Inputs.GetValidText("Dirección (opcional - Enter para omitir): ", 1, 200, isOptional: true);
             if (direccionInput == null)
                 return;
-            string? direccion = string.IsNullOrEmpty(direccionInput)
+            var direccion = string.IsNullOrEmpty(direccionInput)
                 ? null
                 : direccionInput;
 
-            string? contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
+            var contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
             if (contrasena == null)
                 return;
 
@@ -119,7 +118,7 @@
             };
             while (true)
             {
-                var opcionSeleccionada = ConsoleHelper.Inputs.GetValidInt($"""
+                var option = ConsoleHelper.Inputs.GetValidInt($"""
                 DATOS CARGADOS
                 ==============
                 {cliente}
@@ -129,15 +128,15 @@
                 [2] No
                 Ingrese una opción: 
                 """);
-                switch (opcionSeleccionada)
+                switch (option)
                 {
                     case 1:
                         ConsoleHelper.Messages.Info("Guardando datos...");
-                        var resultado = _clienteService.RegistrarCliente(cliente);
-                        if (resultado.IsSuccess)
-                            ConsoleHelper.Messages.OK($"{resultado.Message} (ID : {resultado.Value.IdCliente})");
+                        var result = _clienteService.RegistrarCliente(cliente);
+                        if (result.IsSuccess)
+                            ConsoleHelper.Messages.OK($"{result.Message} (ID : {result.Value.IdCliente})");
                         else
-                            ConsoleHelper.Messages.Error(resultado.Message);
+                            ConsoleHelper.Messages.Error(result.Message);
                         return;
                     case 2:
                         ConsoleHelper.Messages.Volviendo();
@@ -154,14 +153,14 @@
             RECUPERAR CONTRASEÑA
             ====================
             """);
-            string? email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
+            var email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
             if (email == null)
                 return;
             ConsoleHelper.Messages.Info("Verificando datos...");
-            var resultado = _clienteService.RecuperarContrasenia(email);
-            if (!resultado.IsSuccess)
+            var result = _clienteService.RecuperarContrasenia(email);
+            if (!result.IsSuccess)
             {
-                ConsoleHelper.Messages.Error(resultado.Message);
+                ConsoleHelper.Messages.Error(result.Message);
                 return;
             }
             ConsoleHelper.Messages.OK("""
@@ -174,21 +173,21 @@
             INICIO DE SESIÓN
             ================
             """);
-            string? email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
+            var email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
             if (email == null)
                 return;
-            string? contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
+            var contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
             if (contrasena == null)
                 return;
             ConsoleHelper.Messages.Info("Verificando datos...");
-            var resultado = _clienteService.IniciarSesion(email, contrasena);
-            if (!resultado.IsSuccess)
+            var result = _clienteService.IniciarSesion(email, contrasena);
+            if (!result.IsSuccess)
             {
-                ConsoleHelper.Messages.Error(resultado.Message);
+                ConsoleHelper.Messages.Error(result.Message);
                 return;
             }
-            var clienteSesionMenu = new SesionMenu(resultado.Value!, _clienteService, _productoService);
-            clienteSesionMenu.Show();
+            var sesionMenu = new SesionMenu(result.Value!, _clienteService, _productoService);
+            sesionMenu.Show();
             ConsoleHelper.Messages.Info("Sesión finalizada correctamente");
         }
         private class SesionMenu(Cliente cliente, ClienteService clienteService, ProductoService productoService)
@@ -201,7 +200,7 @@
                 while (true)
                 {
                     ConsoleHelper.Messages.OK($"Bienvenid@, {_cliente.Nombre} {_cliente.Apellido} [ID: {_cliente.IdCliente}]");
-                    var opcionSeleccionada = ConsoleHelper.Inputs.GetValidInt("""
+                    var option = ConsoleHelper.Inputs.GetValidInt("""
                     TIENDA
                     ======
                     [1] Navegar catálogo de productos
@@ -210,7 +209,7 @@
                     [0] Cerrar sesión
                     Ingrese una opción: 
                     """);
-                    switch (opcionSeleccionada)
+                    switch (option)
                     {
                         case 1:
                             var productosMenu = new ProductosMenu(_productoService);
@@ -236,7 +235,7 @@
             {
                 while (true)
                 {
-                    var opcionSeleccionada = ConsoleHelper.Inputs.GetValidInt("""
+                    var option = ConsoleHelper.Inputs.GetValidInt("""
                     PERFIL
                     ======
                     [1] Ver datos
@@ -245,7 +244,7 @@
                     [0] Volver
                     Ingrese una opción: 
                     """);
-                    switch (opcionSeleccionada)
+                    switch (option)
                     {
                         case 1:
                             Console.WriteLine($"""
@@ -274,7 +273,7 @@
             {
                 while (true)
                 {
-                    var opcionSeleccionada = ConsoleHelper.Inputs.GetValidInt($"""
+                    var option = ConsoleHelper.Inputs.GetValidInt($"""
                     ELIMINAR CUENTA
                     ===============
                     ¿Está seguro que desea eliminar su cuenta? Esta acción no se puede deshacer            
@@ -282,19 +281,19 @@
                     [2] No
                     Ingrese una opción: 
                     """);
-                    switch (opcionSeleccionada)
+                    switch (option)
                     {
                         case 1:
                             ConsoleHelper.Messages.Info("Eliminando cuenta...");
-                            var resultado = _clienteService.EliminarCliente(_cliente.IdCliente);
-                            if (resultado.IsSuccess)
+                            var result = _clienteService.EliminarCliente(_cliente.IdCliente);
+                            if (result.IsSuccess)
                             {
                                 _cliente.Activo = false;
                                 ConsoleHelper.Messages.OK("Cuenta eliminada");
                                 return true;
                             }
                             else
-                                ConsoleHelper.Messages.Error(resultado.Message);
+                                ConsoleHelper.Messages.Error(result.Message);
                             return false;
                         case 2:
                             ConsoleHelper.Messages.Volviendo();
@@ -307,31 +306,31 @@
             }
             private void ModificarDatos()
             {
-                var clienteActualizado = ClienteHelper.ModificarDatos(_cliente, false);
+                var cliente = ClienteHelper.ModificarDatos(_cliente, false);
                 while (true)
                 {
-                    var opcionSeleccionada = ConsoleHelper.Inputs.GetValidInt($"""
+                    var option = ConsoleHelper.Inputs.GetValidInt($"""
                     DATOS CARGADOS
                     ==============
-                    {clienteActualizado}
+                    {cliente}
 
                     ¿Desea guardar los cambios?
                     [1] Sí
                     [2] No
                     Ingrese una opción: 
                     """);
-                    switch (opcionSeleccionada)
+                    switch (option)
                     {
                         case 1:
                             ConsoleHelper.Messages.Info("Guardando cambios...");
-                            var resultado = _clienteService.ActualizarCliente(clienteActualizado);
-                            if (resultado.IsSuccess)
+                            var result = _clienteService.ActualizarCliente(cliente);
+                            if (result.IsSuccess)
                             {
                                 ConsoleHelper.Messages.OK("Datos actualizados correctamente");
-                                _cliente = clienteActualizado;
+                                _cliente = cliente;
                             }
                             else
-                                ConsoleHelper.Messages.Error(resultado.Message);
+                                ConsoleHelper.Messages.Error(result.Message);
                             return;
                         case 2:
                             ConsoleHelper.Messages.Volviendo();

@@ -12,10 +12,10 @@
             {
                 if (_clienteDao.GetByEmail(cliente.Email) != null)
                     return Result<Cliente>.Failure("El Email ya se encuentra registrado", ErrorType.Conflicto);
-                int idGenerado = _clienteDao.Add(cliente);
-                if (idGenerado > 0)
+                var idCliente = _clienteDao.Add(cliente);
+                if (idCliente > 0)
                 {
-                    cliente.IdCliente = idGenerado;
+                    cliente.IdCliente = idCliente;
                     return Result<Cliente>.Success(cliente, "Cliente registrado con éxito");
                 }
                 return Result<Cliente>.Failure("No se pudo completar el registro en la base de datos", ErrorType.BaseDeDatos);
@@ -38,7 +38,7 @@
 
                 var cliente = _clienteDao.GetByEmail(email.Trim());
 
-                if (cliente is null || !cliente.Activo || cliente.Contrasenia != contrasena)
+                if (cliente == null || !cliente.Activo || cliente.Contrasenia != contrasena)
                     return Result<Cliente?>.Failure("Credenciales inválidas o cuenta inactiva", ErrorType.Validacion);
 
                 return Result<Cliente?>.Success(cliente, "Inicio de sesión exitoso");
@@ -59,7 +59,7 @@
                 Cliente? clienteExistente = null;
 
                 clienteExistente = _clienteDao.GetById(cliente.IdCliente);
-                if (clienteExistente is null)
+                if (clienteExistente == null)
                     return Result<Cliente>.Failure("El cliente a actualizar no existe", ErrorType.NoEncontrado);
 
                 clienteExistente = _clienteDao.GetByEmail(cliente.Email);
@@ -89,7 +89,7 @@
 
                 var cliente = _clienteDao.GetByEmail(email.Trim());
 
-                if (cliente is null || !cliente.Activo)
+                if (cliente == null || !cliente.Activo)
                     return Result.Failure("El E-Mail no corresponde a una cuenta registrada o activa", ErrorType.NoEncontrado);
 
                 return Result.Success("Se ha enviado un correo electrónico con las instrucciones para recuperar la contraseña");
@@ -103,14 +103,14 @@
                 return Result.Failure($"Ocurrió un error inesperado al procesar la solicitud: {ex.Message}", ErrorType.Inesperado);
             }
         }
-        public Result EliminarCliente(int id)
+        public Result EliminarCliente(int idCliente)
         {
-            if (id <= 0)
+            if (idCliente <= 0)
                 return Result.Failure("Usuario no válido", ErrorType.Validacion);
             try
             {
-                var eliminado = _clienteDao.Delete(id);
-                if (eliminado)
+                var deleted = _clienteDao.Delete(idCliente);
+                if (deleted)
                     return Result.Success("Cliente eliminado con éxito");
                 return Result.Failure("No se pudo encontrar el cliente o ya se encuentra inactivo", ErrorType.BaseDeDatos);
             }
@@ -129,11 +129,11 @@
             {
                 if (string.IsNullOrWhiteSpace(email))
                     return Result<bool>.Failure("El E-Mail ingresado no es válido", ErrorType.Validacion);
-                bool existe = _clienteDao.GetByEmail(email.Trim()) != null;
-                string mensaje = existe
+                var emailExists = (_clienteDao.GetByEmail(email.Trim()) != null);
+                var message = emailExists
                     ? "El E-Mail ya se encuentra registrado en el sistema"
                     : "El E-Mail se encuentra disponible";
-                return Result<bool>.Success(existe, mensaje);
+                return Result<bool>.Success(emailExists, message);
             }
             catch (DbException ex)
             {
@@ -151,11 +151,11 @@
                 if (string.IsNullOrWhiteSpace(dni))
                     return Result<bool>.Failure("El DNI ingresado no es válido", ErrorType.Validacion);
 
-                bool existe = _clienteDao.GetByDni(dni.Trim()) != null;
-                string mensaje = existe 
-                    ? "El DNI ya se encuentra registrado" 
+                var dniExists = (_clienteDao.GetByDni(dni.Trim()) != null);
+                var message = dniExists
+                    ? "El DNI ya se encuentra registrado"
                     : "El DNI se encuentra está disponible";
-                return Result<bool>.Success(existe, mensaje);
+                return Result<bool>.Success(dniExists, message);
             }
             catch (DbException ex)
             {
@@ -172,12 +172,11 @@
             {
                 if (string.IsNullOrWhiteSpace(cuitCuil))
                     return Result<bool>.Failure("El CUIT/CUIL ingresado no es válido", ErrorType.Validacion);
-                bool existe = _clienteDao.GetByCuitCuil(cuitCuil.Trim()) != null;
-                string mensaje = existe 
-                    ? "El CUIT/CUIL ya se encuentra registrado" 
+                var cuitCuilExists = _clienteDao.GetByCuitCuil(cuitCuil.Trim()) != null;
+                var message = cuitCuilExists
+                    ? "El CUIT/CUIL ya se encuentra registrado"
                     : "El CUIT/CUIL se ecuentra disponible";
-
-                return Result<bool>.Success(existe, mensaje);
+                return Result<bool>.Success(cuitCuilExists, message);
             }
             catch (DbException ex)
             {

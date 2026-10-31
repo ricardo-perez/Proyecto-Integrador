@@ -197,6 +197,5 @@
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
-
     }
 }
