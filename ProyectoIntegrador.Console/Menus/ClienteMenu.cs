@@ -47,42 +47,62 @@
             REGISTRO
             ========
             """);
+
+            string? email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
+            if (email == null)
+                return;
+            var resultEmail = _clienteService.ExisteEmail(email);
+            if (!resultEmail.IsSuccess)
+            {
+                ConsoleHelper.Messages.Error(resultEmail.Message);
+                return;
+            }
+
+            string? dni = ConsoleHelper.Inputs.GetValidText("DNI: ", 1, 15);
+            if (dni == null)
+                return;
+            var resultDni = _clienteService.ExisteDni(dni);
+            if (!resultDni.IsSuccess)
+            {
+                ConsoleHelper.Messages.Error(resultDni.Message);
+                return;
+            }
+
+            string? cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ", 1, 13);
+            if (cuitCuil == null)
+                return;
+            var resultCuitCuil = _clienteService.ExisteCuitCuil(cuitCuil);
+            if (!resultCuitCuil.IsSuccess)
+            {
+                ConsoleHelper.Messages.Error(resultCuitCuil.Message);
+                return;
+            }
+
             string? nombre = ConsoleHelper.Inputs.GetValidText("Nombre: ", 1, 100);
-            if (nombre is null)
+            if (nombre == null)
                 return;
 
             string? apellido = ConsoleHelper.Inputs.GetValidText("Apellido: ", 1, 100);
-            if (apellido is null)
+            if (apellido == null)
                 return;
 
-            string? dni = ConsoleHelper.Inputs.GetValidText("DNI: ", 1, 15);
-            if (dni is null)
-                return;
 
             string? telefonoInput = ConsoleHelper.Inputs.GetValidText("Teléfono (opcional - Enter para omitir): ", 1, 30, isOptional: true);
-            if (telefonoInput is null)
+            if (telefonoInput == null)
                 return;
             string? telefono = string.IsNullOrEmpty(telefonoInput)
                 ? null
                 : telefonoInput;
 
             string? direccionInput = ConsoleHelper.Inputs.GetValidText("Dirección (opcional - Enter para omitir): ", 1, 200, isOptional: true);
-            if (direccionInput is null)
+            if (direccionInput == null)
                 return;
             string? direccion = string.IsNullOrEmpty(direccionInput)
                 ? null
                 : direccionInput;
 
-            string? email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
-            if (email is null)
-                return;
-
-            string? cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ", 1, 13);
-            if (cuitCuil is null)
-                return;
-
             string? contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
-            if (contrasena is null)
+            if (contrasena == null)
                 return;
 
             var cliente = new Cliente()
@@ -107,7 +127,7 @@
                 ¿Desea guardar el cliente?
                 [1] Sí
                 [2] No
-                Ingrese una opción:
+                Ingrese una opción: 
                 """);
                 switch (opcionSeleccionada)
                 {
@@ -115,9 +135,9 @@
                         ConsoleHelper.Messages.Info("Guardando datos...");
                         var resultado = _clienteService.RegistrarCliente(cliente);
                         if (resultado.IsSuccess)
-                            ConsoleHelper.Messages.OK($"{resultado.Mensaje} (ID : {resultado.Value.IdCliente})");
+                            ConsoleHelper.Messages.OK($"{resultado.Message} (ID : {resultado.Value.IdCliente})");
                         else
-                            ConsoleHelper.Messages.Error(resultado.Mensaje);
+                            ConsoleHelper.Messages.Error(resultado.Message);
                         return;
                     case 2:
                         ConsoleHelper.Messages.Volviendo();
@@ -135,13 +155,13 @@
             ====================
             """);
             string? email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
-            if (email is null)
+            if (email == null)
                 return;
             ConsoleHelper.Messages.Info("Verificando datos...");
             var resultado = _clienteService.RecuperarContrasenia(email);
             if (!resultado.IsSuccess)
             {
-                ConsoleHelper.Messages.Error(resultado.Mensaje);
+                ConsoleHelper.Messages.Error(resultado.Message);
                 return;
             }
             ConsoleHelper.Messages.OK("""
@@ -155,16 +175,16 @@
             ================
             """);
             string? email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
-            if (email is null)
+            if (email == null)
                 return;
             string? contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
-            if (contrasena is null)
+            if (contrasena == null)
                 return;
             ConsoleHelper.Messages.Info("Verificando datos...");
             var resultado = _clienteService.IniciarSesion(email, contrasena);
             if (!resultado.IsSuccess)
             {
-                ConsoleHelper.Messages.Error(resultado.Mensaje);
+                ConsoleHelper.Messages.Error(resultado.Message);
                 return;
             }
             var clienteSesionMenu = new SesionMenu(resultado.Value!, _clienteService, _productoService);
@@ -200,7 +220,8 @@
                             Console.WriteLine("CARRITO DE COMPRAS");
                             break;
                         case 3:
-                            Perfil();
+                            if (!Perfil())
+                                return;
                             break;
                         case 0:
                             ConsoleHelper.Messages.Info("Cerrando sesión...");
@@ -211,7 +232,7 @@
                     }
                 }
             }
-            private void Perfil()
+            private bool Perfil()
             {
                 while (true)
                 {
@@ -220,6 +241,7 @@
                     ======
                     [1] Ver datos
                     [2] Modificar datos
+                    [3] Eliminar cuenta
                     [0] Volver
                     Ingrese una opción: 
                     """);
@@ -235,9 +257,48 @@
                         case 2:
                             ModificarDatos();
                             break;
+                        case 3:
+                            if (EliminarCuenta())
+                                return false;
+                            break;
                         case 0:
                             ConsoleHelper.Messages.Info("Volviendo...");
-                            return;
+                            return false;
+                        default:
+                            ConsoleHelper.Messages.OpcionNoValida();
+                            break;
+                    }
+                }
+            }
+            private bool EliminarCuenta()
+            {
+                while (true)
+                {
+                    var opcionSeleccionada = ConsoleHelper.Inputs.GetValidInt($"""
+                    ELIMINAR CUENTA
+                    ===============
+                    ¿Está seguro que desea eliminar su cuenta? Esta acción no se puede deshacer            
+                    [1] Sí
+                    [2] No
+                    Ingrese una opción: 
+                    """);
+                    switch (opcionSeleccionada)
+                    {
+                        case 1:
+                            ConsoleHelper.Messages.Info("Eliminando cuenta...");
+                            var resultado = _clienteService.EliminarCliente(_cliente.IdCliente);
+                            if (resultado.IsSuccess)
+                            {
+                                _cliente.Activo = false;
+                                ConsoleHelper.Messages.OK("Cuenta eliminada");
+                                return true;
+                            }
+                            else
+                                ConsoleHelper.Messages.Error(resultado.Message);
+                            return false;
+                        case 2:
+                            ConsoleHelper.Messages.Volviendo();
+                            return false;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
                             break;
@@ -257,7 +318,7 @@
                     ¿Desea guardar los cambios?
                     [1] Sí
                     [2] No
-                    Ingrese una opción:
+                    Ingrese una opción: 
                     """);
                     switch (opcionSeleccionada)
                     {
@@ -270,7 +331,7 @@
                                 _cliente = clienteActualizado;
                             }
                             else
-                                ConsoleHelper.Messages.Error(resultado.Mensaje);
+                                ConsoleHelper.Messages.Error(resultado.Message);
                             return;
                         case 2:
                             ConsoleHelper.Messages.Volviendo();

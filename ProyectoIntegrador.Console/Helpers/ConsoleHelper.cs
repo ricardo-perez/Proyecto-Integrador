@@ -28,16 +28,16 @@
                         && textValue.Length <= maxText;
                     if (isValidText)
                         return textValue;
-                    Messages.Error("Debe ingresar un valor válido");
+                    Messages.Error($"El texto debe tener entre {minText} y {maxText} caracteres");
                     int option = 0;
                     do
                     {
                         option = GetValidInt("""
-                    ¿Quiere intentar nuevamente?
-                    [1] Sí
-                    [2] No
-                    Ingrese una opción: 
-                    """);
+                        ¿Quiere intentar nuevamente?
+                        [1] Sí
+                        [2] No
+                        Ingrese una opción: 
+                        """);
                         switch (option)
                         {
                             case 1:
