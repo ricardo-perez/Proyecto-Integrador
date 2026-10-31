@@ -48,61 +48,135 @@
             ========
             """);
 
-            var email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
-            if (email == null)
-                return;
-            var resultEmail = _clienteService.ExisteEmail(email);
-            if (!resultEmail.IsSuccess)
+            string? email;
+            while (true)
             {
-                ConsoleHelper.Messages.Error(resultEmail.Message);
-                return;
+                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ");
+                if (email == null)
+                    return;
+                if (!ClienteValidator.Email(email))
+                {
+                    ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
+                    continue;
+                }
+                var resultEmail = _clienteService.ExisteEmail(email);
+                if (!resultEmail.IsSuccess)
+                {
+                    ConsoleHelper.Messages.Error(resultEmail.Message);
+                    continue;
+                }
+                break;
             }
 
-            var dni = ConsoleHelper.Inputs.GetValidText("DNI: ", 1, 15);
-            if (dni == null)
-                return;
-            var resultDni = _clienteService.ExisteDni(dni);
-            if (!resultDni.IsSuccess)
+            string? dni;
+            while (true)
             {
-                ConsoleHelper.Messages.Error(resultDni.Message);
-                return;
+                dni = ConsoleHelper.Inputs.GetValidText("DNI: ");
+                if (dni == null)
+                    return;
+                if (!ClienteValidator.Dni(dni))
+                {
+                    ConsoleHelper.Messages.Error("El formato del DNI no es válido. Intente nuevamente");
+                    continue;
+                }
+                var resultDni = _clienteService.ExisteDni(dni);
+                if (!resultDni.IsSuccess)
+                {
+                    ConsoleHelper.Messages.Error(resultDni.Message);
+                    continue;
+                }
+                break;
             }
 
-            var cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ", 1, 13);
-            if (cuitCuil == null)
-                return;
-            var resultCuitCuil = _clienteService.ExisteCuitCuil(cuitCuil);
-            if (!resultCuitCuil.IsSuccess)
+            string? cuitCuil;
+            while (true)
             {
-                ConsoleHelper.Messages.Error(resultCuitCuil.Message);
-                return;
+                cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ");
+                if (cuitCuil == null)
+                    return;
+                if (!ClienteValidator.CuitCuil(cuitCuil))
+                {
+                    ConsoleHelper.Messages.Error("El formato del CUIT / CUIL no es válido. Intente nuevamente");
+                    continue;
+                }
+                var resultCuitCuil = _clienteService.ExisteCuitCuil(cuitCuil);
+                if (!resultCuitCuil.IsSuccess)
+                {
+                    ConsoleHelper.Messages.Error(resultCuitCuil.Message);
+                    continue;
+                }
+                break;
             }
 
-            var nombre = ConsoleHelper.Inputs.GetValidText("Nombre: ", 1, 100);
-            if (nombre == null)
-                return;
+            string? nombre;
+            while (true)
+            {
+                nombre = ConsoleHelper.Inputs.GetValidText("Nombre: ");
+                if (nombre == null)
+                    return;
+                if (!ClienteValidator.Nombre(nombre))
+                {
+                    ConsoleHelper.Messages.Error("El formato del Nombre no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
 
-            var apellido = ConsoleHelper.Inputs.GetValidText("Apellido: ", 1, 100);
-            if (apellido == null)
-                return;
 
-            var telefonoInput = ConsoleHelper.Inputs.GetValidText("Teléfono (opcional - Enter para omitir): ", 1, 30, isOptional: true);
-            if (telefonoInput == null)
-                return;
-            var telefono = string.IsNullOrEmpty(telefonoInput)
-                ? null
-                : telefonoInput;
+            string? apellido;
+            while (true)
+            {
+                apellido = ConsoleHelper.Inputs.GetValidText("Apellido: ");
+                if (apellido == null)
+                    return;
+                if (!ClienteValidator.Apellido(apellido))
+                {
+                    ConsoleHelper.Messages.Error("El formato del Apellido no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
 
-            var direccionInput = ConsoleHelper.Inputs.GetValidText("Dirección (opcional - Enter para omitir): ", 1, 200, isOptional: true);
-            if (direccionInput == null)
-                return;
-            var direccion = string.IsNullOrEmpty(direccionInput)
-                ? null
-                : direccionInput;
+            string? telefono;
+            while (true)
+            {
+                telefono = ConsoleHelper.Inputs.GetValidText("Teléfono (opcional - Enter para omitir): ", isOptional: true);
+                if (telefono == null)
+                    return;
+                if (!ClienteValidator.Telefono(telefono))
+                {
+                    ConsoleHelper.Messages.Error("El formato del Teléfono no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
+            string? direccion;
+            while (true)
+            {
+                direccion = ConsoleHelper.Inputs.GetValidText("Dirección (opcional - Enter para omitir): ", isOptional: true);
+                if (direccion == null)
+                    return;
+                if (!ClienteValidator.Direccion(direccion))
+                {
+                    ConsoleHelper.Messages.Error("El formato de la Direción no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
 
-            var contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
-            if (contrasena == null)
-                return;
+            string? contrasenia;
+            while (true)
+            {
+                contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ");
+                if (contrasenia == null)
+                    return;
+                if (!ClienteValidator.Contrasenia(contrasenia))
+                {
+                    ConsoleHelper.Messages.Error("El formato de la Contraseña no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
 
             var cliente = new Cliente()
             {
@@ -113,7 +187,7 @@
                 Direccion = direccion,
                 Email = email,
                 CuitCuil = cuitCuil,
-                Contrasenia = contrasena,
+                Contrasenia = contrasenia,
                 Activo = true
             };
             while (true)
@@ -153,9 +227,19 @@
             RECUPERAR CONTRASEÑA
             ====================
             """);
-            var email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
-            if (email == null)
-                return;
+            string? email;
+            while (true)
+            {
+                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ");
+                if (email == null)
+                    return;
+                if (!ClienteValidator.Email(email))
+                {
+                    ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
             ConsoleHelper.Messages.Info("Verificando datos...");
             var result = _clienteService.RecuperarContrasenia(email);
             if (!result.IsSuccess)
@@ -173,14 +257,35 @@
             INICIO DE SESIÓN
             ================
             """);
-            var email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", 1, 254);
-            if (email == null)
-                return;
-            var contrasena = ConsoleHelper.Inputs.GetValidText("Contraseña: ", 1, 255);
-            if (contrasena == null)
-                return;
+            string? email;
+            while (true)
+            {
+
+                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ");
+                if (email == null)
+                    return;
+                if (!ClienteValidator.Email(email))
+                {
+                    ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
+            string? contrasenia;
+            while (true)
+            {
+                contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ");
+                if (contrasenia == null)
+                    return;
+                if (!ClienteValidator.Contrasenia(contrasenia))
+                {
+                    ConsoleHelper.Messages.Error("El formato de la Contraseña no es válido. Intente nuevamente");
+                    continue;
+                }
+                break;
+            }
             ConsoleHelper.Messages.Info("Verificando datos...");
-            var result = _clienteService.IniciarSesion(email, contrasena);
+            var result = _clienteService.IniciarSesion(email, contrasenia);
             if (!result.IsSuccess)
             {
                 ConsoleHelper.Messages.Error(result.Message);
@@ -262,7 +367,7 @@
                             break;
                         case 0:
                             ConsoleHelper.Messages.Info("Volviendo...");
-                            return false;
+                            return true;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
                             break;
@@ -306,7 +411,7 @@
             }
             private void ModificarDatos()
             {
-                var cliente = ClienteHelper.ModificarDatos(_cliente, false);
+                var cliente = ClienteHelper.ModificarDatos(_cliente, _clienteService, false);
                 while (true)
                 {
                     var option = ConsoleHelper.Inputs.GetValidInt($"""

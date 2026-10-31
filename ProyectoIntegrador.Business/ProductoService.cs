@@ -10,10 +10,10 @@
         public Result<List<Producto>> ObtenerPaginaConStock(int pageNumber, int pageSize)
         {
             if (pageNumber < 1)
-                return Result<List<Producto>>.Failure("El número de página debe ser mayor o igual a 1", ErrorType.Validacion);
+                return Result<List<Producto>>.Failure("El número de página debe ser mayor o igual a 1", ErrorType.Validation);
 
             if (pageSize < 1)
-                return Result<List<Producto>>.Failure("El tamaño de página debe ser mayor o igual a 1", ErrorType.Validacion);
+                return Result<List<Producto>>.Failure("El tamaño de página debe ser mayor o igual a 1", ErrorType.Validation);
 
             try
             {
@@ -22,11 +22,11 @@
             }
             catch (DbException ex)
             {
-                return Result<List<Producto>>.Failure($"Error de comunicación con la base de datos: {ex.Message}", ErrorType.BaseDeDatos);
+                return Result<List<Producto>>.Failure($"Error de comunicación con la base de datos: {ex.Message}", ErrorType.Database);
             }
             catch (Exception ex)
             {
-                return Result<List<Producto>>.Failure($"Ocurrió un error inesperado durante la consulta: {ex.Message}", ErrorType.Inesperado);
+                return Result<List<Producto>>.Failure($"Ocurrió un error inesperado durante la consulta: {ex.Message}", ErrorType.Unexpected);
             }
         }
         public int ObtenerTotalPaginas(int pageSize)

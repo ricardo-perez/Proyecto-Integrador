@@ -15,7 +15,7 @@
                     Messages.Error("Ingrese un número válido");
                 }
             }
-            internal static string? GetValidText(string message, int minText, int maxText, bool isOptional = false)
+            internal static string? GetValidText(string message, bool isOptional = false)
             {
                 while (true)
                 {
@@ -23,33 +23,9 @@
                     string? textValue = Console.ReadLine()?.Trim();
                     if (isOptional && string.IsNullOrWhiteSpace(textValue))
                         return string.Empty;
-                    bool isValidText = !string.IsNullOrWhiteSpace(textValue)
-                        && textValue.Length >= minText
-                        && textValue.Length <= maxText;
-                    if (isValidText)
+                    if (!string.IsNullOrWhiteSpace(textValue))
                         return textValue;
-                    Messages.Error($"El texto debe tener entre {minText} y {maxText} caracteres");
-                    int option = 0;
-                    do
-                    {
-                        option = GetValidInt("""
-                        ¿Quiere intentar nuevamente?
-                        [1] Sí
-                        [2] No
-                        Ingrese una opción: 
-                        """);
-                        switch (option)
-                        {
-                            case 1:
-                                // Sale del switch y del do
-                                break;
-                            case 2:
-                                return null;
-                            default:
-                                Messages.OpcionNoValida();
-                                break;
-                        }
-                    } while (option != 1);
+                    Messages.Error($"El campo no puede estar vacío");
                 }
             }
         }

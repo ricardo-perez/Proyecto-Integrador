@@ -1,10 +1,11 @@
 ﻿namespace ProyectoIntegrador.Console.Helpers
 {
+    using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Entities;
     using System;
     internal static class ClienteHelper
     {
-        internal static Cliente ModificarDatos(Cliente cliente, bool esEmpleado = false)
+        internal static Cliente ModificarDatos(Cliente cliente, ClienteService clienteService, bool esEmpleado = false)
         {
             Console.WriteLine("""
                 MODIFICAR DATOS
@@ -13,79 +14,229 @@
 
             var infoText = "Ingrese un nuevo valor o presione ENTER para mantener el valor actual";
 
-            var nombreInput = ConsoleHelper.Inputs.GetValidText($"""
-                Nombre  [{cliente.Nombre}]
-                {infoText}: 
-                """, 1, 100, isOptional: true);
-            var nombre = string.IsNullOrWhiteSpace(nombreInput)
-                ? cliente.Nombre
-                : nombreInput;
+            string? nombre;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                    Nombre  [{cliente.Nombre}]
+                    {infoText}: 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    nombre = cliente.Nombre;
+                    break;
+                }
+                if (!ClienteValidator.Nombre(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato del Nombre no es válido. Intente nuevamente");
+                    continue;
+                }
+                nombre = input;
+                break;
+            }
 
-            var apellidoInput = ConsoleHelper.Inputs.GetValidText($"""
-                Apellido  [{cliente.Apellido}]
-                {infoText}: 
-                """, 1, 100, isOptional: true);
-            var apellido = string.IsNullOrWhiteSpace(apellidoInput)
-                ? cliente.Apellido
-                : apellidoInput;
+            string? apellido;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                    Apellido  [{cliente.Apellido}]
+                    {infoText}: 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    apellido = cliente.Apellido;
+                    break;
+                }
+                if (!ClienteValidator.Apellido(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato del Apellido no es válido. Intente nuevamente");
+                    continue;
+                }
+                apellido = input;
+                break;
+            }
 
-            var dniInput = ConsoleHelper.Inputs.GetValidText($"""
-                DNI [{cliente.Dni}]
-                {infoText}: 
-                """, 1, 15, isOptional: true);
-            var dni = string.IsNullOrWhiteSpace(dniInput)
-                ? cliente.Dni
-                : dniInput;
+            string? dni;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                    DNI [{cliente.Dni}]
+                    {infoText}: 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    dni = cliente.Dni;
+                    break;
+                }
+                if (!ClienteValidator.Dni(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato del DNI no es válido. Intente nuevamente");
+                    continue;
+                }
+                if (input != cliente.Dni)
+                {
+                    var reslut = clienteService.ExisteDni(input);
+                    if (!reslut.IsSuccess)
+                    {
+                        ConsoleHelper.Messages.Error(reslut.Message);
+                        continue;
+                    }
+                }
+                dni = input;
+                break;
+            }
 
-            var telefonoInput = ConsoleHelper.Inputs.GetValidText($"""
-                Teléfono [{cliente.Telefono ?? "N/A"}]
-                {infoText}: 
-                """, 1, 30, isOptional: true);
-            var telefono = string.IsNullOrWhiteSpace(telefonoInput)
-                ? cliente.Telefono
-                : telefonoInput;
+            string? telefono;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                    Teléfono [{cliente.Telefono ?? "N/A"}]
+                    {infoText}: 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    telefono = cliente.Telefono;
+                    break;
+                }
+                if (!ClienteValidator.Telefono(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato del Teléfono no es válido. Intente nuevamente");
+                    continue;
+                }
+                telefono = input;
+                break;
+            }
 
-            var direccionInput = ConsoleHelper.Inputs.GetValidText($"""
-                Dirección [{cliente.Direccion ?? "N/A"}]
-                {infoText}: 
-                """, 1, 200, isOptional: true);
-            var direccion = string.IsNullOrWhiteSpace(direccionInput)
-                ? cliente.Direccion
-                : direccionInput;
+            string? direccion;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                    Dirección [{cliente.Direccion ?? "N/A"}]
+                    {infoText}: 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    direccion = cliente.Direccion;
+                    break;
+                }
+                if (!ClienteValidator.Direccion(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato de la Dirección no es válido. Intente nuevamente");
+                    continue;
+                }
+                direccion = input;
+                break;
+            }
 
-            var emailInput = ConsoleHelper.Inputs.GetValidText($"""
-                E-Mail [{cliente.Email}]
-                {infoText}: 
-                """, 1, 254, isOptional: true);
-            var email = string.IsNullOrWhiteSpace(emailInput)
-                ? cliente.Email
-                : emailInput;
+            string? email;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                    E-Mail [{cliente.Email}]
+                    {infoText}: 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    email = cliente.Email;
+                    break;
+                }
+                if (!ClienteValidator.Email(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
+                    continue;
+                }
+                if (input != cliente.Email)
+                {
+                    var result = clienteService.ExisteEmail(input);
+                    if (!result.IsSuccess)
+                    {
+                        ConsoleHelper.Messages.Error(result.Message);
+                        continue;
+                    }
+                }
+                email = input;
+                break;
+            }
 
-            var cuitCuilInput = ConsoleHelper.Inputs.GetValidText($"""
-                CUIT / CUIL [{cliente.CuitCuil}]
-                {infoText}: 
-                """, 1, 13, isOptional: true);
-            var cuitCuil = string.IsNullOrWhiteSpace(cuitCuilInput)
-                ? cliente.CuitCuil
-                : cuitCuilInput;
+            string? cuitCuil;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                    CUIT / CUIL [{cliente.CuitCuil}]
+                    {infoText}: 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    cuitCuil = cliente.CuitCuil;
+                    break;
+                }
+                if (!ClienteValidator.CuitCuil(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato del CUIT / CUIL no es válido. Intente nuevamente");
+                    continue;
+                }
+                if (input != cliente.CuitCuil)
+                {
+                    var result = clienteService.ExisteCuitCuil(input);
+                    if (!result.IsSuccess)
+                    {
+                        ConsoleHelper.Messages.Error(result.Message);
+                        continue;
+                    }
+                }
+                cuitCuil = input;
+                break;
+            }
 
-            var contrasenaInput = ConsoleHelper.Inputs.GetValidText("""
-                NUEVA CONTRASEÑA
-                (dejar en blanco para mantener la actual): 
-                """, 1, 255, isOptional: true);
-            var contrasena = string.IsNullOrWhiteSpace(contrasenaInput)
-                ? cliente.Contrasenia
-                : contrasenaInput;
+            string? contrasenia;
+            while (true)
+            {
+                var input = ConsoleHelper.Inputs.GetValidText("""
+                    NUEVA CONTRASEÑA
+                    (dejar en blanco para mantener la actual): 
+                    """, isOptional: true);
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    contrasenia = cliente.Contrasenia;
+                    break;
+                }
+                if (!ClienteValidator.Contrasenia(input))
+                {
+                    ConsoleHelper.Messages.Error("El formato de la Contraseña no es válido. Intente nuevamente");
+                    continue;
+                }
+                contrasenia = input;
+                break;
+            }
 
             var activo = cliente.Activo;
             if (esEmpleado)
             {
-                var estadoTexto = cliente.Activo ? "S" : "N";
-                var activoInput = ConsoleHelper.Inputs.GetValidText($"¿Cuenta activa? (S/N) [{estadoTexto}]: ", 1, 1, isOptional: true);
-
-                if (!string.IsNullOrWhiteSpace(activoInput))
-                    activo = activoInput.Equals("S", StringComparison.OrdinalIgnoreCase);
+                while (true)
+                {
+                    var activoTexto = cliente.Activo ? "Sí" : "No";
+                    var option = ConsoleHelper.Inputs.GetValidInt($"""
+                        ¿Cuenta activa? [{activoTexto}]
+                        [1] Sí
+                        [2] No
+                        Ingrese una opción: 
+                        """);
+                    switch (option)
+                    {
+                        case 1:
+                            activo = true;
+                            break;
+                        case 2:
+                            activo = false;
+                            break;
+                        default:
+                            ConsoleHelper.Messages.OpcionNoValida();
+                            continue;
+                    }
+                    break;
+                }
             }
+
             return new Cliente
             {
                 IdCliente = cliente.IdCliente,
@@ -96,7 +247,7 @@
                 Direccion = direccion,
                 Email = email,
                 CuitCuil = cuitCuil,
-                Contrasenia = contrasena,
+                Contrasenia = contrasenia,
                 Activo = activo
             };
         }

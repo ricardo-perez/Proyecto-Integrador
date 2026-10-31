@@ -3,12 +3,12 @@ namespace ProyectoIntegrador.Entities
 {
     public enum ErrorType
     {
-        Ninguno = 0,
-        Validacion = 1,
-        NoEncontrado = 2,
-        Conflicto = 3,
-        BaseDeDatos = 4,
-        Inesperado = 5
+        None = 0,
+        Validation,
+        NotFound,
+        Conflict,
+        Database,
+        Unexpected
     }
     public class Result
     {
@@ -24,9 +24,9 @@ namespace ProyectoIntegrador.Entities
         }
         public static Result Success(string mensaje = "Operación realizada con éxito")
         {
-            return new Result(true, mensaje, ErrorType.Ninguno);
+            return new Result(true, mensaje, ErrorType.None);
         }
-        public static Result Failure(string mensaje, ErrorType tipoError = ErrorType.Inesperado)
+        public static Result Failure(string mensaje, ErrorType tipoError = ErrorType.Unexpected)
         {
             return new Result(false, mensaje, tipoError);
         }
@@ -41,9 +41,9 @@ namespace ProyectoIntegrador.Entities
         }
         public static Result<T> Success(T value, string mensaje = "Operación realizada con éxito")
         {
-            return new Result<T>(value, true, mensaje, ErrorType.Ninguno);
+            return new Result<T>(value, true, mensaje, ErrorType.None);
         }
-        public static new Result<T> Failure(string mensaje, ErrorType tipoError = ErrorType.Inesperado)
+        public static new Result<T> Failure(string mensaje, ErrorType tipoError = ErrorType.Unexpected)
         {
             return new Result<T>(default, false, mensaje, tipoError);
         }
