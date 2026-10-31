@@ -8,22 +8,22 @@
         private readonly ProductoService _productoService = productoService;
         internal void Show()
         {
-            var productosPorPagina = 10;
-            var paginaActual = 1;
+            var pageSize = 2;
+            var pageNumber = 1;
             while (true)
             {
                 Console.WriteLine("""
                 PRODUCTOS
                 =========
                 """);
-                var totalPaginas = _productoService.ObtenerTotalPaginas(productosPorPagina);
-                var resultado = _productoService.ObtenerPaginaConStock(paginaActual, productosPorPagina);
-                if (!resultado.IsSuccess || resultado.Value == null || resultado.Value.Count == 0)
+                var totalPaginas = _productoService.ObtenerTotalPaginas(pageSize);
+                var result = _productoService.ObtenerPaginaConStock(pageNumber, pageSize);
+                if (!result.IsSuccess || result.Value == null || result.Value.Count == 0)
                 {
-                    ConsoleHelper.Messages.Info("No hay productos disponibles en el catálogo actualmente");
+                    ConsoleHelper.Messages.Info("No hay productos disponibles en el catálogo");
                     return;
                 }
-                var productos = resultado.Value;
+                var productos = result.Value;
                 var indice = 0;
                 foreach (var producto in productos)
                 {
@@ -31,33 +31,71 @@
                     [{++indice}] {producto.Nombre} - $ {producto.Precio} | {producto.Descripcion} | STOCK: {producto.Stock}
                     """);
                 }
-                Console.WriteLine("""
+
+                var input = ConsoleHelper.Inputs.GetValidText("""
                 [P] Primer página
                 [A] Anterior
                 [S] Siguiente
                 [U] Última página
                 [0] Volver
-                """);
-                var opcionSeleccionada = ConsoleHelper.Inputs.GetValidInt("""
                 Seleccione una opción: 
                 """);
 
-
-                if (opcionSeleccionada == 0)
+                if (string.IsNullOrWhiteSpace(input))
                 {
-                    ConsoleHelper.Messages.Info("Volviendo...");
-                    return;
+                    ConsoleHelper.Messages.OpcionNoValida();
+                    continue;
                 }
-                if (opcionSeleccionada > 0 && opcionSeleccionada <= productos.Count)
+
+                if (int.TryParse(input.Trim(), out var option))
                 {
-                    var productoSeleccionado = productos[opcionSeleccionada - 1];
-                    Console.WriteLine($"{productoSeleccionado.DescripcionLarga}");
-                    //VerDetalleProducto(productoSeleccionado);
+                    if (option == 0)
+                    {
+                        ConsoleHelper.Messages.Info("Volviendo...");
+                        return;
+                    }
+                    if (option > 0 && option <= productos.Count)
+                    {
+                        var producto = productos[option - 1];
+                        Console.WriteLine($"{producto.DescripcionLarga}");
+                        // Método Mostrar Descripción con opciones de compra
+                    }
+                    else
+                    {
+                        ConsoleHelper.Messages.OpcionNoValida();
+                    }
                 }
                 else
-                    ConsoleHelper.Messages.OpcionNoValida();
+                {
+                    var command = input.Trim().ToUpper();
+                    switch (command)
+                    {
+                        case "P":
+                            pageNumber = 1;
+                            break;
+                        case "U":
+                            pageNumber = totalPaginas > 0
+                                ? totalPaginas
+                                : 1;
+                            break;
+                        case "S":
+                            if (pageNumber < totalPaginas)
+                                pageNumber++;
+                            else
+                                ConsoleHelper.Messages.Error("Ya se encuentra en la última página");
+                            break;
+                        case "A":
+                            if (pageNumber > 1)
+                                pageNumber--;
+                            else
+                                ConsoleHelper.Messages.Error("Ya se encuentra en la primer página");
+                            break;
+                        default:
+                            ConsoleHelper.Messages.OpcionNoValida();
+                            break;
+                    }
+                }
             }
-
         }
     }
 }

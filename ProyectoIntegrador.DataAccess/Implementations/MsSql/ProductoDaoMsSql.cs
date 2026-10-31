@@ -168,7 +168,11 @@
                     AND activo_para_venta = 1;
                 """);
             using var reader = command.ExecuteReader();
-            return reader.GetInt32(reader.GetOrdinal("Cantidad_Productos"));
+            if (reader.Read())
+            {
+                return reader.GetInt32(reader.GetOrdinal("Cantidad_Productos"));
+            }
+            return 0;
         }
         private static void AddEntityParameters(IDbCommand command, Producto entity)
         {
