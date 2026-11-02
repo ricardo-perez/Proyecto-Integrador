@@ -13,11 +13,12 @@
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("""
-                PRODUCTOS
-                =========
-                """);
-                var totalPaginas = _productoService.ObtenerTotalPaginas(pageSize);
+
+                var totalPages = _productoService.ObtenerTotalPaginas(pageSize);
+
+                Console.WriteLine($"{"PRODUCTOS",-80}[ Página {pageNumber} de {totalPages} ]");
+                Console.WriteLine(new string('=', 100));
+
                 var result = _productoService.ObtenerPaginaConStock(pageNumber, pageSize);
                 if (!result.IsSuccess || result.Value == null || result.Value.Count == 0)
                 {
@@ -29,19 +30,16 @@
                 var indice = 0;
                 foreach (var producto in productos)
                 {
-                    Console.WriteLine($"""
-                    [{++indice}] {producto.Nombre} - $ {producto.Precio} | {producto.Descripcion} | STOCK: {producto.Stock}
-                    """);
+                    Console.WriteLine($"[{++indice}] {producto.Nombre} - $ {producto.Precio} | {producto.Descripcion} | STOCK: {producto.Stock}");
                 }
 
-                var input = ConsoleHelper.Inputs.GetValidText("""
-                [P] Primer página
-                [A] Anterior
-                [S] Siguiente
-                [U] Última página
-                [0] Volver
+                var separador = new string('-', 100);
+                var input = ConsoleHelper.Inputs.GetValidText($"""
+                {separador}
+                [P] Primer página  |  [A] Anterior  |  [S] Siguiente  |  [U] Última página  |  [0] Volver
+                {separador}
                 Seleccione una opción: 
-                """);
+                """, isOptional: true);
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
@@ -60,8 +58,12 @@
                     if (option > 0 && option <= productos.Count)
                     {
                         var producto = productos[option - 1];
-                        Console.WriteLine($"{producto.DescripcionLarga}");
-                        // Método Mostrar Descripción con opciones de compra
+                        Console.WriteLine($"""
+                            DETALLE
+                            =======
+                            {producto.DescripcionLarga}
+                            """);
+                        ConsoleHelper.Messages.Continuar();
                     }
                     else
                     {
@@ -78,23 +80,17 @@
                             pageNumber = 1;
                             break;
                         case "U":
-                            pageNumber = totalPaginas > 0
-                                ? totalPaginas
+                            pageNumber = totalPages > 0
+                                ? totalPages
                                 : 1;
                             break;
                         case "S":
-                            if (pageNumber < totalPaginas)
+                            if (pageNumber < totalPages)
                                 pageNumber++;
-                            else
-                                ConsoleHelper.Messages.Error("Ya se encuentra en la última página");
-                            ConsoleHelper.Messages.Continuar();
                             break;
                         case "A":
                             if (pageNumber > 1)
                                 pageNumber--;
-                            else
-                                ConsoleHelper.Messages.Error("Ya se encuentra en la primer página");
-                            ConsoleHelper.Messages.Continuar();
                             break;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
