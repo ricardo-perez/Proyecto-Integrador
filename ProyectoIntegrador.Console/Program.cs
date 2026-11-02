@@ -19,6 +19,7 @@ IProductoDao productoDao = new ProductoDaoMsSql(connectionFactory);
 var clienteSerive = new ClienteService(clienteDao);
 var productoService = new ProductoService(productoDao);
 var clienteMenu = new ClienteMenu(clienteSerive, productoService);
-var mainMenu = new Main(clienteMenu);
+var empleadoMenu = new EmpleadoMenu();
+var mainMenu = new Main(clienteMenu, empleadoMenu);
 //
 mainMenu.Show();

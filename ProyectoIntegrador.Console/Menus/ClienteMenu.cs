@@ -215,18 +215,22 @@
                             ConsoleHelper.Messages.OK($"{result.Message} (ID : {result.Value.IdCliente})");
                         else
                             ConsoleHelper.Messages.Error(result.Message);
+                        ConsoleHelper.Messages.Continuar();
                         return;
                     case 2:
                         ConsoleHelper.Messages.Volviendo();
+                        ConsoleHelper.Messages.Continuar();
                         return;
                     default:
                         ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
                         break;
                 }
             }
         }
         private void RecoveryPassword()
         {
+            Console.Clear();
             Console.WriteLine("""
             RECUPERAR CONTRASEÑA
             ====================
@@ -249,14 +253,17 @@
             if (!result.IsSuccess)
             {
                 ConsoleHelper.Messages.Error(result.Message);
+                ConsoleHelper.Messages.Continuar();
                 return;
             }
             ConsoleHelper.Messages.OK("""
             Se le ha enviado un E-Mail para poder recuperar la contraseña
             """);
+            ConsoleHelper.Messages.Continuar();
         }
         private void Login()
         {
+            Console.Clear();
             Console.WriteLine("""
             INICIO DE SESIÓN
             ================
@@ -267,7 +274,10 @@
 
                 email = ConsoleHelper.Inputs.GetValidText("E-Mail: ");
                 if (email == null)
+                {
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Email(email))
                 {
                     ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
@@ -280,7 +290,10 @@
             {
                 contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ");
                 if (contrasenia == null)
+                {
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 break;
             }
             ConsoleHelper.Messages.Info("Verificando datos...");
@@ -288,11 +301,13 @@
             if (!result.IsSuccess)
             {
                 ConsoleHelper.Messages.Error(result.Message);
+                ConsoleHelper.Messages.Continuar();
                 return;
             }
             var sesionMenu = new SesionMenu(result.Value!, _clienteService, _productoService);
             sesionMenu.Show();
             ConsoleHelper.Messages.Info("Sesión finalizada correctamente");
+            ConsoleHelper.Messages.Continuar();
         }
         private class SesionMenu(Cliente cliente, ClienteService clienteService, ProductoService productoService)
         {
@@ -303,6 +318,7 @@
             {
                 while (true)
                 {
+                    Console.Clear();
                     ConsoleHelper.Messages.OK($"Bienvenid@, {_cliente.Nombre} {_cliente.Apellido} [ID: {_cliente.IdCliente}]");
                     var option = ConsoleHelper.Inputs.GetValidInt("""
                     TIENDA
@@ -320,17 +336,24 @@
                             productosMenu.Show();
                             break;
                         case 2:
-                            Console.WriteLine("CARRITO DE COMPRAS");
+                            Console.Clear();
+                            Console.WriteLine("""
+                                CARRITO DE COMPRAS
+                                ==================
+                                """);
+                            ConsoleHelper.Messages.Continuar();
                             break;
                         case 3:
                             if (!Profile())
                                 return;
                             break;
                         case 0:
-                            ConsoleHelper.Messages.Info("Cerrando sesión...");
+                            //ConsoleHelper.Messages.Info("Cerrando sesión...");
+                            //ConsoleHelper.Messages.Continuar();
                             return;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
+                            ConsoleHelper.Messages.Continuar();
                             break;
                     }
                 }
@@ -339,6 +362,7 @@
             {
                 while (true)
                 {
+                    Console.Clear();
                     var option = ConsoleHelper.Inputs.GetValidInt("""
                     PERFIL
                     ======
@@ -351,11 +375,13 @@
                     switch (option)
                     {
                         case 1:
+                            Console.Clear();
                             Console.WriteLine($"""
                             DATOS
                             =====
                             {_cliente}
                             """);
+                            ConsoleHelper.Messages.Continuar();
                             break;
                         case 2:
                             UpdateAccount();
@@ -365,10 +391,12 @@
                                 return false;
                             break;
                         case 0:
-                            ConsoleHelper.Messages.Info("Volviendo...");
+                            ConsoleHelper.Messages.Volviendo();
+                            ConsoleHelper.Messages.Continuar();
                             return true;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
+                            ConsoleHelper.Messages.Continuar();
                             break;
                     }
                 }
@@ -377,6 +405,7 @@
             {
                 while (true)
                 {
+                    Console.Clear();
                     var option = ConsoleHelper.Inputs.GetValidInt($"""
                     ELIMINAR CUENTA
                     ===============
@@ -394,16 +423,22 @@
                             {
                                 _cliente.Activo = false;
                                 ConsoleHelper.Messages.OK("Cuenta eliminada");
+                                ConsoleHelper.Messages.Continuar();
                                 return true;
                             }
                             else
+                            {
                                 ConsoleHelper.Messages.Error(result.Message);
+                                ConsoleHelper.Messages.Continuar();
+                            }
                             return false;
                         case 2:
                             ConsoleHelper.Messages.Volviendo();
+                            ConsoleHelper.Messages.Continuar();
                             return false;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
+                            ConsoleHelper.Messages.Continuar();
                             break;
                     }
                 }
@@ -445,79 +480,6 @@
                     }
                 }
             }
-            //private void NavegarCatalogoProductos()
-            //{
-            //    var resultado = _productoService.ObtenerTodos();
-            //    if (!resultado.IsSuccess || resultado.Value == null || !resultado.Value.Any())
-            //    {
-            //        ConsoleHelper.Messages.Info("No hay productos disponibles en el catálogo actualmente");
-            //        return;
-            //    }
-            //    var productos = resultado.Value.ToList();
-            //    const int pageSize = 10;
-            //    int paginaActual = 1;
-            //    int totalPaginas = (int)Math.Ceiling((double)productos.Count / pageSize);
-            //    string input = string.Empty;
-            //    do
-            //    {
-            //        Console.Clear();
-            //        Console.ForegroundColor = ConsoleColor.Cyan;
-            //        Console.WriteLine("========================================================================");
-            //        Console.WriteLine($"                 CATÁLOGO DE PRODUCTOS (Página {paginaActual} de {totalPaginas})");
-            //        Console.WriteLine("========================================================================");
-            //        Console.ResetColor();
-            //        var productosPagina = productos.Skip((paginaActual - 1) * pageSize).Take(pageSize);
-            //        foreach (var prod in productosPagina)
-            //        {
-            //            Console.WriteLine($"[ID: {prod.IdProducto}] {prod.Nombre} - ${prod.Precio:N2} | Stock: {prod.Stock}");
-            //        }
-            //        Console.WriteLine("========================================================================");
-            //        Console.WriteLine("");
-            //        if (paginaActual < totalPaginas)
-            //        {
-            //            Console.WriteLine("[S] Página Siguiente");
-            //        }
-            //        if (paginaActual > 1)
-            //        {
-            //            Console.WriteLine("[A] Página Anterior");
-            //        }
-            //        Console.WriteLine("[0] Volver");
-            //        Console.WriteLine("");
-            //        Console.WriteLine("O ingrese el ID del producto que desea ver en detalle");
-            //        Console.Write("Ingrese una opción: ");
-            //        input = Console.ReadLine()?.Trim().ToUpper() ?? string.Empty;
-            //        if (input == "0")
-            //        {
-            //            break;
-            //        }
-            //        else if (input == "S" && paginaActual < totalPaginas)
-            //        {
-            //            paginaActual++;
-            //        }
-            //        else if (input == "A" && paginaActual > 1)
-            //        {
-            //            paginaActual--;
-            //        }
-            //        else if (int.TryParse(input, out int idProducto))
-            //        {
-            //            var productoSeleccionado = productos.FirstOrDefault(p => p.IdProducto == idProducto);
-            //            if (productoSeleccionado != null)
-            //            {
-            //                // TODO: En la siguiente etapa invocaremos aquí el detalle del producto seleccionado
-            //                ConsoleHelper.Messages.Info($"Seleccionó el producto ID {productoSeleccionado.IdProducto}: {productoSeleccionado.Nombre}");
-            //            }
-            //            else
-            //            {
-            //                ConsoleHelper.Messages.ErrorMEssage("El ID ingresado no corresponde a un producto del catálogo");
-            //            }
-            //        }
-            //        else
-            //        {
-            //            ConsoleHelper.Messages.OpcionNoValida();
-            //        }
-
-            //    } while (input != "0");
-            //}
         }
     }
 }

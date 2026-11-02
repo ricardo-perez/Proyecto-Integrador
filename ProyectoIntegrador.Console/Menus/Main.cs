@@ -2,14 +2,15 @@
 {
     using ProyectoIntegrador.Console.Helpers;
     using System;
-    using static ProyectoIntegrador.Console.Helpers.ConsoleHelper;
 
     internal class Main
     {
         private readonly ClienteMenu _clienteMenu;
-        public Main(ClienteMenu clienteMenu)
+        private readonly EmpleadoMenu _empleadoMenu;
+        public Main(ClienteMenu clienteMenu, EmpleadoMenu empleadoMenu)
         {
             _clienteMenu = clienteMenu;
+            _empleadoMenu = empleadoMenu;
             Configuration();
         }
         internal void Show()
@@ -18,7 +19,7 @@
             while (true)
             {
                 Console.Clear();
-                var option = Inputs.GetValidInt("""
+                var option = ConsoleHelper.Inputs.GetValidInt("""
                 MENÚ PRINCIPAL
                 ==============
                 [1] Cliente
@@ -33,11 +34,7 @@
                         _clienteMenu.Show();
                         break;
                     case 2:
-                        Console.WriteLine("""
-                            LOGIN EMPLEADO
-                            ==============
-                            """);
-                        Messages.Continuar();
+                        _empleadoMenu.Show();
                         break;
                     case 3:
                         About();
@@ -47,8 +44,8 @@
                             return;
                         break;
                     default:
-                        Messages.OpcionNoValida();
-                        Messages.Continuar();
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
                         break;
                 }
             }
@@ -58,7 +55,7 @@
             while (true)
             {
                 Console.Clear();
-                var option = Inputs.GetValidInt("""
+                var option = ConsoleHelper.Inputs.GetValidInt("""
                     ¿Seguro que desea salir?
                     [1] Sí
                     [2] No
@@ -70,13 +67,13 @@
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("Saliendo...");
                         Console.ResetColor();
-                        Messages.Continuar();
+                        ConsoleHelper.Messages.Continuar();
                         return true;
                     case 2:
                         return false;
                     default:
-                        Messages.OpcionNoValida();
-                        Messages.Continuar();
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
                         break;
                 }
             }
@@ -110,7 +107,7 @@
             {"Proyecto:",-20} Trabajo Práctico Integrador
             {"Año:",-20} 2026
             """);
-            Messages.Continuar();
+            ConsoleHelper.Messages.Continuar();
         }
     }
 }

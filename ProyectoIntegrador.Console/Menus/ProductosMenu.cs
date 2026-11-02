@@ -51,7 +51,7 @@
                 {
                     if (option == 0)
                     {
-                        ConsoleHelper.Messages.Info("Volviendo...");
+                        ConsoleHelper.Messages.Volviendo();
                         return;
                     }
                     if (option > 0 && option <= productos.Count)
