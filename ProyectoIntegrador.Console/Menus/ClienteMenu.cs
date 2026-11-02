@@ -34,8 +34,8 @@
                         RecoveryPassword();
                         break;
                     case 0:
-                        ConsoleHelper.Messages.Volviendo();
-                        ConsoleHelper.Messages.Continuar();
+                        //ConsoleHelper.Messages.Volviendo();
+                        //ConsoleHelper.Messages.Continuar();
                         return;
                     default:
                         ConsoleHelper.Messages.OpcionNoValida();
@@ -46,18 +46,23 @@
         }
         private void Signup()
         {
+            var cancelKeyword = "0";
             Console.Clear();
             Console.WriteLine("""
-            REGISTRO
-            ========
+            REGISTRO (Ingrese 0 en cualquier campo para cancelar)
+            =====================================================
             """);
 
             string? email;
             while (true)
             {
-                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ");
+                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", cancelKeyword: cancelKeyword);
                 if (email == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Email(email))
                 {
                     ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
@@ -75,9 +80,13 @@
             string? dni;
             while (true)
             {
-                dni = ConsoleHelper.Inputs.GetValidText("DNI: ");
+                dni = ConsoleHelper.Inputs.GetValidText("DNI: ", cancelKeyword: cancelKeyword);
                 if (dni == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Dni(dni))
                 {
                     ConsoleHelper.Messages.Error("El formato del DNI no es válido. Intente nuevamente");
@@ -95,9 +104,13 @@
             string? cuitCuil;
             while (true)
             {
-                cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ");
+                cuitCuil = ConsoleHelper.Inputs.GetValidText("CUIT / CUIL: ", cancelKeyword: cancelKeyword);
                 if (cuitCuil == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.CuitCuil(cuitCuil))
                 {
                     ConsoleHelper.Messages.Error("El formato del CUIT / CUIL no es válido. Intente nuevamente");
@@ -115,9 +128,13 @@
             string? nombre;
             while (true)
             {
-                nombre = ConsoleHelper.Inputs.GetValidText("Nombre: ");
+                nombre = ConsoleHelper.Inputs.GetValidText("Nombre: ", cancelKeyword: cancelKeyword);
                 if (nombre == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Nombre(nombre))
                 {
                     ConsoleHelper.Messages.Error("El formato del Nombre no es válido. Intente nuevamente");
@@ -130,9 +147,13 @@
             string? apellido;
             while (true)
             {
-                apellido = ConsoleHelper.Inputs.GetValidText("Apellido: ");
+                apellido = ConsoleHelper.Inputs.GetValidText("Apellido: ", cancelKeyword: cancelKeyword);
                 if (apellido == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Apellido(apellido))
                 {
                     ConsoleHelper.Messages.Error("El formato del Apellido no es válido. Intente nuevamente");
@@ -146,7 +167,11 @@
             {
                 telefono = ConsoleHelper.Inputs.GetValidText("Teléfono (opcional - Enter para omitir): ", isOptional: true);
                 if (telefono == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Telefono(telefono))
                 {
                     ConsoleHelper.Messages.Error("El formato del Teléfono no es válido. Intente nuevamente");
@@ -159,7 +184,11 @@
             {
                 direccion = ConsoleHelper.Inputs.GetValidText("Dirección (opcional - Enter para omitir): ", isOptional: true);
                 if (direccion == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Direccion(direccion))
                 {
                     ConsoleHelper.Messages.Error("El formato de la Direción no es válido. Intente nuevamente");
@@ -171,9 +200,13 @@
             string? contrasenia;
             while (true)
             {
-                contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ");
+                contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ", cancelKeyword: cancelKeyword);
                 if (contrasenia == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Contrasenia(contrasenia))
                 {
                     ConsoleHelper.Messages.Error("El formato de la Contraseña no es válido. Intente nuevamente");
@@ -230,17 +263,22 @@
         }
         private void RecoveryPassword()
         {
+            var cancelKeyword = "0";
             Console.Clear();
             Console.WriteLine("""
-            RECUPERAR CONTRASEÑA
-            ====================
+            RECUPERAR CONTRASEÑA  (Ingrese 0 en cualquier campo para cancelar)
+            ==================================================================
             """);
             string? email;
             while (true)
             {
-                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ");
+                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", cancelKeyword: cancelKeyword);
                 if (email == null)
+                {
+                    Console.WriteLine("Cancelando...");
+                    ConsoleHelper.Messages.Continuar();
                     return;
+                }
                 if (!ClienteValidator.Email(email))
                 {
                     ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
@@ -263,18 +301,20 @@
         }
         private void Login()
         {
+            var cancelKeyword = "0";
             Console.Clear();
             Console.WriteLine("""
-            INICIO DE SESIÓN
-            ================
+            INICIO DE SESIÓN  (Ingrese 0 en cualquier campo para cancelar)
+            ==============================================================
             """);
             string? email;
             while (true)
             {
 
-                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ");
+                email = ConsoleHelper.Inputs.GetValidText("E-Mail: ", cancelKeyword: cancelKeyword);
                 if (email == null)
                 {
+                    Console.WriteLine("Cancelando...");
                     ConsoleHelper.Messages.Continuar();
                     return;
                 }
@@ -288,9 +328,10 @@
             string? contrasenia;
             while (true)
             {
-                contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ");
+                contrasenia = ConsoleHelper.Inputs.GetValidText("Contraseña: ", cancelKeyword: cancelKeyword);
                 if (contrasenia == null)
                 {
+                    Console.WriteLine("Cancelando...");
                     ConsoleHelper.Messages.Continuar();
                     return;
                 }
@@ -348,9 +389,37 @@
                                 return;
                             break;
                         case 0:
-                            //ConsoleHelper.Messages.Info("Cerrando sesión...");
-                            //ConsoleHelper.Messages.Continuar();
-                            return;
+                            if (SignOut())
+                                return;
+                            break;
+                        default:
+                            ConsoleHelper.Messages.OpcionNoValida();
+                            ConsoleHelper.Messages.Continuar();
+                            break;
+                    }
+                }
+            }
+            private static bool SignOut()
+            {
+                while (true)
+                {
+                    Console.Clear();
+                    var option = ConsoleHelper.Inputs.GetValidInt("""
+                    ¿Está seguro de que desea cerrar la sesión?
+                    [1] Sí
+                    [2] No
+                    Ingrese una opción: 
+                    """);
+                    switch (option)
+                    {
+                        case 1:
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine("Cerrando sesión...");
+                            Console.ResetColor();
+                            ConsoleHelper.Messages.Continuar();
+                            return true;
+                        case 2:
+                            return false;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
                             ConsoleHelper.Messages.Continuar();
@@ -391,8 +460,8 @@
                                 return false;
                             break;
                         case 0:
-                            ConsoleHelper.Messages.Volviendo();
-                            ConsoleHelper.Messages.Continuar();
+                            //ConsoleHelper.Messages.Volviendo();
+                            //ConsoleHelper.Messages.Continuar();
                             return true;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
@@ -433,8 +502,8 @@
                             }
                             return false;
                         case 2:
-                            ConsoleHelper.Messages.Volviendo();
-                            ConsoleHelper.Messages.Continuar();
+                            //ConsoleHelper.Messages.Volviendo();
+                            //ConsoleHelper.Messages.Continuar();
                             return false;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();

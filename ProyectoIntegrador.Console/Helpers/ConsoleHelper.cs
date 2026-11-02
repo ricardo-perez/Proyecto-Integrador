@@ -15,12 +15,15 @@
                     Messages.Error("Ingrese un número válido");
                 }
             }
-            internal static string? GetValidText(string message, bool isOptional = false)
+            internal static string? GetValidText(string message, bool isOptional = false, string cancelKeyword = "")
             {
                 while (true)
                 {
                     Console.Write(message);
                     string? textValue = Console.ReadLine()?.Trim();
+                    if (!string.IsNullOrEmpty(cancelKeyword) 
+                        && cancelKeyword.Equals(textValue, StringComparison.OrdinalIgnoreCase))
+                        return null;
                     if (isOptional && string.IsNullOrWhiteSpace(textValue))
                         return string.Empty;
                     if (!string.IsNullOrWhiteSpace(textValue))

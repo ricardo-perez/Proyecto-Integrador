@@ -12,6 +12,7 @@
             var pageNumber = 1;
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("""
                 PRODUCTOS
                 =========
@@ -21,6 +22,7 @@
                 if (!result.IsSuccess || result.Value == null || result.Value.Count == 0)
                 {
                     ConsoleHelper.Messages.Info("No hay productos disponibles en el catálogo");
+                    ConsoleHelper.Messages.Continuar();
                     return;
                 }
                 var productos = result.Value;
@@ -44,6 +46,7 @@
                 if (string.IsNullOrWhiteSpace(input))
                 {
                     ConsoleHelper.Messages.OpcionNoValida();
+                    ConsoleHelper.Messages.Continuar();
                     continue;
                 }
 
@@ -63,6 +66,7 @@
                     else
                     {
                         ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
                     }
                 }
                 else
@@ -83,15 +87,18 @@
                                 pageNumber++;
                             else
                                 ConsoleHelper.Messages.Error("Ya se encuentra en la última página");
+                            ConsoleHelper.Messages.Continuar();
                             break;
                         case "A":
                             if (pageNumber > 1)
                                 pageNumber--;
                             else
                                 ConsoleHelper.Messages.Error("Ya se encuentra en la primer página");
+                            ConsoleHelper.Messages.Continuar();
                             break;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
+                            ConsoleHelper.Messages.Continuar();
                             break;
                     }
                 }
