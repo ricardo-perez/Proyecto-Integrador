@@ -2,6 +2,7 @@
 {
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
+    using ProyectoIntegrador.Entities;
     using System;
     internal class ProductosMenu(ProductoService productoService)
     {
@@ -58,12 +59,7 @@
                     if (option > 0 && option <= productos.Count)
                     {
                         var producto = productos[option - 1];
-                        Console.WriteLine($"""
-                            DETALLE
-                            =======
-                            {producto.DescripcionLarga}
-                            """);
-                        ConsoleHelper.Messages.Continuar();
+                        Detail(producto);
                     }
                     else
                     {
@@ -98,6 +94,79 @@
                             break;
                     }
                 }
+            }
+        }
+        private static void Detail(Producto producto)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"""
+                    DETALLE DE PRODUCTO
+                    ===================
+                    SKU: {producto.Sku}
+                    Nombre: {producto.Nombre}
+                    Precio: $ {producto.Precio}
+                    Stock disponible: {producto.Stock}
+
+                    {producto.DescripcionLarga}
+
+                    """);
+                if (producto.Stock > 0)
+                    Console.WriteLine("[1] Agregar al carrito");
+
+                var option = ConsoleHelper.Inputs.GetValidInt("""
+                    [0] Volver
+                    Seleccione una opción: 
+                    """);
+                switch (option)
+                {
+                    case 1:
+                        if (producto.Stock > 0)
+                            AgregarAlCarrito(producto);
+                        else
+                        {
+                            ConsoleHelper.Messages.Error("El producto no cuenta con stock disponible");
+                            ConsoleHelper.Messages.Continuar();
+                        }
+                        break;
+                    case 0:
+                        return;
+                    default:
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
+                        break;
+                }
+            }
+        }
+        private static void AgregarAlCarrito(Producto producto)
+        {
+            while (true)
+            {
+                Console.Clear();
+                var qty = ConsoleHelper.Inputs.GetValidInt($"""
+                    AGREGAR AL CARRITO
+                    ==================
+                    Producto: {producto.Nombre} - $ {producto.Precio}
+                    Descripción: {producto.Descripcion}
+                    Stock disponible: {producto.Stock}
+                    
+                    Ingrese la cantidad a agregar (0 para cancelar): 
+                    """);
+
+                if (qty == 0)
+                    return;
+
+                if (qty > producto.Stock)
+                {
+                    ConsoleHelper.Messages.Error($"La cantidad ingresada supera el stock disponible ({producto.Stock} unidades)");
+                    ConsoleHelper.Messages.Continuar();
+                    continue;
+                }
+
+                ConsoleHelper.Messages.OK($"Se han agregado {qty} unidad(es) al carrito de compras");
+                ConsoleHelper.Messages.Continuar();
+                return;
             }
         }
     }
