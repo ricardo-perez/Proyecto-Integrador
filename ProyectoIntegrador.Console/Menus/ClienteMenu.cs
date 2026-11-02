@@ -12,6 +12,7 @@
         {
             while (true)
             {
+                Console.Clear();
                 var option = ConsoleHelper.Inputs.GetValidInt("""
                 CLIENTE
                 =======
@@ -34,15 +35,18 @@
                         break;
                     case 0:
                         ConsoleHelper.Messages.Volviendo();
+                        ConsoleHelper.Messages.Continuar();
                         return;
                     default:
                         ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
                         break;
                 }
             }
         }
         private void Signup()
         {
+            Console.Clear();
             Console.WriteLine("""
             REGISTRO
             ========

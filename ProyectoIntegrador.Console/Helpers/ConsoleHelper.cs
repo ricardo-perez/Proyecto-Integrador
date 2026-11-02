@@ -25,7 +25,7 @@
                         return string.Empty;
                     if (!string.IsNullOrWhiteSpace(textValue))
                         return textValue;
-                    Messages.Error($"El campo no puede estar vacío");
+                    Messages.Error("El campo no puede estar vacío");
                 }
             }
         }
@@ -58,6 +58,11 @@
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Volviendo...");
                 Console.ResetColor();
+            }
+            internal static void Continuar()
+            {
+                Console.WriteLine("Presione una tecla para continuar...");
+                Console.ReadKey(true);
             }
         }
     }
