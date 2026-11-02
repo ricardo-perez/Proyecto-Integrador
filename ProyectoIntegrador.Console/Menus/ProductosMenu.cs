@@ -35,12 +35,14 @@
                 }
 
                 var separador = new string('-', 100);
-                var input = ConsoleHelper.Inputs.GetValidText($"""
+
+                Console.Write($"""
                 {separador}
                 [P] Primer página  |  [A] Anterior  |  [S] Siguiente  |  [U] Última página  |  [0] Volver
                 {separador}
                 Seleccione una opción: 
-                """, isOptional: true);
+                """);
+                var input = Console.ReadLine()?.Trim();
 
                 if (string.IsNullOrWhiteSpace(input))
                 {
@@ -48,14 +50,10 @@
                     ConsoleHelper.Messages.Continuar();
                     continue;
                 }
-
-                if (int.TryParse(input.Trim(), out var option))
+                if (int.TryParse(input, out var option))
                 {
                     if (option == 0)
-                    {
-                        ConsoleHelper.Messages.Volviendo();
                         return;
-                    }
                     if (option > 0 && option <= productos.Count)
                     {
                         var producto = productos[option - 1];
@@ -115,10 +113,20 @@
                 if (producto.Stock > 0)
                     Console.WriteLine("[1] Agregar al carrito");
 
-                var option = ConsoleHelper.Inputs.GetValidInt("""
-                    [0] Volver
-                    Seleccione una opción: 
-                    """);
+                Console.Write("""
+                [0] Volver
+                Seleccione una opción: 
+                """);
+
+                var input = Console.ReadLine()?.Trim();
+
+                if (!int.TryParse(input, out var option) || option < 0)
+                {
+                    ConsoleHelper.Messages.OpcionNoValida();
+                    ConsoleHelper.Messages.Continuar();
+                    continue;
+                }
+
                 switch (option)
                 {
                     case 1:
@@ -144,15 +152,24 @@
             while (true)
             {
                 Console.Clear();
-                var qty = ConsoleHelper.Inputs.GetValidInt($"""
-                    AGREGAR AL CARRITO
-                    ==================
-                    Producto: {producto.Nombre} - $ {producto.Precio}
-                    Descripción: {producto.Descripcion}
-                    Stock disponible: {producto.Stock}
+                Console.Write($"""
+                AGREGAR AL CARRITO
+                ==================
+                Producto: {producto.Nombre} - $ {producto.Precio}
+                Descripción: {producto.Descripcion}
+                Stock disponible: {producto.Stock}
                     
-                    Ingrese la cantidad a agregar (0 para cancelar): 
-                    """);
+                Ingrese la cantidad a agregar (0 para cancelar): 
+                """);
+
+                var input = Console.ReadLine()?.Trim();
+
+                if (!int.TryParse(input, out var qty) || qty < 0)
+                {
+                    ConsoleHelper.Messages.OpcionNoValida();
+                    ConsoleHelper.Messages.Continuar();
+                    continue;
+                }
 
                 if (qty == 0)
                     return;
@@ -164,6 +181,7 @@
                     continue;
                 }
 
+                producto.Stock -= qty;
                 ConsoleHelper.Messages.OK($"Se han agregado {qty} unidad(es) al carrito de compras");
                 ConsoleHelper.Messages.Continuar();
                 return;
