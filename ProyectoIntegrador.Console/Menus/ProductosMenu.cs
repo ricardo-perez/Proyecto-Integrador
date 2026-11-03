@@ -4,9 +4,10 @@
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class ProductosMenu(ProductoService productoService)
+    internal class ProductosMenu(ProductoService productoService, List<ItemCarrito> carrito)
     {
         private readonly ProductoService _productoService = productoService;
+        private readonly List<ItemCarrito> _carrito = carrito;
         internal void Show()
         {
             var pageSize = 2;
@@ -94,7 +95,7 @@
                 }
             }
         }
-        private static void Detail(Producto producto)
+        private void Detail(Producto producto)
         {
             while (true)
             {
@@ -131,7 +132,7 @@
                 {
                     case 1:
                         if (producto.Stock > 0)
-                            AgregarAlCarrito(producto);
+                            AddToCart(producto);
                         else
                         {
                             ConsoleHelper.Messages.Error("El producto no cuenta con stock disponible");
@@ -147,7 +148,7 @@
                 }
             }
         }
-        private static void AgregarAlCarrito(Producto producto)
+        private void AddToCart(Producto producto)
         {
             while (true)
             {
@@ -181,7 +182,18 @@
                     continue;
                 }
 
-                producto.Stock -= qty;
+                var item = _carrito.Find(i => i.Producto.IdProducto == producto.IdProducto);
+                if (item != null)
+                    item.Cantidad += qty;
+                else
+                {
+                    _carrito.Add(new ItemCarrito
+                    {
+                        Producto = producto,
+                        Cantidad = qty
+                    });
+                }
+
                 ConsoleHelper.Messages.OK($"Se han agregado {qty} unidad(es) al carrito de compras");
                 ConsoleHelper.Messages.Continuar();
                 return;
