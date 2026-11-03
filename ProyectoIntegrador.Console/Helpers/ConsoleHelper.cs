@@ -5,16 +5,6 @@
     {
         internal static class Inputs
         {
-            internal static int GetValidInt(string message)
-            {
-                while (true)
-                {
-                    Console.Write(message);
-                    if (int.TryParse(Console.ReadLine(), out int valor) && valor >= 0)
-                        return valor;
-                    Messages.Error("Ingrese un número válido");
-                }
-            }
             internal static string? GetValidText(string message, bool isOptional = false, string cancelKeyword = "")
             {
                 while (true)

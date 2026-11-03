@@ -214,13 +214,21 @@
             {
                 while (true)
                 {
-                    var activoTexto = cliente.Activo ? "Sí" : "No";
-                    var option = ConsoleHelper.Inputs.GetValidInt($"""
-                        ¿Cuenta activa? [{activoTexto}]
+                    Console.Write($"""
+                        ¿Cuenta activa? [{(cliente.Activo ? "Sí" : "No")}]
                         [1] Sí
                         [2] No
                         Ingrese una opción: 
                         """);
+
+                    var input = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(input, out var option))
+                    {
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
+                        continue;
+                    }
+
                     switch (option)
                     {
                         case 1:
