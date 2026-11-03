@@ -43,8 +43,6 @@
                         RecoveryPassword();
                         break;
                     case 0:
-                        //ConsoleHelper.Messages.Volviendo();
-                        //ConsoleHelper.Messages.Continuar();
                         return;
                     default:
                         ConsoleHelper.Messages.OpcionNoValida();
@@ -384,8 +382,9 @@
                     TIENDA
                     ======
                     [1] Navegar catálogo de productos
-                    [2] Ver carrito de compras
-                    [3] Mi perfil
+                    [2] Carrito de compras
+                    [3] Historial de compras
+                    [4] Mi perfil
                     [0] Cerrar sesión
                     Ingrese una opción: 
                     """);
@@ -412,7 +411,7 @@
                                 """);
                             ConsoleHelper.Messages.Continuar();
                             break;
-                        case 3:
+                        case 4:
                             if (!Profile())
                                 return;
                             break;
@@ -506,8 +505,6 @@
                                 return false;
                             break;
                         case 0:
-                            //ConsoleHelper.Messages.Volviendo();
-                            //ConsoleHelper.Messages.Continuar();
                             return true;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
@@ -557,8 +554,6 @@
                             }
                             return false;
                         case 2:
-                            //ConsoleHelper.Messages.Volviendo();
-                            //ConsoleHelper.Messages.Continuar();
                             return false;
                         default:
                             ConsoleHelper.Messages.OpcionNoValida();
@@ -570,48 +565,20 @@
             private void UpdateAccount()
             {
                 var cliente = ClienteHelper.ModificarDatos(_cliente, _clienteService, false);
-                while (true)
+
+                if (cliente == _cliente)
+                    return;
+
+                ConsoleHelper.Messages.Info("Guardando cambios...");
+                var result = _clienteService.ActualizarCliente(cliente);
+                if (result.IsSuccess)
                 {
-                    Console.Write($"""
-                    DATOS CARGADOS
-                    ==============
-                    {cliente}
-
-                    ¿Desea guardar los cambios?
-                    [1] Sí
-                    [2] No
-                    Ingrese una opción: 
-                    """);
-
-                    var input = Console.ReadLine()?.Trim();
-                    if (!int.TryParse(input, out var option))
-                    {
-                        ConsoleHelper.Messages.OpcionNoValida();
-                        ConsoleHelper.Messages.Continuar();
-                        continue;
-                    }
-
-                    switch (option)
-                    {
-                        case 1:
-                            ConsoleHelper.Messages.Info("Guardando cambios...");
-                            var result = _clienteService.ActualizarCliente(cliente);
-                            if (result.IsSuccess)
-                            {
-                                ConsoleHelper.Messages.OK("Datos actualizados correctamente");
-                                _cliente = cliente;
-                            }
-                            else
-                                ConsoleHelper.Messages.Error(result.Message);
-                            return;
-                        case 2:
-                            ConsoleHelper.Messages.Volviendo();
-                            return;
-                        default:
-                            ConsoleHelper.Messages.OpcionNoValida();
-                            break;
-                    }
+                    ConsoleHelper.Messages.OK("Datos actualizados correctamente");
+                    _cliente = cliente;
                 }
+                else
+                    ConsoleHelper.Messages.Error(result.Message);
+                ConsoleHelper.Messages.Continuar();
             }
         }
     }

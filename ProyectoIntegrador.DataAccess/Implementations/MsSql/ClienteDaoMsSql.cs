@@ -4,8 +4,6 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    using System.Net;
-
     public class ClienteDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<Cliente>(connectionFactory), IClienteDao
     {
@@ -19,7 +17,7 @@
             WHERE
                 1 = 1
         """;
-        //
+
         public override int Add(Cliente entity)
         {
             ArgumentNullException.ThrowIfNull(entity, nameof(entity));
@@ -109,7 +107,7 @@
             AddParameter(command, "@id", id);
             return command.ExecuteNonQuery() > 0;
         }
-        //
+
         public Cliente? GetByEmail(string email)
         {
             if (string.IsNullOrEmpty(email))
@@ -158,7 +156,7 @@
                 ? Map(reader)
                 : null;
         }
-        //
+
         private static void AddEntityParameters(IDbCommand command, Cliente entity)
         {
             List<(string Name, object? Value)> parameters =

@@ -4,22 +4,22 @@ using ProyectoIntegrador.Console.Menus;
 using ProyectoIntegrador.DataAccess.Factories;
 using ProyectoIntegrador.DataAccess.Implementations.MsSql;
 using ProyectoIntegrador.DataAccess.Interfaces;
-//
+
 IConfiguration configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
 string connectionString = configuration.GetConnectionString("SqlServerConnection")
     ?? throw new InvalidOperationException("No se encontró la cadena de conexión 'SqlServerConnection' en appsettings.json");
-//
+
 IConnectionFactory connectionFactory = new MsSqlConnectionFactory(connectionString);
 IClienteDao clienteDao = new ClienteDaoMsSql(connectionFactory);
 IProductoDao productoDao = new ProductoDaoMsSql(connectionFactory);
-//
+
 var clienteSerive = new ClienteService(clienteDao);
 var productoService = new ProductoService(productoDao);
 var clienteMenu = new ClienteMenu(clienteSerive, productoService);
 var empleadoMenu = new EmpleadoMenu();
 var mainMenu = new Main(clienteMenu, empleadoMenu);
-//
+
 mainMenu.Show();
