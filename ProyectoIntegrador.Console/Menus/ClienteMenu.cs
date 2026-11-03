@@ -4,7 +4,7 @@
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal partial class ClienteMenu(ClienteService clienteService, ProductoService productoService)
+    internal class ClienteMenu(ClienteService clienteService, ProductoService productoService)
     {
         private readonly ClienteService _clienteService = clienteService;
         private readonly ProductoService _productoService = productoService;
@@ -362,8 +362,8 @@
                 ConsoleHelper.Messages.Continuar();
                 return;
             }
-            var sesionMenu = new SesionMenu(result.Value!, _clienteService, _productoService);
-            sesionMenu.Show();
+            var clienteSesionMenu = new ClienteSesionMenu(result.Value!, _clienteService, _productoService);
+            clienteSesionMenu.Show();
             ConsoleHelper.Messages.Info("Sesión finalizada correctamente");
             ConsoleHelper.Messages.Continuar();
         }
