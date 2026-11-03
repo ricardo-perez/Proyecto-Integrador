@@ -16,18 +16,17 @@ namespace ProyectoIntegrador.Entities
         public override string ToString()
         {
             return $"""
-            Id: {this.IdCliente}
-            Nombre: {this.Nombre}
-            Apellido: {this.Apellido}
-            DNI: {this.Dni}
-            Teléfono: {this.Telefono}
-            Dirección: {this.Direccion}
-            E-Mail: {this.Email}
-            CUIT-CUIL: {this.CuitCuil}
-            Contraseña: {this.Contrasenia}
-            Activo: {(this.Activo
-                ? "Sí"
-                : "No")}
+            Nombre:      {this.Nombre}
+            Apellido:    {this.Apellido}
+            DNI:         {this.Dni}
+            Teléfono:    {this.Telefono ?? "N/A"}
+            Dirección:   {this.Direccion ?? "N/A"}
+            E-Mail:      {this.Email}
+            CUIT / CUIL: {this.CuitCuil}
+            Contraseña:  ********
+            Estado:      {(this.Activo
+                ? "Activo"
+                : "Inactivo")}
             """;
         }
     }
