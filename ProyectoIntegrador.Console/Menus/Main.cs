@@ -15,11 +15,10 @@
         }
         internal void Show()
         {
-            Console.Title = "SISTEMA DE GESTIÓN";
             while (true)
             {
                 Console.Clear();
-                var option = ConsoleHelper.Inputs.GetValidInt("""
+                Console.Write("""
                 MENÚ PRINCIPAL
                 ==============
                 [1] Cliente
@@ -28,6 +27,15 @@
                 [0] Salir
                 Ingrese una opción: 
                 """);
+
+                var input = Console.ReadLine()?.Trim();
+                if (!int.TryParse(input, out var option))
+                {
+                    ConsoleHelper.Messages.OpcionNoValida();
+                    ConsoleHelper.Messages.Continuar();
+                    continue;
+                }
+
                 switch (option)
                 {
                     case 1:
@@ -55,12 +63,21 @@
             while (true)
             {
                 Console.Clear();
-                var option = ConsoleHelper.Inputs.GetValidInt("""
-                    ¿Seguro que desea salir?
-                    [1] Sí
-                    [2] No
-                    Ingrese una opción: 
-                    """);
+                Console.Write("""
+                ¿Seguro que desea salir?
+                [1] Sí
+                [2] No
+                Ingrese una opción: 
+                """);
+
+                var input = Console.ReadLine()?.Trim();
+                if (!int.TryParse(input, out var option))
+                {
+                    ConsoleHelper.Messages.OpcionNoValida();
+                    ConsoleHelper.Messages.Continuar();
+                    continue;
+                }
+
                 switch (option)
                 {
                     case 1:
@@ -100,7 +117,7 @@
             Console.WriteLine($"""
             ACERCA DE
             =========
-            {"Sistema:",-20} Sistema de Gestión de Productos y Clientes
+            {"Sistema:",-20} SISTEMA DE GESTIÓN DE PRODUCTOS Y CLIENTES
             {"Tecnología:",-20} .NET Core / C# / ADO.NET / MSSQL
             {"Desarrollador:",-20} Pérez Brivio, Ricardo Luis
             {"Institución:",-20} UTN - FRD - Tecnicatura Universitaria en Programación

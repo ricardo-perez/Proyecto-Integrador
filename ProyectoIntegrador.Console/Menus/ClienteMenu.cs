@@ -13,7 +13,7 @@
             while (true)
             {
                 Console.Clear();
-                var option = ConsoleHelper.Inputs.GetValidInt("""
+                Console.Write("""
                 CLIENTE
                 =======
                 [1] Iniciar sesión
@@ -22,6 +22,15 @@
                 [0] Volver
                 Ingrese una opción: 
                 """);
+
+                var input = Console.ReadLine()?.Trim();
+                if (!int.TryParse(input, out var option))
+                {
+                    ConsoleHelper.Messages.OpcionNoValida();
+                    ConsoleHelper.Messages.Continuar();
+                    continue;
+                }
+
                 switch (option)
                 {
                     case 1:
@@ -229,7 +238,8 @@
             };
             while (true)
             {
-                var option = ConsoleHelper.Inputs.GetValidInt($"""
+                Console.Clear();
+                Console.Write($"""
                 DATOS CARGADOS
                 ==============
                 {cliente}
@@ -239,6 +249,15 @@
                 [2] No
                 Ingrese una opción: 
                 """);
+
+                var input = Console.ReadLine()?.Trim();
+                if (!int.TryParse(input, out var option))
+                {
+                    ConsoleHelper.Messages.OpcionNoValida();
+                    ConsoleHelper.Messages.Continuar();
+                    continue;
+                }
+
                 switch (option)
                 {
                     case 1:
@@ -361,7 +380,7 @@
                 {
                     Console.Clear();
                     ConsoleHelper.Messages.OK($"Bienvenid@, {_cliente.Nombre} {_cliente.Apellido} [ID: {_cliente.IdCliente}]");
-                    var option = ConsoleHelper.Inputs.GetValidInt("""
+                    Console.Write("""
                     TIENDA
                     ======
                     [1] Navegar catálogo de productos
@@ -370,6 +389,15 @@
                     [0] Cerrar sesión
                     Ingrese una opción: 
                     """);
+
+                    var input = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(input, out var option))
+                    {
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
+                        continue;
+                    }
+
                     switch (option)
                     {
                         case 1:
@@ -404,12 +432,21 @@
                 while (true)
                 {
                     Console.Clear();
-                    var option = ConsoleHelper.Inputs.GetValidInt("""
+                    Console.Write("""
                     ¿Está seguro de que desea cerrar la sesión?
                     [1] Sí
                     [2] No
                     Ingrese una opción: 
                     """);
+
+                    var input = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(input, out var option))
+                    {
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
+                        continue;
+                    }
+
                     switch (option)
                     {
                         case 1:
@@ -432,7 +469,7 @@
                 while (true)
                 {
                     Console.Clear();
-                    var option = ConsoleHelper.Inputs.GetValidInt("""
+                    Console.Write("""
                     PERFIL
                     ======
                     [1] Ver datos
@@ -441,6 +478,15 @@
                     [0] Volver
                     Ingrese una opción: 
                     """);
+
+                    var input = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(input, out var option))
+                    {
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
+                        continue;
+                    }
+
                     switch (option)
                     {
                         case 1:
@@ -475,7 +521,7 @@
                 while (true)
                 {
                     Console.Clear();
-                    var option = ConsoleHelper.Inputs.GetValidInt($"""
+                    Console.Write($"""
                     ELIMINAR CUENTA
                     ===============
                     ¿Está seguro que desea eliminar su cuenta? Esta acción no se puede deshacer            
@@ -483,6 +529,15 @@
                     [2] No
                     Ingrese una opción: 
                     """);
+
+                    var input = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(input, out var option))
+                    {
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
+                        continue;
+                    }
+
                     switch (option)
                     {
                         case 1:
@@ -517,7 +572,7 @@
                 var cliente = ClienteHelper.ModificarDatos(_cliente, _clienteService, false);
                 while (true)
                 {
-                    var option = ConsoleHelper.Inputs.GetValidInt($"""
+                    Console.Write($"""
                     DATOS CARGADOS
                     ==============
                     {cliente}
@@ -527,6 +582,15 @@
                     [2] No
                     Ingrese una opción: 
                     """);
+
+                    var input = Console.ReadLine()?.Trim();
+                    if (!int.TryParse(input, out var option))
+                    {
+                        ConsoleHelper.Messages.OpcionNoValida();
+                        ConsoleHelper.Messages.Continuar();
+                        continue;
+                    }
+
                     switch (option)
                     {
                         case 1:
