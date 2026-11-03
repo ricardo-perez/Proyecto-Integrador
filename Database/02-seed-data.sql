@@ -32,7 +32,7 @@ INSERT INTO tipos_movimiento (nombre, descripcion) VALUES
 (N'Producto Fallado / Dañado', N'Egreso por pérdida, rotura, defecto de fábrica o fallo de lectura del soporte físico.'),
 (N'Transferencia Interna', N'Movimiento de ajuste de stock entre DEPÓSITO y ONLINE.');
 
-INSERT INTO clientes (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo) VALUES
+INSERT INTO clientes (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasenia, activo) VALUES
 (N'Ricardo', N'Pérez', '28507441', '1135874197', N'Libertad 1391, Belén de Escobar', 'ricardo.perez.brivio@gmail.com', '20-28507441-0', '1234', 1);
 
 INSERT INTO productos (sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta, activo) VALUES

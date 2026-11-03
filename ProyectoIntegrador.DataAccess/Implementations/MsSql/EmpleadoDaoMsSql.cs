@@ -12,7 +12,7 @@
         private const string SelectBase = $"""
             SELECT 
                 {PrimaryKeyColumn}, id_rol, legajo, nombre, apellido, dni, 
-                telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo
+                telefono, direccion, email, nombre_usuario, contrasenia, imagen_ruta, activo
             FROM 
                 {TableName}
             WHERE
@@ -25,7 +25,7 @@
             using var command = CreateCommand(connection
                 , $"""
                     INSERT INTO {TableName} 
-                        (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasena, imagen_ruta, activo) 
+                        (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasenia, imagen_ruta, activo) 
                     OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
                         (@idRol, @legajo, @nombre, @apellido, @dni, @telefono, @direccion, @email, @nombreUsuario, @contrasenia, @imagenRuta, @activo);
@@ -182,7 +182,7 @@
                         , direccion = @direccion
                         , email = @email
                         , nombre_usuario = @nombreUsuario
-                        , contrasena = @contrasenia
+                        , contrasenia = @contrasenia
                         , imagen_ruta = @imagenRuta
                         , activo = @activo
                     WHERE 
@@ -216,7 +216,7 @@
                     ? null
                     : reader.GetString(emailIndex),
                 NombreUsuario = reader.GetString(reader.GetOrdinal("nombre_usuario")),
-                Contrasenia = reader.GetString(reader.GetOrdinal("contrasena")),
+                Contrasenia = reader.GetString(reader.GetOrdinal("contrasenia")),
                 ImagenRuta = reader.IsDBNull(imagenRutaIndex)
                     ? null
                     : reader.GetString(imagenRutaIndex),

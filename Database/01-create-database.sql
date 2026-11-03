@@ -21,7 +21,7 @@ CREATE TABLE empleados (
     direccion NVARCHAR(200) NULL,
     email VARCHAR(254) NULL,
     nombre_usuario NVARCHAR(50) NOT NULL UNIQUE,
-    contrasena VARCHAR(255) NOT NULL,
+    contrasenia VARCHAR(255) NOT NULL,
     imagen_ruta NVARCHAR(500) NULL,
     activo BIT NOT NULL DEFAULT 1,
     CONSTRAINT fk_empleados_roles 
@@ -39,7 +39,7 @@ CREATE TABLE clientes (
     direccion NVARCHAR(200) NULL,
     email VARCHAR(254) NOT NULL UNIQUE,
     cuit_cuil VARCHAR(13) NOT NULL UNIQUE,
-    contrasena VARCHAR(255) NOT NULL,
+    contrasenia VARCHAR(255) NOT NULL,
     activo BIT NOT NULL DEFAULT 1
 );
 CREATE TABLE productos (

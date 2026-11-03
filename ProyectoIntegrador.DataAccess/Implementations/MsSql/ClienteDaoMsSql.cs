@@ -11,7 +11,7 @@
         private const string PrimaryKeyColumn = "id_cliente";
         private const string SelectBase = $"""
             SELECT 
-                {PrimaryKeyColumn}, nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo
+                {PrimaryKeyColumn}, nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasenia, activo
             FROM 
                 {TableName}
             WHERE
@@ -25,7 +25,7 @@
             using var command = CreateCommand(connection
                 , $"""
                     INSERT INTO {TableName} 
-                        (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasena, activo) 
+                        (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasenia, activo) 
                     OUTPUT INSERTED.{PrimaryKeyColumn}
                     VALUES 
                         (@nombre, @apellido, @dni, @telefono, @direccion, @email, @cuitCuil, @contrasenia, @activo);
@@ -80,7 +80,7 @@
                         , direccion = @direccion
                         , email = @email
                         , cuit_cuil = @cuitCuil
-                        , contrasena = @contrasenia
+                        , contrasenia = @contrasenia
                         , activo = @activo                                
                     WHERE 
                         {PrimaryKeyColumn} = @id
@@ -191,7 +191,7 @@
                     : reader.GetString(direccionIndex),
                 Email = reader.GetString(reader.GetOrdinal("email")),
                 CuitCuil = reader.GetString(reader.GetOrdinal("cuit_cuil")),
-                Contrasenia = reader.GetString(reader.GetOrdinal("contrasena")),
+                Contrasenia = reader.GetString(reader.GetOrdinal("contrasenia")),
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
         }
