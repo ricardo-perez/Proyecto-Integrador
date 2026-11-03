@@ -152,13 +152,19 @@
         {
             while (true)
             {
+                var item = _carrito.Find(i => i.Producto.IdProducto == producto.IdProducto);
+                int cartQty = item?.Cantidad ?? 0;
+                int stockQty = producto.Stock - cartQty;
+
                 Console.Clear();
                 Console.Write($"""
                 AGREGAR AL CARRITO
                 ==================
                 Producto: {producto.Nombre} - $ {producto.Precio}
                 Descripción: {producto.Descripcion}
-                Stock disponible: {producto.Stock}
+                Stock disponible en tienda: {producto.Stock} unidad(es)
+                Agregada(s) en el carrito: {cartQty} unidad(es)
+                Stock disponible para agregar: {stockQty} unidad(es)
                     
                 Ingrese la cantidad a agregar (0 para cancelar): 
                 """);
@@ -175,14 +181,13 @@
                 if (qty == 0)
                     return;
 
-                if (qty > producto.Stock)
+                if (qty > stockQty)
                 {
-                    ConsoleHelper.Messages.Error($"La cantidad ingresada supera el stock disponible ({producto.Stock} unidades)");
+                    ConsoleHelper.Messages.Error($"La cantidad ingresada supera el stock disponible para agregar ({stockQty} unidad(es))");
                     ConsoleHelper.Messages.Continuar();
                     continue;
                 }
 
-                var item = _carrito.Find(i => i.Producto.IdProducto == producto.IdProducto);
                 if (item != null)
                     item.Cantidad += qty;
                 else
