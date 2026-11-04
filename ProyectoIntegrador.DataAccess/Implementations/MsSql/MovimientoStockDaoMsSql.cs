@@ -20,24 +20,6 @@
         """;
         public override int Add(MovimientoStock entity)
         {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    INSERT INTO {TableName} 
-                        (id_producto, id_tipo_movimiento, id_empleado, id_venta, tipo_stock, cantidad, fecha, motivo) 
-                    OUTPUT INSERTED.{PrimaryKeyColumn}
-                    VALUES 
-                        (@idProducto, @idTipoMovimiento, @idEmpleado, @idVenta, @tipoStock, @cantidad, @fecha, @motivo);
-                """);
-            AddEntityParameters(command, entity);
-            var result = command.ExecuteScalar();
-            if (result == null || result == DBNull.Value)
-                return 0;
-            return Convert.ToInt32(result);
-        }
-        public override bool Delete(int id)
-        {
             throw new NotImplementedException();
         }
         public override IEnumerable<MovimientoStock> GetAll()
@@ -70,6 +52,34 @@
         public override bool Update(MovimientoStock entity)
         {
             throw new NotImplementedException();
+        }
+        public override bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Add(MovimientoStock entity, IDbConnection connection, IDbTransaction transaction)
+        {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
+            ArgumentNullException.ThrowIfNull(connection, nameof(connection));
+            ArgumentNullException.ThrowIfNull(transaction, nameof(transaction));
+
+            using var command = CreateCommand(connection, 
+            $"""
+                INSERT INTO {TableName} 
+                    (id_producto, id_tipo_movimiento, id_empleado, id_venta, tipo_stock, cantidad, fecha, motivo) 
+                OUTPUT INSERTED.{PrimaryKeyColumn}
+                VALUES 
+                    (@idProducto, @idTipoMovimiento, @idEmpleado, @idVenta, @tipoStock, @cantidad, @fecha, @motivo);
+            """, transaction: transaction);
+
+            AddEntityParameters(command, entity);
+
+            var result = command.ExecuteScalar();
+            if (result == null || result == DBNull.Value)
+                return 0;
+
+            return Convert.ToInt32(result);
         }
         private static void AddEntityParameters(IDbCommand command, MovimientoStock entity)
         {
@@ -110,6 +120,7 @@
                     : reader.GetString(motivoIndex)
             };
         }
+
 
     }
 }

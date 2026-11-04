@@ -103,6 +103,5 @@
                 MontoTotal = reader.GetDecimal(reader.GetOrdinal("monto_total"))
             };
         }
-
     }
 }
