@@ -45,7 +45,7 @@
                         productosMenu.Show();
                         break;
                     case 2:
-                        var cartMainMenu = new CartMainMenu(_cliente, _carrito, _medioDePagoService);
+                        var cartMainMenu = new CartMainMenu(_cliente, _carrito, _medioDePagoService, _productoService);
                         cartMainMenu.Show();
                         break;
                     case 4:

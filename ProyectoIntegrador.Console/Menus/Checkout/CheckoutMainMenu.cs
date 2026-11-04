@@ -4,13 +4,17 @@
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class CheckoutMainMenu(Cliente cliente, List<ItemCarrito> carrito, MedioDePagoService medioDePagoService)
+    internal class CheckoutMainMenu(Cliente cliente, List<ItemCarrito> carrito, MedioDePagoService medioDePagoService, ProductoService productoService)
     {
         private readonly Cliente _cliente = cliente;
         private readonly List<ItemCarrito> _carrito = carrito;
         private readonly MedioDePagoService _medioDePagoService = medioDePagoService;
+        private readonly ProductoService _productoService = productoService;
         public void Show(decimal total)
         {
+            if (!CheckStock())
+                return;
+
             var result = _medioDePagoService.ObtenerMediosDePago();
             if (!result.IsSuccess || result.Value == null || result.Value.Count == 0)
             {
@@ -72,6 +76,22 @@
                 ConsoleHelper.Messages.Error("Vuelva a intentar más tarde");
             }
             ConsoleHelper.Messages.Continuar();
+        }
+        private bool CheckStock()
+        {
+            foreach (var item in _carrito)
+            {
+                var stock = _productoService.ObtenerStock(item.Producto.IdProducto);
+                if (item.Cantidad > stock)
+                {
+                    Console.Clear();
+                    ConsoleHelper.Messages.Error($"El producto '{item.Producto.Nombre}' ya no cuenta con stock suficiente.");
+                    ConsoleHelper.Messages.Error($"Stock disponible actual: {stock} unidad(es).");
+                    ConsoleHelper.Messages.Continuar();
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
