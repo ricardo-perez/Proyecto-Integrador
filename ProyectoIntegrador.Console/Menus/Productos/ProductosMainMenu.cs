@@ -10,7 +10,7 @@
         private readonly List<ItemCarrito> _carrito = carrito;
         internal void Show()
         {
-            var pageSize = 2;
+            var pageSize = 10;
             var pageNumber = 1;
             while (true)
             {
@@ -31,16 +31,16 @@
                 var productos = result.Value;
                 var indice = 0;
                 foreach (var producto in productos)
-                {
                     Console.WriteLine($"[{++indice}] {producto.Nombre} - $ {producto.Precio} | {producto.Descripcion} | STOCK: {producto.Stock}");
-                }
 
-                var separador = new string('-', 100);
+                var line = new string('-', 100);
 
                 Console.Write($"""
-                {separador}
-                [P] Primer página  |  [A] Anterior  |  [S] Siguiente  |  [U] Última página  |  [0] Volver
-                {separador}
+                {line}
+                [P] Primer página  |  [A] Anterior  |  [S] Siguiente  |  [U] Última página
+                {line}
+                [0] Volver
+                {line}
                 Seleccione una opción: 
                 """);
                 var input = Console.ReadLine()?.Trim();

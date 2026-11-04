@@ -2,6 +2,7 @@
 {
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
+    using ProyectoIntegrador.Console.Menus.Cart;
     using ProyectoIntegrador.Console.Menus.Productos;
     using ProyectoIntegrador.Entities;
     using System;
@@ -43,7 +44,8 @@
                         productosMenu.Show();
                         break;
                     case 2:
-                        Cart();
+                        var cartMainMenu = new CartMainMenu(_cliente, _carrito);
+                        cartMainMenu.Show();
                         break;
                     case 4:
                         var clientePerfilMenu = new ClientePerfilMenu(_cliente, _clienteService);
@@ -54,71 +56,6 @@
                         if (SignOut())
                             return;
                         break;
-                    default:
-                        ConsoleHelper.Messages.OpcionNoValida();
-                        ConsoleHelper.Messages.Continuar();
-                        break;
-                }
-            }
-        }
-        private void Cart()
-        {
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine("""
-                    CARRITO DE COMPRAS
-                    ==================
-                    """);
-
-                if (_carrito.Count == 0)
-                {
-                    ConsoleHelper.Messages.Info("El carrito de compras está vacío");
-                    ConsoleHelper.Messages.Continuar();
-                    return;
-                }
-
-                decimal total = 0;
-                var indice = 0;
-
-                foreach (var item in _carrito)
-                {
-                    Console.WriteLine($"[{++indice}] {item.Producto.Nombre} | Cantidad: {item.Cantidad} | P. Unitario: $ {item.Producto.Precio} | Total: $ {item.PrecioTotal}");
-                    total += item.PrecioTotal;
-                }
-
-                var separador = new string('-', 100);
-                Console.WriteLine(separador);
-                Console.WriteLine($"TOTAL: $ {total}");
-                Console.WriteLine(separador);
-
-                Console.Write("""
-                    [1] Finalizar compra
-                    [2] Editar carrito
-                    [0] Volver
-                    Seleccione una opción: 
-                    """);
-
-                var input = Console.ReadLine()?.Trim();
-                if (!int.TryParse(input, out var option))
-                {
-                    ConsoleHelper.Messages.OpcionNoValida();
-                    ConsoleHelper.Messages.Continuar();
-                    continue;
-                }
-
-                switch (option)
-                {
-                    case 1:
-                        ConsoleHelper.Messages.Info("CHECKOUT...");
-                        ConsoleHelper.Messages.Continuar();
-                        break;
-                    case 2:
-                        ConsoleHelper.Messages.Info("EDITAR CARRITO...");
-                        ConsoleHelper.Messages.Continuar();
-                        break;
-                    case 0:
-                        return;
                     default:
                         ConsoleHelper.Messages.OpcionNoValida();
                         ConsoleHelper.Messages.Continuar();
