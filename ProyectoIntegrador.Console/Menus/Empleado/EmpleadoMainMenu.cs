@@ -1,9 +1,8 @@
-﻿
-namespace ProyectoIntegrador.Console.Menus
+﻿namespace ProyectoIntegrador.Console.Menus.Empleado
 {
     using System;
     using ProyectoIntegrador.Console.Helpers;
-    internal class EmpleadoMenu
+    internal class EmpleadoMainMenu
     {
         internal void Show()
         {

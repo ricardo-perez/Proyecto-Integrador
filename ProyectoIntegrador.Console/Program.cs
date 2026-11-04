@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using ProyectoIntegrador.Business;
 using ProyectoIntegrador.Console.Menus;
+using ProyectoIntegrador.Console.Menus.Cliente;
+using ProyectoIntegrador.Console.Menus.Empleado;
 using ProyectoIntegrador.DataAccess.Factories;
 using ProyectoIntegrador.DataAccess.Implementations.MsSql;
 using ProyectoIntegrador.DataAccess.Interfaces;
@@ -18,8 +20,8 @@ IProductoDao productoDao = new ProductoDaoMsSql(connectionFactory);
 
 var clienteSerive = new ClienteService(clienteDao);
 var productoService = new ProductoService(productoDao);
-var clienteMenu = new ClienteMenu(clienteSerive, productoService);
-var empleadoMenu = new EmpleadoMenu();
-var mainMenu = new Main(clienteMenu, empleadoMenu);
+var clienteMenu = new ClienteMainMenu(clienteSerive, productoService);
+var empleadoMenu = new EmpleadoMainMenu();
+var mainMenu = new MainMenu(clienteMenu, empleadoMenu);
 
 mainMenu.Show();

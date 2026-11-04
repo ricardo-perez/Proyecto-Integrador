@@ -1,4 +1,4 @@
-﻿namespace ProyectoIntegrador.Console.Menus
+﻿namespace ProyectoIntegrador.Console.Menus.Cliente
 {
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;

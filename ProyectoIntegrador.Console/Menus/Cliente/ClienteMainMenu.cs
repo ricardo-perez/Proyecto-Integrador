@@ -1,10 +1,10 @@
-﻿namespace ProyectoIntegrador.Console.Menus
+﻿namespace ProyectoIntegrador.Console.Menus.Cliente
 {
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class ClienteMenu(ClienteService clienteService, ProductoService productoService)
+    internal class ClienteMainMenu(ClienteService clienteService, ProductoService productoService)
     {
         private readonly ClienteService _clienteService = clienteService;
         private readonly ProductoService _productoService = productoService;

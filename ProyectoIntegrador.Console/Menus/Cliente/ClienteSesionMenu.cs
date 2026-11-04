@@ -1,7 +1,8 @@
-﻿namespace ProyectoIntegrador.Console.Menus
+﻿namespace ProyectoIntegrador.Console.Menus.Cliente
 {
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
+    using ProyectoIntegrador.Console.Menus.Productos;
     using ProyectoIntegrador.Entities;
     using System;
     internal class ClienteSesionMenu(Cliente cliente, ClienteService clienteService, ProductoService productoService)
@@ -38,7 +39,7 @@
                 switch (option)
                 {
                     case 1:
-                        var productosMenu = new ProductosMenu(_productoService, _carrito);
+                        var productosMenu = new ProductosMainMenu(_productoService, _carrito);
                         productosMenu.Show();
                         break;
                     case 2:

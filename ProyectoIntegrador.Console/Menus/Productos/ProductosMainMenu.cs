@@ -1,10 +1,10 @@
-﻿namespace ProyectoIntegrador.Console.Menus
+﻿namespace ProyectoIntegrador.Console.Menus.Productos
 {
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class ProductosMenu(ProductoService productoService, List<ItemCarrito> carrito)
+    internal class ProductosMainMenu(ProductoService productoService, List<ItemCarrito> carrito)
     {
         private readonly ProductoService _productoService = productoService;
         private readonly List<ItemCarrito> _carrito = carrito;

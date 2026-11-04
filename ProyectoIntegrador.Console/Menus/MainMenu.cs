@@ -1,13 +1,15 @@
 ﻿namespace ProyectoIntegrador.Console.Menus
 {
     using ProyectoIntegrador.Console.Helpers;
+    using ProyectoIntegrador.Console.Menus.Cliente;
+    using ProyectoIntegrador.Console.Menus.Empleado;
     using System;
 
-    internal class Main
+    internal class MainMenu
     {
-        private readonly ClienteMenu _clienteMenu;
-        private readonly EmpleadoMenu _empleadoMenu;
-        public Main(ClienteMenu clienteMenu, EmpleadoMenu empleadoMenu)
+        private readonly ClienteMainMenu _clienteMenu;
+        private readonly EmpleadoMainMenu _empleadoMenu;
+        public MainMenu(ClienteMainMenu clienteMenu, EmpleadoMainMenu empleadoMenu)
         {
             _clienteMenu = clienteMenu;
             _empleadoMenu = empleadoMenu;
