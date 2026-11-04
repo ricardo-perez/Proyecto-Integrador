@@ -17,21 +17,7 @@
         """;
         public override int Add(Venta entity)
         {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    INSERT INTO {TableName} 
-                        (id_cliente, id_medio_de_pago, fecha, subtotal, descuento_total, monto_total) 
-                    OUTPUT INSERTED.{PrimaryKeyColumn}
-                    VALUES 
-                        (@idCliente, @idMedioDePago, @fecha, @subtotal, @descuentoTotal, @montoTotal);
-                """);
-            AddEntityParameters(command, entity);
-            var result = command.ExecuteScalar();
-            if (result == null || result == DBNull.Value)
-                return 0;
-            return Convert.ToInt32(result);
+            throw new NotImplementedException();
         }
         public override IEnumerable<Venta> GetAll()
         {
@@ -69,6 +55,28 @@
             throw new NotImplementedException();
         }
 
+        public int Add(Venta entity, IDbConnection connection, IDbTransaction transaction)
+        {
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
+            ArgumentNullException.ThrowIfNull(connection, nameof(connection));
+            ArgumentNullException.ThrowIfNull(transaction, nameof(transaction));
+
+            using var command = CreateCommand(connection, $"""
+                INSERT INTO {TableName} 
+                    (id_cliente, id_medio_de_pago, fecha, subtotal, descuento_total, monto_total) 
+                OUTPUT INSERTED.{PrimaryKeyColumn}
+                VALUES 
+                    (@idCliente, @idMedioDePago, @fecha, @subtotal, @descuentoTotal, @montoTotal);
+            """, transaction: transaction);
+
+            AddEntityParameters(command, entity);
+
+            var result = command.ExecuteScalar();
+            if (result == null || result == DBNull.Value)
+                return 0;
+
+            return Convert.ToInt32(result);
+        }
         private static void AddEntityParameters(IDbCommand command, Venta entity)
         {
             List<(string Name, object? Value)> parameters =
