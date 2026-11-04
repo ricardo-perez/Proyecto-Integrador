@@ -18,11 +18,16 @@ IConnectionFactory connectionFactory = new MsSqlConnectionFactory(connectionStri
 IClienteDao clienteDao = new ClienteDaoMsSql(connectionFactory);
 IProductoDao productoDao = new ProductoDaoMsSql(connectionFactory);
 IMedioDePagoDao medioDePagoDao = new MedioDePagoDaoMsSql(connectionFactory);
+IVentaDao ventaDao = new VentaDaoMsSql(connectionFactory);
+IDetalleVentaDao detalleVentaDao = new DetalleVentaDaoMsSql(connectionFactory);
+IMovimientoStockDao movimientoStockDao = new MovimientoStockDaoMsSql(connectionFactory);
 
 var clienteSerive = new ClienteService(clienteDao);
 var productoService = new ProductoService(productoDao);
 var medioDePagoService = new MedioDePagoService(medioDePagoDao);
-var clienteMenu = new ClienteMainMenu(clienteSerive, productoService, medioDePagoService);
+var ventaService = new VentaService(ventaDao, detalleVentaDao, movimientoStockDao);
+
+var clienteMenu = new ClienteMainMenu(clienteSerive, productoService, medioDePagoService, ventaService);
 var empleadoMenu = new EmpleadoMainMenu();
 var mainMenu = new MainMenu(clienteMenu, empleadoMenu);
 

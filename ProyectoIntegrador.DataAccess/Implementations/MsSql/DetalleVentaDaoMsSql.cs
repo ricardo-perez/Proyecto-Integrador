@@ -3,10 +3,8 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    using System;
-    using System.Collections.Generic;
     using System.Data;
-    internal class DetalleVentaDaoMsSql(IConnectionFactory connectionFactory)
+    public class DetalleVentaDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<DetalleVenta>(connectionFactory), IDetalleVentaDao
     {
         private const string TableName = "detalles_ventas";
@@ -19,7 +17,20 @@
         """;
         public override int Add(DetalleVenta entity)
         {
-            throw new NotImplementedException();
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection, $"""
+                INSERT INTO {TableName} 
+                    (id_venta, id_producto, cantidad, precio_unitario, subtotal) 
+                OUTPUT INSERTED.{PrimaryKeyColumn}
+                VALUES 
+                    (@idVenta, @idProducto, @cantidad, @precioUnitario, @subtotal);
+            """);
+            AddEntityParameters(command, entity);
+            var result = command.ExecuteScalar();
+            if (result == null || result == DBNull.Value)
+                return 0;
+            return Convert.ToInt32(result);
         }
         public override IEnumerable<DetalleVenta> GetAll()
         {
@@ -36,10 +47,10 @@
             if (id <= 0)
                 return null;
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection,
+            using var command = CreateCommand(connection, 
             $"""
                 {SelectBase}
-            WHERE 
+            WHERE
                 {PrimaryKeyColumn} = @id
             """);
             AddParameter(command, "@id", id);
@@ -57,28 +68,6 @@
             throw new NotImplementedException();
         }
 
-        public int Add(DetalleVenta entity, IDbConnection connection, IDbTransaction transaction)
-        {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            ArgumentNullException.ThrowIfNull(connection, nameof(connection));
-            ArgumentNullException.ThrowIfNull(transaction, nameof(transaction));
-
-            using var command = CreateCommand(connection, $"""
-                INSERT INTO {TableName} 
-                    (id_venta, id_producto, cantidad, precio_unitario, subtotal) 
-                OUTPUT INSERTED.{PrimaryKeyColumn}
-                VALUES 
-                    (@idVenta, @idProducto, @cantidad, @precioUnitario, @subtotal);
-            """, transaction: transaction);
-
-            AddEntityParameters(command, entity);
-
-            var result = command.ExecuteScalar();
-            if (result == null || result == DBNull.Value)
-                return 0;
-
-            return Convert.ToInt32(result);
-        }
         private static void AddEntityParameters(IDbCommand command, DetalleVenta entity)
         {
             List<(string Name, object? Value)> parameters =
@@ -91,7 +80,6 @@
             ];
             AddParameters(command, parameters);
         }
-
         private static DetalleVenta Map(IDataReader reader)
         {
             return new DetalleVenta

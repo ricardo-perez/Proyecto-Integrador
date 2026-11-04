@@ -4,11 +4,12 @@
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class ClienteMainMenu(ClienteService clienteService, ProductoService productoService, MedioDePagoService medioDePagoService)
+    internal class ClienteMainMenu(ClienteService clienteService, ProductoService productoService, MedioDePagoService medioDePagoService, VentaService ventaService)
     {
         private readonly ClienteService _clienteService = clienteService;
         private readonly ProductoService _productoService = productoService;
         private readonly MedioDePagoService _medioDePagoService = medioDePagoService;
+        private readonly VentaService _ventaService = ventaService;
         internal void Show()
         {
             while (true)
@@ -363,7 +364,7 @@
                 ConsoleHelper.Messages.Continuar();
                 return;
             }
-            var clienteSesionMenu = new ClienteSesionMenu(result.Value!, _clienteService, _productoService, _medioDePagoService);
+            var clienteSesionMenu = new ClienteSesionMenu(result.Value!, _clienteService, _productoService, _medioDePagoService, _ventaService);
             clienteSesionMenu.Show();
             ConsoleHelper.Messages.Info("Sesión finalizada correctamente");
             ConsoleHelper.Messages.Continuar();

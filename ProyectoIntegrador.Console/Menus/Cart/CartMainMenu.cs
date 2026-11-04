@@ -5,12 +5,13 @@
     using ProyectoIntegrador.Console.Menus.Checkout;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class CartMainMenu(Cliente cliente, List<ItemCarrito> carrito, MedioDePagoService medioDePagoService, ProductoService productoService)
+    internal class CartMainMenu(Cliente cliente, List<ItemCarrito> carrito, MedioDePagoService medioDePagoService, ProductoService productoService, VentaService ventaService)
     {
         private readonly Cliente _cliente = cliente;
         private readonly List<ItemCarrito> _carrito = carrito;
         private readonly MedioDePagoService _medioDePagoService = medioDePagoService;
         private readonly ProductoService _productoService = productoService;
+        private readonly VentaService _ventaService = ventaService;
         public void Show()
         {
             var pageSize = 10;
@@ -72,7 +73,7 @@
                             decimal total = 0;
                             foreach (var item in _carrito)
                                 total += item.PrecioTotal;
-                            var checkoutMenu = new CheckoutMainMenu(_cliente, _carrito, _medioDePagoService, _productoService);
+                            var checkoutMenu = new CheckoutMainMenu(_cliente, _carrito, _medioDePagoService, _productoService, _ventaService);
                             checkoutMenu.Show(total);
                             break;
                         case "P":

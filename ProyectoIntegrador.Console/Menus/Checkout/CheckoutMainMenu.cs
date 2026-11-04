@@ -4,12 +4,13 @@
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class CheckoutMainMenu(Cliente cliente, List<ItemCarrito> carrito, MedioDePagoService medioDePagoService, ProductoService productoService)
+    internal class CheckoutMainMenu(Cliente cliente, List<ItemCarrito> carrito, MedioDePagoService medioDePagoService, ProductoService productoService, VentaService ventaService)
     {
         private readonly Cliente _cliente = cliente;
         private readonly List<ItemCarrito> _carrito = carrito;
         private readonly MedioDePagoService _medioDePagoService = medioDePagoService;
         private readonly ProductoService _productoService = productoService;
+        private readonly VentaService _ventaService = ventaService;
         public void Show(decimal total)
         {
             if (!CheckStock())
@@ -57,24 +58,8 @@
             var medioDePagoSeleccionado = mediosDePago[opcionPago - 1];
             int idMedioDePago = medioDePagoSeleccionado.IdMedioDePago;
 
-            ConsoleHelper.Messages.Info("Procesando compra de forma segura...");
+            ProcesarCompra(idMedioDePago, medioDePagoSeleccionado.Nombre, total);
 
-            bool checkoutOk = true;
-
-            if (checkoutOk)
-            {
-                Console.Clear();
-                ConsoleHelper.Messages.OK("Compra realizada con éxito");
-                Console.WriteLine($"Medio de pago: {medioDePagoSeleccionado.Nombre}");
-                Console.WriteLine($"Total abonado: $ {total}");
-                _carrito.Clear();
-            }
-            else
-            {
-                ConsoleHelper.Messages.Error("Ocurrió un error en el sistema");
-                ConsoleHelper.Messages.Error("No se pudo procesar la venta");
-                ConsoleHelper.Messages.Error("Vuelva a intentar más tarde");
-            }
             ConsoleHelper.Messages.Continuar();
         }
         private bool CheckStock()
@@ -85,13 +70,36 @@
                 if (item.Cantidad > stock)
                 {
                     Console.Clear();
-                    ConsoleHelper.Messages.Error($"El producto '{item.Producto.Nombre}' ya no cuenta con stock suficiente.");
-                    ConsoleHelper.Messages.Error($"Stock disponible actual: {stock} unidad(es).");
+                    ConsoleHelper.Messages.Error($"El producto '{item.Producto.Nombre}' ya no cuenta con stock suficiente");
+                    ConsoleHelper.Messages.Error($"Stock disponible actual: {stock} unidad(es)");
                     ConsoleHelper.Messages.Continuar();
                     return false;
                 }
             }
             return true;
+        }
+        private void ProcesarCompra(int idMedioDePago, string nombreMedioDePago, decimal total)
+        {
+            Console.WriteLine("Procesando compra...");
+
+            var result = _ventaService.RegistrarVenta(_cliente.IdCliente, idMedioDePago, _carrito, total);
+
+            if (result.IsSuccess)
+            {
+                Console.Clear();
+                ConsoleHelper.Messages.OK("Compra realizada con éxito");
+                Console.WriteLine($"Nº de compra: {result.Value}");
+                Console.WriteLine($"Medio de pago: {nombreMedioDePago}");
+                Console.WriteLine($"Total: $ {total}");
+                _carrito.Clear();
+            }
+            else
+            {
+                Console.Clear();
+                ConsoleHelper.Messages.Error("Ocurrió un error en el sistema");
+                ConsoleHelper.Messages.Error(result.Message);
+                ConsoleHelper.Messages.Error("Vuelva a intentar más tarde");
+            }
         }
     }
 }

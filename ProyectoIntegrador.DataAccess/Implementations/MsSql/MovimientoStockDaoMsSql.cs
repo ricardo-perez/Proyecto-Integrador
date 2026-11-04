@@ -3,11 +3,8 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
-    using System;
-    using System.Collections.Generic;
     using System.Data;
-
-    internal class MovimientoStockDaoMsSql(IConnectionFactory connectionFactory)
+    public class MovimientoStockDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<MovimientoStock>(connectionFactory), IMovimientoStockDao
     {
         private const string TableName = "movimientos_stock";
@@ -20,7 +17,16 @@
         """;
         public override int Add(MovimientoStock entity)
         {
-            throw new NotImplementedException();
+            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection, $"""
+                INSERT INTO {TableName} 
+                    (id_producto, id_tipo_movimiento, id_empleado, id_venta, tipo_stock, cantidad, fecha, motivo) 
+                VALUES 
+                    (@idProducto, @idTipoMovimiento, @idEmpleado, @idVenta, @tipoStock, @cantidad, @fecha, @motivo);
+            """);
+            AddEntityParameters(command, entity);
+            return command.ExecuteNonQuery();
         }
         public override IEnumerable<MovimientoStock> GetAll()
         {
@@ -37,12 +43,12 @@
             if (id <= 0)
                 return null;
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                    WHERE
-                        {PrimaryKeyColumn} = @id
-                """);
+            using var command = CreateCommand(connection,
+            $"""
+                {SelectBase}
+               WHERE
+                {PrimaryKeyColumn} = @id
+            """);
             AddParameter(command, "@id", id);
             using var reader = command.ExecuteReader();
             return reader.Read()
@@ -57,30 +63,6 @@
         {
             throw new NotImplementedException();
         }
-
-        public int Add(MovimientoStock entity, IDbConnection connection, IDbTransaction transaction)
-        {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            ArgumentNullException.ThrowIfNull(connection, nameof(connection));
-            ArgumentNullException.ThrowIfNull(transaction, nameof(transaction));
-
-            using var command = CreateCommand(connection, 
-            $"""
-                INSERT INTO {TableName} 
-                    (id_producto, id_tipo_movimiento, id_empleado, id_venta, tipo_stock, cantidad, fecha, motivo) 
-                OUTPUT INSERTED.{PrimaryKeyColumn}
-                VALUES 
-                    (@idProducto, @idTipoMovimiento, @idEmpleado, @idVenta, @tipoStock, @cantidad, @fecha, @motivo);
-            """, transaction: transaction);
-
-            AddEntityParameters(command, entity);
-
-            var result = command.ExecuteScalar();
-            if (result == null || result == DBNull.Value)
-                return 0;
-
-            return Convert.ToInt32(result);
-        }
         private static void AddEntityParameters(IDbCommand command, MovimientoStock entity)
         {
             List<(string Name, object? Value)> parameters =
@@ -92,7 +74,7 @@
                 ("@tipoStock", entity.TipoStock),
                 ("@cantidad", entity.Cantidad),
                 ("@fecha", entity.Fecha),
-                ("@motivo", entity.Motivo),
+                ("@motivo", entity.Motivo)
             ];
             AddParameters(command, parameters);
         }
@@ -120,7 +102,5 @@
                     : reader.GetString(motivoIndex)
             };
         }
-
-
     }
 }
