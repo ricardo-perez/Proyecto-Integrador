@@ -33,21 +33,6 @@
                 return 0;
             return Convert.ToInt32(result);
         }
-        public override bool Delete(int id)
-        {
-            if (id <= 0)
-                return false;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    DELETE FROM
-                        {TableName} 
-                    WHERE 
-                        {PrimaryKeyColumn} = @id
-                """);
-            AddParameter(command, "@id", id);
-            return command.ExecuteNonQuery() > 0;
-        }
         public override IEnumerable<Venta> GetAll()
         {
             var entityList = new List<Venta>();
@@ -77,28 +62,13 @@
         }
         public override bool Update(Venta entity)
         {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            if (entity.IdVenta <= 0)
-                return false;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    UPDATE
-                        {TableName}
-                    SET 
-                        id_cliente = @idCliente 
-                        , id_medio_de_pago = @idMedioDePago
-                        , fecha = @fecha
-                        , subtotal = @subtotal
-                        , descuento_total = @descuentoTotal
-                        , monto_total = @montoTotal
-                    WHERE 
-                        {PrimaryKeyColumn} = @id
-                """);
-            AddEntityParameters(command, entity);
-            AddParameter(command, "@id", entity.IdVenta);
-            return command.ExecuteNonQuery() > 0;
+            throw new NotImplementedException();
         }
+        public override bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         private static void AddEntityParameters(IDbCommand command, Venta entity)
         {
             List<(string Name, object? Value)> parameters =
@@ -125,5 +95,6 @@
                 MontoTotal = reader.GetDecimal(reader.GetOrdinal("monto_total"))
             };
         }
+
     }
 }
