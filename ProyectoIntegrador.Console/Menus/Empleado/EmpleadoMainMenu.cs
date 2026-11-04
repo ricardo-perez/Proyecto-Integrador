@@ -82,8 +82,8 @@
                 ConsoleHelper.Messages.Continuar();
                 return;
             }
-            //var empleadoSesionMenu = new EmpleadoSesionMenu(result.Value!);
-            //empleadoSesionMenu.Show();
+            var empleadoSesionMenu = new EmpleadoSesionMenu(result.Value!);
+            empleadoSesionMenu.Show();
             ConsoleHelper.Messages.Info("Sesión finalizada correctamente");
             ConsoleHelper.Messages.Continuar();
         }
