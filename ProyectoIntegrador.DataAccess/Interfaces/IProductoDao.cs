@@ -5,5 +5,6 @@
     {
         IEnumerable<Producto> GetPagedWithStock(int pageNumber, int pageSize);
         int GetTotalCountForCatalog();
+        int GetStock(int id);
     }
 }

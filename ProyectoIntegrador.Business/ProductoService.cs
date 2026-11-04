@@ -30,8 +30,28 @@
         }
         public int ObtenerTotalPaginas(int pageSize)
         {
-            int totalRegistros = _productoDao.GetTotalCountForCatalog();
-            return (int)Math.Ceiling((double)totalRegistros / pageSize);
+            if (pageSize < 1)
+                return 0;
+            try
+            {
+                int totalRegistros = _productoDao.GetTotalCountForCatalog();
+                return (int)Math.Ceiling((double)totalRegistros / pageSize);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+        public int ObtenerStock(int id)
+        {
+            try
+            {
+                return _productoDao.GetStock(id);
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

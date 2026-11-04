@@ -5,10 +5,6 @@
     using ProyectoIntegrador.Entities;
     using System;
     using System.Data;
-    using System.Text.RegularExpressions;
-
-    using static System.Net.Mime.MediaTypeNames;
-
     public class ProductoDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<Producto>(connectionFactory), IProductoDao
     {
@@ -153,6 +149,22 @@
             AddEntityParameters(command, entity);
             AddParameter(command, "@id", entity.IdProducto);
             return command.ExecuteNonQuery() > 0;
+        }
+
+        public int GetStock(int id)
+        {
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection, """
+                SELECT
+                    ISNULL(SUM(cantidad), 0) AS stock_actual
+                FROM
+                    movimientos_stock
+                WHERE
+                    id_producto = @idProducto;
+                """);
+            AddParameter(command, "@idProducto", id);
+            var result = command.ExecuteScalar();
+            return result != null && result != DBNull.Value ? Convert.ToInt32(result) : 0;
         }
         public int GetTotalCountForCatalog()
         {
