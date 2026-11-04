@@ -84,5 +84,19 @@
                 return Result<int>.Failure($"Error al procesar la venta: {ex.Message}", ErrorType.Unexpected);
             }
         }
+        public Result<List<Venta>> HistorialPorCliente(int idCliente)
+        {
+            if (idCliente <= 0)
+                return Result<List<Venta>>.Failure("Cliente no válido", ErrorType.Validation);
+            try
+            {
+                var ventas = _ventaDao.GetByClienteId(idCliente);
+                return Result<List<Venta>>.Success(ventas.ToList());
+            }
+            catch (Exception ex)
+            {
+                return Result<List<Venta>>.Failure($"Error al obtener el historial de compras: {ex.Message}", ErrorType.Unexpected);
+            }
+        }
     }
 }

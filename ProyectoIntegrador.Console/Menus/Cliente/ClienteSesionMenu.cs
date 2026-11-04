@@ -3,6 +3,7 @@
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Console.Menus.Cart;
+    using ProyectoIntegrador.Console.Menus.Compras;
     using ProyectoIntegrador.Console.Menus.Productos;
     using ProyectoIntegrador.Entities;
     using System;
@@ -48,6 +49,10 @@
                     case 2:
                         var cartMainMenu = new CartMainMenu(_cliente, _carrito, _medioDePagoService, _productoService, _ventaService);
                         cartMainMenu.Show();
+                        break;
+                    case 3:
+                        var comprasMainMenu = new ComprasMainMenu(_cliente, _ventaService);
+                        comprasMainMenu.Show();
                         break;
                     case 4:
                         var clientePerfilMenu = new ClientePerfilMenu(_cliente, _clienteService);

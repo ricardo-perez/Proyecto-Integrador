@@ -69,6 +69,25 @@
             throw new NotImplementedException();
         }
 
+        public IEnumerable<Venta> GetByClienteId(int id)
+        {
+            if (id <= 0)
+                return [];
+
+            var entityList = new List<Venta>();
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection,
+            $"""
+                {SelectBase}
+            WHERE 
+                id_cliente = @idClient
+            """);
+            AddParameter(command, "@idClient", id);
+            using var reader = command.ExecuteReader();
+            while (reader.Read())
+                entityList.Add(Map(reader));
+            return entityList;
+        }
         private static void AddEntityParameters(IDbCommand command, Venta entity)
         {
             List<(string Name, object? Value)> parameters =
