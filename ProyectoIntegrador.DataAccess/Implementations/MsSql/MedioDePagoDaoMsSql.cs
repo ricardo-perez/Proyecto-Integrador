@@ -4,7 +4,7 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data;
-    internal class MedioDePagoDaoMsSql(IConnectionFactory connectionFactory)
+    public class MedioDePagoDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<MedioDePago>(connectionFactory), IMedioDePagoDao
     {
         private const string TableName = "medios_de_pago";

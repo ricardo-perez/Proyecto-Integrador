@@ -4,7 +4,7 @@
     using ProyectoIntegrador.Console.Helpers;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class ProductosMainMenu(ProductoService productoService, List<ItemCarrito> carrito)
+    internal class ProductosMainMenu(List<ItemCarrito> carrito, ProductoService productoService)
     {
         private readonly ProductoService _productoService = productoService;
         private readonly List<ItemCarrito> _carrito = carrito;

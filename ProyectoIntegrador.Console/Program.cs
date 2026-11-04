@@ -17,10 +17,12 @@ string connectionString = configuration.GetConnectionString("SqlServerConnection
 IConnectionFactory connectionFactory = new MsSqlConnectionFactory(connectionString);
 IClienteDao clienteDao = new ClienteDaoMsSql(connectionFactory);
 IProductoDao productoDao = new ProductoDaoMsSql(connectionFactory);
+IMedioDePagoDao medioDePagoDao = new MedioDePagoDaoMsSql(connectionFactory);
 
 var clienteSerive = new ClienteService(clienteDao);
 var productoService = new ProductoService(productoDao);
-var clienteMenu = new ClienteMainMenu(clienteSerive, productoService);
+var medioDePagoService = new MedioDePagoService(medioDePagoDao);
+var clienteMenu = new ClienteMainMenu(clienteSerive, productoService, medioDePagoService);
 var empleadoMenu = new EmpleadoMainMenu();
 var mainMenu = new MainMenu(clienteMenu, empleadoMenu);
 

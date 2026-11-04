@@ -1,12 +1,15 @@
 ﻿namespace ProyectoIntegrador.Console.Menus.Cart
 {
+    using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
+    using ProyectoIntegrador.Console.Menus.Checkout;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class CartMainMenu(Cliente cliente, List<ItemCarrito> carrito)
+    internal class CartMainMenu(Cliente cliente, List<ItemCarrito> carrito, MedioDePagoService medioDePagoService)
     {
         private readonly Cliente _cliente = cliente;
         private readonly List<ItemCarrito> _carrito = carrito;
+        private readonly MedioDePagoService _medioDePagoService = medioDePagoService;
         public void Show()
         {
             var pageSize = 10;
@@ -65,11 +68,11 @@
                     switch (command)
                     {
                         case "F":
-                            //decimal total = 0;
-                            //foreach (var item in _carrito)
-                            //    total += item.PrecioTotal;
-                            //var checkoutMenu = new Checkout.CheckoutMainMenu(_cliente, _carrito);
-                            //checkoutMenu.Show(total);
+                            decimal total = 0;
+                            foreach (var item in _carrito)
+                                total += item.PrecioTotal;
+                            var checkoutMenu = new CheckoutMainMenu(_cliente, _carrito, _medioDePagoService);
+                            checkoutMenu.Show(total);
                             break;
                         case "P":
                             pageNumber = 1;

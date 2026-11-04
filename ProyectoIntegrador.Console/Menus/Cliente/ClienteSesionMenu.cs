@@ -6,11 +6,12 @@
     using ProyectoIntegrador.Console.Menus.Productos;
     using ProyectoIntegrador.Entities;
     using System;
-    internal class ClienteSesionMenu(Cliente cliente, ClienteService clienteService, ProductoService productoService)
+    internal class ClienteSesionMenu(Cliente cliente, ClienteService clienteService, ProductoService productoService, MedioDePagoService medioDePagoService)
     {
         private readonly Cliente _cliente = cliente;
         private readonly ClienteService _clienteService = clienteService;
         private readonly ProductoService _productoService = productoService;
+        private readonly MedioDePagoService _medioDePagoService = medioDePagoService;
         private readonly List<ItemCarrito> _carrito = [];
         internal void Show()
         {
@@ -40,11 +41,11 @@
                 switch (option)
                 {
                     case 1:
-                        var productosMenu = new ProductosMainMenu(_productoService, _carrito);
+                        var productosMenu = new ProductosMainMenu(_carrito, _productoService);
                         productosMenu.Show();
                         break;
                     case 2:
-                        var cartMainMenu = new CartMainMenu(_cliente, _carrito);
+                        var cartMainMenu = new CartMainMenu(_cliente, _carrito, _medioDePagoService);
                         cartMainMenu.Show();
                         break;
                     case 4:

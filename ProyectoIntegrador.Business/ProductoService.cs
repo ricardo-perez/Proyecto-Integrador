@@ -3,7 +3,6 @@
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
     using System.Data.Common;
-
     public class ProductoService(IProductoDao productoDao)
     {
         private readonly IProductoDao _productoDao = productoDao;
