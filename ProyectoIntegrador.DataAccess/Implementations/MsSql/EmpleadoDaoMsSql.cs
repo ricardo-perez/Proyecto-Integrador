@@ -3,8 +3,9 @@
     using ProyectoIntegrador.DataAccess.Base;
     using ProyectoIntegrador.DataAccess.Interfaces;
     using ProyectoIntegrador.Entities;
+    using System.Collections.Generic;
     using System.Data;
-    internal class EmpleadoDaoMsSql(IConnectionFactory connectionFactory)
+    public class EmpleadoDaoMsSql(IConnectionFactory connectionFactory)
         : AdoDaoBase<Empleado>(connectionFactory), IEmpleadoDao
     {
         private const string TableName = "empleados";
@@ -20,177 +21,40 @@
         """;
         public override int Add(Empleado entity)
         {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    INSERT INTO {TableName} 
-                        (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasenia, imagen_ruta, activo) 
-                    OUTPUT INSERTED.{PrimaryKeyColumn}
-                    VALUES 
-                        (@idRol, @legajo, @nombre, @apellido, @dni, @telefono, @direccion, @email, @nombreUsuario, @contrasenia, @imagenRuta, @activo);
-                """);
-            AddEntityParameters(command, entity);
-            var result = command.ExecuteScalar();
-            if (result == null || result == DBNull.Value)
-                return 0;
-            return Convert.ToInt32(result);
-        }
-        public override bool Delete(int id)
-        {
-            if (id <= 0)
-                return false;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    UPDATE
-                        {TableName} 
-                    SET
-                        activo = 0
-                    WHERE 
-                        {PrimaryKeyColumn} = @id
-                        AND activo = 1
-                """);
-            AddParameter(command, "@id", id);
-            return command.ExecuteNonQuery() > 0;
-        }
-        public override IEnumerable<Empleado> GetAll()
-        {
-            var entityList = new List<Empleado>();
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection, SelectBase);
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-                entityList.Add(Map(reader));
-            return entityList;
-        }
-        public Empleado? GetByApellido(string apellido)
-        {
-            if (string.IsNullOrEmpty(apellido))
-                return null;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND apellido = @apellido
-                """);
-            AddParameter(command, "@apellido", apellido.Trim());
-            using var reader = command.ExecuteReader();
-            return reader.Read()
-                ? Map(reader)
-                : null;
-        }
-        public IEnumerable<Empleado> SearchByApellido(string apellido)
-        {
-            if (string.IsNullOrWhiteSpace(apellido))
-                return [];
-            var entityList = new List<Empleado>();
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND apellido LIKE @apellido
-                """);
-            AddParameter(command, "@apellido", $"%{apellido.Trim()}%");
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-                entityList.Add(Map(reader));
-            return entityList;
-        }
-        public Empleado? GetByEmail(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-                return null;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND email = @email
-                """);
-            AddParameter(command, "@email", email.Trim());
-            using var reader = command.ExecuteReader();
-            return reader.Read()
-                ? Map(reader)
-                : null;
-        }
-        public IEnumerable<Empleado> SearchByEmail(string email)
-        {
-            if (string.IsNullOrWhiteSpace(email))
-                return [];
-            var entityList = new List<Empleado>();
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND email LIKE @email
-                """);
-            AddParameter(command, "@email", $"%{email.Trim()}%");
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
-                entityList.Add(Map(reader));
-            return entityList;
+            throw new NotImplementedException();
         }
         public override Empleado? GetById(int id)
         {
-            if (id <= 0)
-                return null;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND {PrimaryKeyColumn} = @id
-                """);
-            AddParameter(command, "@id", id);
-            using var reader = command.ExecuteReader();
-            return reader.Read()
-                ? Map(reader)
-                : null;
+            throw new NotImplementedException();
         }
-        public Empleado? GetByLegajo(int legajo)
+        public override IEnumerable<Empleado> GetAll()
         {
-            if (legajo <= 0)
-                return null;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    {SelectBase}
-                        AND legajo = @legajo
-                """);
-            AddParameter(command, "@legajo", legajo);
-            using var reader = command.ExecuteReader();
-            return reader.Read()
-                ? Map(reader)
-                : null;
+            throw new NotImplementedException();
         }
         public override bool Update(Empleado entity)
         {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            if (entity.IdEmpleado <= 0)
-                return false;
+            throw new NotImplementedException();
+        }
+        public override bool Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Empleado? GetByNombreUsuario(string nombreUsuario)
+        {
+            if (string.IsNullOrWhiteSpace(nombreUsuario))
+                return null;
             using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    UPDATE
-                        {TableName}
-                    SET 
-                        id_rol = @idRol 
-                        , legajo = @legajo
-                        , nombre = @nombre
-                        , apellido = @apellido
-                        , dni = @dni
-                        , telefono = @telefono
-                        , direccion = @direccion
-                        , email = @email
-                        , nombre_usuario = @nombreUsuario
-                        , contrasenia = @contrasenia
-                        , imagen_ruta = @imagenRuta
-                        , activo = @activo
-                    WHERE 
-                        {PrimaryKeyColumn} = @id
+            using var command = CreateCommand(connection,
+                $"""
+                {SelectBase} 
+                AND nombre_usuario = @nombreUsuario
                 """);
-            AddEntityParameters(command, entity);
-            AddParameter(command, "@id", entity.IdEmpleado);
-            return command.ExecuteNonQuery() > 0;
+            AddParameter(command, "@nombreUsuario", nombreUsuario.Trim());
+            using var reader = command.ExecuteReader();
+            return reader.Read()
+                ? Map(reader) 
+                : null;
         }
         private static Empleado Map(IDataReader reader)
         {
@@ -222,25 +86,6 @@
                     : reader.GetString(imagenRutaIndex),
                 Activo = reader.GetBoolean(reader.GetOrdinal("activo"))
             };
-        }
-        private static void AddEntityParameters(IDbCommand command, Empleado entity)
-        {
-            List<(string Name, object? Value)> parameters =
-            [
-                ("@idRol", entity.IdRol),
-                ("@legajo", entity.Legajo),
-                ("@nombre", entity.Nombre),
-                ("@apellido", entity.Apellido),
-                ("@dni", entity.Dni),
-                ("@telefono", entity.Telefono),
-                ("@direccion", entity.Direccion),
-                ("@email", entity.Email),
-                ("@nombreUsuario", entity.NombreUsuario),
-                ("@contrasenia", entity.Contrasenia),
-                ("@imagenRuta", entity.ImagenRuta),
-                ("@activo", entity.Activo)
-            ];
-            AddParameters(command, parameters);
         }
     }
 }

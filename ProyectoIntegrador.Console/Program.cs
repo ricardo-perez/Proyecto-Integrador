@@ -21,14 +21,16 @@ IMedioDePagoDao medioDePagoDao = new MedioDePagoDaoMsSql(connectionFactory);
 IVentaDao ventaDao = new VentaDaoMsSql(connectionFactory);
 IDetalleVentaDao detalleVentaDao = new DetalleVentaDaoMsSql(connectionFactory);
 IMovimientoStockDao movimientoStockDao = new MovimientoStockDaoMsSql(connectionFactory);
+IEmpleadoDao empleadoDao = new EmpleadoDaoMsSql(connectionFactory);
 
 var clienteSerive = new ClienteService(clienteDao);
 var productoService = new ProductoService(productoDao);
 var medioDePagoService = new MedioDePagoService(medioDePagoDao);
 var ventaService = new VentaService(ventaDao, detalleVentaDao, movimientoStockDao);
+var empleadoService = new EmpleadoService(empleadoDao);
 
 var clienteMenu = new ClienteMainMenu(clienteSerive, productoService, medioDePagoService, ventaService);
-var empleadoMenu = new EmpleadoMainMenu();
+var empleadoMenu = new EmpleadoMainMenu(empleadoService);
 var mainMenu = new MainMenu(clienteMenu, empleadoMenu);
 
 mainMenu.Show();

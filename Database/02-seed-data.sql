@@ -35,6 +35,12 @@ INSERT INTO tipos_movimiento (nombre, descripcion) VALUES
 INSERT INTO clientes (nombre, apellido, dni, telefono, direccion, email, cuit_cuil, contrasenia, activo) VALUES
 (N'Ricardo', N'Pérez', '28507441', '1135874197', N'Libertad 1391, Belén de Escobar', 'ricardo.perez.brivio@gmail.com', '20-28507441-0', '1234', 1);
 
+INSERT INTO roles (nombre, descripcion) VALUES
+('Admin', 'Administrador')
+
+INSERT INTO empleados (id_rol, legajo, nombre, apellido, dni, telefono, direccion, email, nombre_usuario, contrasenia, imagen_ruta, activo) VALUES
+(1, 1, N'Ricardo', N'Pérez', '28507441', '1135874197', N'Libertad 1391, Belén de Escobar', 'ricardo.perez.brivio@gmail.com', 'admin', '1234', '', 1);
+
 INSERT INTO productos (sku, nombre, descripcion, descripcion_larga, imagen_ruta, precio, activo_para_venta, activo) VALUES
 ('MUS-CD-001', N'Pink Floyd - The Dark Side of the Moon (CD)', N'Edición remasterizada en CD audio estándar.', N'Álbum conceptual icónico de 1973 en formato CD digipack remasterizado en alta definición.', '/images/products/pink_floyd_dark_side.jpg', 25000.00, 1, 1),
 ('MUS-CD-002', N'Daft Punk - Random Access Memories (CD)', N'Álbum de estudio en CD Jewel Case.', N'Edición original en CD que incluye los sencillos Get Lucky y Lose Yourself to Dance.', '/images/products/daft_punk_ram.jpg', 22000.00, 1, 1),
