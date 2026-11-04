@@ -15,39 +15,6 @@
             FROM 
                 {TableName}
         """;
-        public override int Add(MedioDePago entity)
-        {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    INSERT INTO {TableName} 
-                        (nombre, descripcion) 
-                    OUTPUT INSERTED.{PrimaryKeyColumn}
-                    VALUES 
-                        (@nombre, @descripcion);
-                """);
-            AddEntityParameters(command, entity);
-            var result = command.ExecuteScalar();
-            if (result == null || result == DBNull.Value)
-                return 0;
-            return Convert.ToInt32(result);
-        }
-        public override bool Delete(int id)
-        {
-            if (id <= 0)
-                return false;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    DELETE FROM
-                        {TableName} 
-                    WHERE 
-                        {PrimaryKeyColumn} = @id
-                """);
-            AddParameter(command, "@id", id);
-            return command.ExecuteNonQuery() > 0;
-        }
         public override IEnumerable<MedioDePago> GetAll()
         {
             var entityList = new List<MedioDePago>();
@@ -75,35 +42,6 @@
                 ? Map(reader)
                 : null;
         }
-        public override bool Update(MedioDePago entity)
-        {
-            ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-            if (entity.IdMedioDePago <= 0)
-                return false;
-            using var connection = CreateConnection();
-            using var command = CreateCommand(connection
-                , $"""
-                    UPDATE
-                        {TableName}
-                    SET 
-                        nombre = @nombre,
-                        descripcion = @descripcion
-                    WHERE 
-                        {PrimaryKeyColumn} = @id
-                """);
-            AddEntityParameters(command, entity);
-            AddParameter(command, "@id", entity.IdMedioDePago);
-            return command.ExecuteNonQuery() > 0;
-        }
-        private static void AddEntityParameters(IDbCommand command, MedioDePago entity)
-        {
-            List<(string Name, object? Value)> parameters =
-            [
-                ("@nombre", entity.Nombre),
-                ("@descripcion", entity.Descripcion)
-            ];
-            AddParameters(command, parameters);
-        }
         private static MedioDePago Map(IDataReader reader)
         {
             int descripcionIndex = reader.GetOrdinal("descripcion");
@@ -115,6 +53,18 @@
                     ? null
                     : reader.GetString(descripcionIndex)
             };
+        }
+        public override int Add(MedioDePago entity)
+        {
+            throw new NotImplementedException();
+        }
+        public override bool Update(MedioDePago entity)
+        {
+            throw new NotImplementedException();
+        }
+        public override bool Delete(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
