@@ -60,13 +60,13 @@
                 if (producto == null)
                     return Result<Producto>.Failure("Datos de producto no válidos", ErrorType.Validation);
 
-                producto.Activo = false;
-                producto.ActivoParaVenta = false;
-
-                int id = _productoDao.Add(producto);
-                return id > 0
-                    ? Result<Producto>.Success(producto, "Producto creado correctamente [inactivo y no disponible para venta]")
-                    : Result<Producto>.Failure("No se pudo agregar el producto", ErrorType.Database);
+                var idProducto = _productoDao.Add(producto);
+                if (idProducto > 0)
+                {
+                    producto.IdProducto = idProducto;
+                    return Result<Producto>.Success(producto, "Producto creado correctamente [inactivo y no disponible para venta]");
+                }
+                return Result<Producto>.Failure("No se pudo agregar el producto", ErrorType.Database);
             }
             catch (Exception ex)
             {
@@ -113,5 +113,26 @@
                 return Result<List<Producto>>.Failure($"Error al obtener productos: {ex.Message}", ErrorType.Unexpected);
             }
         }
+        public Result ExisteSku(string sku)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(sku))
+                    return Result.Failure("El SKU ingresado no es válido", ErrorType.Validation);
+                var producto = _productoDao.GetBySku(sku.Trim());
+                if (producto != null)
+                    return Result.Failure("El SKU ya se encuentra registrado en otro producto", ErrorType.Conflict);
+                return Result.Success("El SKU se encuentra disponible");
+            }
+            catch (DbException ex)
+            {
+                return Result.Failure($"Error de comunicación con la base de datos: {ex.Message}", ErrorType.Database);
+            }
+            catch (Exception ex)
+            {
+                return Result.Failure($"Ocurrió un error inesperado al verificar el E-Mail: {ex.Message}", ErrorType.Unexpected);
+            }
+        }
+
     }
 }

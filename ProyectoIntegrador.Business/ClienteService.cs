@@ -56,7 +56,7 @@
         {
             try
             {
-                Cliente? clienteExistente = null;
+                Cliente? clienteExistente;
 
                 clienteExistente = _clienteDao.GetById(cliente.IdCliente);
                 if (clienteExistente == null)

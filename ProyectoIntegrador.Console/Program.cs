@@ -28,9 +28,10 @@ var productoService = new ProductoService(productoDao);
 var medioDePagoService = new MedioDePagoService(medioDePagoDao);
 var ventaService = new VentaService(ventaDao, detalleVentaDao, movimientoStockDao);
 var empleadoService = new EmpleadoService(empleadoDao);
+var movimientoStockService = new MovimientoStockService(movimientoStockDao);
 
 var clienteMenu = new ClienteMainMenu(clienteSerive, productoService, medioDePagoService, ventaService);
-var empleadoMenu = new EmpleadoMainMenu(empleadoService);
+var empleadoMenu = new EmpleadoMainMenu(empleadoService, productoService, movimientoStockService);
 var mainMenu = new MainMenu(clienteMenu, empleadoMenu);
 
 mainMenu.Show();

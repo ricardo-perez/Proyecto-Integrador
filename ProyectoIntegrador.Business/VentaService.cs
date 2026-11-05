@@ -45,7 +45,7 @@
                     MontoTotal = total
                 };
 
-                int idVenta = _ventaDao.Add(venta);
+                var idVenta = _ventaDao.Add(venta);
                 if (idVenta <= 0)
                     return Result<int>.Failure("No se pudo registrar la venta", ErrorType.Database);
 
@@ -60,7 +60,9 @@
                         Subtotal = item.Producto.Precio * item.Cantidad
                     };
 
-                    _detalleVentaDao.Add(detalle);
+                    var idDetalleVenta = _detalleVentaDao.Add(detalle);
+                    if (idDetalleVenta <= 0)
+                        return Result<int>.Failure("No se pudo registrar la venta", ErrorType.Database);
 
                     var movimiento = new MovimientoStock
                     {
@@ -72,10 +74,10 @@
                         Fecha = DateTime.Now,
                         Motivo = $"Venta Online N° {idVenta}"
                     };
-
-                    _movimientoStockDao.Add(movimiento);
+                    var idMovimientoStock = _movimientoStockDao.Add(movimiento);
+                    if (idMovimientoStock <= 0)
+                        return Result<int>.Failure("No se pudo registrar la venta", ErrorType.Database);
                 }
-
                 scope.Complete();
                 return Result<int>.Success(idVenta);
             }

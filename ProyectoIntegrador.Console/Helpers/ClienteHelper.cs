@@ -21,8 +21,6 @@
                 Activo = cliente.Activo
             };
 
-            var infoText = "Ingrese un nuevo valor o presione ENTER para mantener el valor actual";
-
             while (true)
             {
                 Console.Clear();
@@ -70,9 +68,9 @@
                     continue;
                 }
 
-                Console.WriteLine($"""
+                Console.WriteLine("""
                 
-                {infoText}
+                Ingrese un nuevo valor o presione ENTER para mantener el valor actual
                 """);
                 switch (option)
                 {

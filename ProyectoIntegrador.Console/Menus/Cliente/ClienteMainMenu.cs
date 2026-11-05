@@ -77,10 +77,10 @@
                     ConsoleHelper.Messages.Error("El formato del E-mail no es válido. Intente nuevamente");
                     continue;
                 }
-                var resultEmail = _clienteService.ExisteEmail(email);
-                if (!resultEmail.IsSuccess)
+                var result = _clienteService.ExisteEmail(email);
+                if (!result.IsSuccess)
                 {
-                    ConsoleHelper.Messages.Error(resultEmail.Message);
+                    ConsoleHelper.Messages.Error(result.Message);
                     continue;
                 }
                 break;
@@ -101,10 +101,10 @@
                     ConsoleHelper.Messages.Error("El formato del DNI no es válido. Intente nuevamente");
                     continue;
                 }
-                var resultDni = _clienteService.ExisteDni(dni);
-                if (!resultDni.IsSuccess)
+                var result = _clienteService.ExisteDni(dni);
+                if (!result.IsSuccess)
                 {
-                    ConsoleHelper.Messages.Error(resultDni.Message);
+                    ConsoleHelper.Messages.Error(result.Message);
                     continue;
                 }
                 break;
@@ -125,10 +125,10 @@
                     ConsoleHelper.Messages.Error("El formato del CUIT / CUIL no es válido. Intente nuevamente");
                     continue;
                 }
-                var resultCuitCuil = _clienteService.ExisteCuitCuil(cuitCuil);
-                if (!resultCuitCuil.IsSuccess)
+                var result = _clienteService.ExisteCuitCuil(cuitCuil);
+                if (!result.IsSuccess)
                 {
-                    ConsoleHelper.Messages.Error(resultCuitCuil.Message);
+                    ConsoleHelper.Messages.Error(result.Message);
                     continue;
                 }
                 break;

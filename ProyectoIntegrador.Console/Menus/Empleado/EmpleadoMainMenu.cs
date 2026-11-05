@@ -3,9 +3,12 @@
     using ProyectoIntegrador.Business;
     using ProyectoIntegrador.Console.Helpers;
     using System;
-    internal class EmpleadoMainMenu(EmpleadoService empleadoService)
+    internal class EmpleadoMainMenu(EmpleadoService empleadoService, ProductoService productoService, MovimientoStockService movimientoStockService)
     {
         private readonly EmpleadoService _empleadoService = empleadoService;
+        private readonly ProductoService _productoService = productoService;
+        private readonly MovimientoStockService _movimientoStockService = movimientoStockService;
+
         internal void Show()
         {
             while (true)
@@ -82,7 +85,7 @@
                 ConsoleHelper.Messages.Continuar();
                 return;
             }
-            var empleadoSesionMenu = new EmpleadoSesionMenu(result.Value!);
+            var empleadoSesionMenu = new EmpleadoSesionMenu(result.Value!, _productoService, _movimientoStockService);
             empleadoSesionMenu.Show();
             ConsoleHelper.Messages.Info("Sesión finalizada correctamente");
             ConsoleHelper.Messages.Continuar();

@@ -30,8 +30,8 @@
                 }
                 var productos = result.Value;
                 var indice = 0;
-                foreach (var producto in productos)
-                    Console.WriteLine($"[{++indice}] {producto.Nombre} - $ {producto.Precio} | {producto.Descripcion} | STOCK: {producto.Stock}");
+                foreach (var item in productos)
+                    Console.WriteLine($"[{++indice}] {item.Nombre} - $ {item.Precio} | {item.Descripcion} | STOCK: {item.Stock}");
 
                 var line = new string('-', 100);
 

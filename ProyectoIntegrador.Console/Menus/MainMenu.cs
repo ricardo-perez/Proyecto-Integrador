@@ -109,7 +109,7 @@
                 Console.BufferWidth = ancho;
                 Console.BufferHeight = alto;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
         }
