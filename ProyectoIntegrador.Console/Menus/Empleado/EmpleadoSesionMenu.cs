@@ -13,10 +13,10 @@
                 Console.Clear();
                 ConsoleHelper.Messages.OK($"Bienvenid@, {_empleado.Nombre} {_empleado.Apellido} [ID: {_empleado.IdEmpleado}]");
                 Console.Write("""
-                    BACKOFFICE
-                    ==========
-                    [1] Registrar nuevo producto
-                    [2] Navegar y gestionar productos
+                    BACKOFFICE PRODUCTOS
+                    ====================
+                    [1] Agregar
+                    [2] Gestionar
                     [0] Cerrar sesión
                     Ingrese una opción: 
                     """);

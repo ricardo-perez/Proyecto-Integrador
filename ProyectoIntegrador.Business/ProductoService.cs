@@ -53,5 +53,65 @@
                 return 0;
             }
         }
+        public Result<Producto> CrearProducto(Producto producto)
+        {
+            try
+            {
+                if (producto == null)
+                    return Result<Producto>.Failure("Datos de producto no válidos", ErrorType.Validation);
+
+                producto.Activo = false;
+                producto.ActivoParaVenta = false;
+
+                int id = _productoDao.Add(producto);
+                return id > 0
+                    ? Result<Producto>.Success(producto, "Producto creado correctamente [inactivo y no disponible para venta]")
+                    : Result<Producto>.Failure("No se pudo agregar el producto", ErrorType.Database);
+            }
+            catch (Exception ex)
+            {
+                return Result<Producto>.Failure($"Error al crear producto: {ex.Message}", ErrorType.Unexpected);
+            }
+        }
+        public Result<Producto> ActualizarProducto(Producto producto)
+        {
+            try
+            {
+                Producto? productoExistente = null;
+
+                productoExistente = _productoDao.GetById(producto.IdProducto);
+                if (productoExistente == null)
+                    return Result<Producto>.Failure("El producto a actualizar no existe", ErrorType.NotFound);
+
+                productoExistente = _productoDao.GetBySku(producto.Sku);
+                if (productoExistente != null
+                    && productoExistente.IdProducto != producto.IdProducto)
+                    return Result<Producto>.Failure("El SKU ya se encuentra registrado en otro producto", ErrorType.Conflict);
+
+                if (_productoDao.Update(producto))
+                    return Result<Producto>.Success(producto, "Producto actualizado con éxito");
+                return Result<Producto>.Failure("No se pudo actualizar el producto en la base de datos", ErrorType.Database);
+            }
+            catch (DbException ex)
+            {
+                return Result<Producto>.Failure($"Error de comunicación con la base de datos: {ex.Message}", ErrorType.Database);
+            }
+            catch (Exception ex)
+            {
+                return Result<Producto>.Failure($"Ocurrió un error inesperado durante la actualización: {ex.Message}", ErrorType.Unexpected);
+            }
+        }
+        public Result<List<Producto>> ObtenerTodosLosProductos()
+        {
+            try
+            {
+                var productos = _productoDao.GetAll();
+                return Result<List<Producto>>.Success(productos.ToList());
+            }
+            catch (Exception ex)
+            {
+                return Result<List<Producto>>.Failure($"Error al obtener productos: {ex.Message}", ErrorType.Unexpected);
+            }
+        }
     }
 }

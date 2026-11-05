@@ -151,6 +151,23 @@
             return command.ExecuteNonQuery() > 0;
         }
 
+        public Producto? GetBySku(string sku)
+        {
+            if (string.IsNullOrEmpty(sku))
+                return null;
+            using var connection = CreateConnection();
+            using var command = CreateCommand(connection
+                , $"""
+                    {SelectBase}
+                    WHERE 
+                        sku = @sku
+                """);
+            AddParameter(command, "@sku", sku);
+            using var reader = command.ExecuteReader();
+            return reader.Read()
+                ? Map(reader)
+                : null;
+        }
         public int GetStock(int id)
         {
             using var connection = CreateConnection();
